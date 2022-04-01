@@ -35,7 +35,7 @@ module.exports = (options) => {
         if (_handler) {
           endpoints[endpoint] = _handler(getEndpointOptions, Model)
         } else {
-          throw Error(`CRUD template "${getEndpointOptions.template}" not found`)
+          throw Error(`CRUD template "${endpointOptions.template}" not found`)
         }
       }
     }
