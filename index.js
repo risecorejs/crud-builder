@@ -27,8 +27,8 @@ module.exports = (options) => {
 
       if (handler) {
         endpoints[endpoint] = handler(getEndpointOptions, Model)
-      } else if (getEndpointOptions.template) {
-        const _handler = templates[getEndpointOptions.template]
+      } else if (getEndpointOptions().template) {
+        const _handler = templates[getEndpointOptions().template]
 
         if (_handler) {
           endpoints[endpoint] = _handler(getEndpointOptions, Model)
