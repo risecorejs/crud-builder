@@ -17,21 +17,23 @@ module.exports = (options) => {
   const Model = getModel(options.Model)
 
   for (const endpoint in options.endpoints) {
-    const endpointOptions =
-      typeof options.endpoints[endpoint] === 'function' ? options.endpoints[endpoint]() : options.endpoints[endpoint]
+    if (options.endpoints[endpoint]) {
+      const getEndpointOptions =
+        typeof options.endpoints[endpoint] === 'function'
+          ? options.endpoints[endpoint]
+          : () => options.endpoints[endpoint]
 
-    if (endpointOptions) {
       const handler = templates[endpoint]
 
       if (handler) {
-        endpoints[endpoint] = handler(endpointOptions, Model)
-      } else if (endpointOptions.template) {
-        const _handler = templates[endpointOptions.template]
+        endpoints[endpoint] = handler(getEndpointOptions, Model)
+      } else if (getEndpointOptions.template) {
+        const _handler = templates[getEndpointOptions.template]
 
         if (_handler) {
-          endpoints[endpoint] = _handler(endpointOptions, Model)
+          endpoints[endpoint] = _handler(getEndpointOptions, Model)
         } else {
-          throw Error(`CRUD template "${endpointOptions.template}" not found`)
+          throw Error(`CRUD template "${getEndpointOptions.template}" not found`)
         }
       }
     }
@@ -42,7 +44,7 @@ module.exports = (options) => {
 
 /**
  * CREATE
- * @param options {{
+ * @param getOptions {Function: () => ({
  *   Model: Object|string?,
  *   state: Object?,
  *   validator: boolean?,
@@ -52,12 +54,14 @@ module.exports = (options) => {
  *   beforeCreate: Function?,
  *   afterCreate: Function?,
  *   response: Function?
- * }|true}
+ * }|true)}
  * @param Model {Object}
  * @return {Function}
  */
-function create(options, Model) {
+function create(getOptions, Model) {
   return async (req, res) => {
+    let options = getOptions()
+
     try {
       if (options === true) options = {}
 
@@ -119,18 +123,20 @@ function create(options, Model) {
 
 /**
  * INDEX
- * @param options {{
+ * @param getOptions {Function: () => ({
  *   Model: Object|string?,
  *   method: "findAndCountAll"|"findAll"?,
  *   pagination: boolean?,
  *   queryBuilder: Function?,
  *   response: Function?
- * }|true}
+ * }|true)}
  * @param Model {Object}
  * @return {Function}
  */
-function index(options, Model) {
+function index(getOptions, Model) {
   return async (req, res) => {
+    let options = getOptions()
+
     try {
       if (options === true) options = {}
 
@@ -173,17 +179,19 @@ function index(options, Model) {
 
 /**
  * SHOW
- * @param options {{
+ * @param getOptions {Function: () => ({
  *   Model: Object|string?,
  *   key: "id" | string?,
  *   queryBuilder: Function?,
  *   response: Function?
- * }|true}
+ * }|true)}
  * @param Model {Object}
  * @return {Function}
  */
-function show(options, Model) {
+function show(getOptions, Model) {
   return async (req, res) => {
+    let options = getOptions()
+
     try {
       if (options === true) options = {}
 
@@ -234,7 +242,7 @@ function show(options, Model) {
 
 /**
  * UPDATE
- * @param options {{
+ * @param getOptions {Function: () => ({
  *   Model: Object|string?,
  *   state: Object?,
  *   key: "id" | string?,
@@ -246,13 +254,15 @@ function show(options, Model) {
  *   beforeUpdate: Function?,
  *   afterUpdate: Function?,
  *   response: Function?
- * }|true}
+ * }|true)}
  * @param Model {Object}
  * @return {Function}
  */
-function update(options, Model) {
+function update(getOptions, Model) {
   return async (req, res) => {
     try {
+      let options = getOptions()
+
       if (options === true) options = {}
 
       const context = {
@@ -341,7 +351,7 @@ function update(options, Model) {
 
 /**
  * DESTROY
- * @param options {{
+ * @param getOptions {Function: () => ({
  *   Model: Object|string?,
  *   key: "id" | string?,
  *   queryBuilder: Function?,
@@ -349,13 +359,15 @@ function update(options, Model) {
  *   beforeDestroy: Function?,
  *   afterDestroy: Function?,
  *   response: Function?
- * }|true}
+ * }|true)}
  * @param Model {Object}
  * @return {Function}
  */
-function destroy(options, Model) {
+function destroy(getOptions, Model) {
   return async (req, res) => {
     try {
+      let options = getOptions()
+
       if (options === true) options = {}
 
       if (options.Model) {
