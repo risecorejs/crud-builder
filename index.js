@@ -6,7 +6,7 @@ const templates = { create, index, show, update, destroy }
 /**
  * CRUD-BUILDER
  * @param options {{
- *   Model: Object|string,
+ *   model: string|Object,
  *   endpoints: Object
  * }}
  * @return {Object}
@@ -14,7 +14,7 @@ const templates = { create, index, show, update, destroy }
 module.exports = (options) => {
   const endpoints = {}
 
-  const Model = getModel(options.Model)
+  const Model = getModel(options.model)
 
   for (const endpoint in options.endpoints) {
     if (options.endpoints[endpoint]) {
@@ -47,11 +47,11 @@ module.exports = (options) => {
 /**
  * CREATE
  * @param getOptions {Function: () => ({
- *   Model: Object|string?,
+ *   model: string|Object?,
  *   state: Object?,
  *   validator: boolean?,
  *   rules: Object|Function?,
- *   fields: string|Array|Function?,
+ *   fields: string|Object|Array|Function?,
  *   formatter: Function?,
  *   beforeCreate: Function?,
  *   afterCreate: Function?,
@@ -74,8 +74,8 @@ function create(getOptions, Model) {
         instance: null
       }
 
-      if (options.Model) {
-        Model = getModel(options.Model)
+      if (options.model) {
+        Model = getModel(options.model)
       }
 
       if (options.validator !== false && options.rules) {
@@ -126,7 +126,7 @@ function create(getOptions, Model) {
 /**
  * INDEX
  * @param getOptions {Function: () => ({
- *   Model: Object|string?,
+ *   model: string|Object?,
  *   method: "findAndCountAll"|"findAll"?,
  *   pagination: boolean?,
  *   queryBuilder: Function?,
@@ -142,8 +142,8 @@ function index(getOptions, Model) {
     try {
       if (options === true) options = {}
 
-      if (options.Model) {
-        Model = getModel(options.Model)
+      if (options.model) {
+        Model = getModel(options.model)
       }
 
       options.method ||= 'findAndCountAll'
@@ -182,8 +182,8 @@ function index(getOptions, Model) {
 /**
  * SHOW
  * @param getOptions {Function: () => ({
- *   Model: Object|string?,
- *   key: "id" | string?,
+ *   model: string|Object?,
+ *   key: "id" | string | false?,
  *   queryBuilder: Function?,
  *   response: Function?
  * }|true)}
@@ -197,8 +197,8 @@ function show(getOptions, Model) {
     try {
       if (options === true) options = {}
 
-      if (options.Model) {
-        Model = getModel(options.Model)
+      if (options.model) {
+        Model = getModel(options.model)
       }
 
       const queryOptions = {
@@ -245,13 +245,13 @@ function show(getOptions, Model) {
 /**
  * UPDATE
  * @param getOptions {Function: () => ({
- *   Model: Object|string?,
+ *   model: string|Object?,
  *   state: Object?,
- *   key: "id" | string?,
+ *   key: "id" | string | false?,
  *   queryBuilder: Function?,
  *   validator: boolean?,
  *   rules: Object|Function?,
- *   fields: string|Array|Function?,
+ *   fields: string|Object|Array|Function?,
  *   formatter: Function?,
  *   beforeUpdate: Function?,
  *   afterUpdate: Function?,
@@ -274,8 +274,8 @@ function update(getOptions, Model) {
         instance: null
       }
 
-      if (options.Model) {
-        Model = getModel(options.Model)
+      if (options.model) {
+        Model = getModel(options.model)
       }
 
       const queryOptions = {
@@ -354,8 +354,8 @@ function update(getOptions, Model) {
 /**
  * DESTROY
  * @param getOptions {Function: () => ({
- *   Model: Object|string?,
- *   key: "id" | string?,
+ *   model: string|Object?,
+ *   key: "id" | string | false?,
  *   queryBuilder: Function?,
  *   force: boolean?,
  *   beforeDestroy: Function?,
@@ -372,8 +372,8 @@ function destroy(getOptions, Model) {
 
       if (options === true) options = {}
 
-      if (options.Model) {
-        Model = getModel(options.Model)
+      if (options.model) {
+        Model = getModel(options.model)
       }
 
       const queryOptions = {
@@ -439,11 +439,11 @@ function destroy(getOptions, Model) {
 
 /**
  * GET-MODEL
- * @param Model {Object|string}
+ * @param model {string|Object}
  * @return {Object}
  */
-function getModel(Model) {
-  return typeof Model === 'string' ? models[Model] : Model
+function getModel(model) {
+  return typeof model === 'string' ? models[model] : model
 }
 
 /**
