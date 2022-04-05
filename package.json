@@ -17,7 +17,7 @@
     "prettier": "^2.3.2"
   },
   "dependencies": {
-    "@risecorejs/core": "^2.0.5",
+    "@risecorejs/core": "^2.2.1",
     "http-status-codes": "^2.2.0"
   }
 }

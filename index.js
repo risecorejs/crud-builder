@@ -25,25 +25,27 @@ module.exports = (options) => {
   const Model = getModel(options.model)
 
   for (const endpoint in options.endpoints) {
-    if (options.endpoints[endpoint]) {
+    if (options.endpoints.hasOwnProperty(endpoint)) {
       const getEndpointOptions =
         typeof options.endpoints[endpoint] === 'function'
           ? options.endpoints[endpoint]
           : () => options.endpoints[endpoint]
 
-      const handler = templates[endpoint]
-
       const endpointOptions = getEndpointOptions()
 
-      if (handler) {
-        endpoints[endpoint] = handler(getEndpointOptions, Model)
-      } else if (endpointOptions.template) {
-        const _handler = templates[endpointOptions.template]
+      if (endpointOptions) {
+        const handler = templates[endpoint]
 
-        if (_handler) {
-          endpoints[endpoint] = _handler(getEndpointOptions, Model)
-        } else {
-          throw Error(`CRUD template "${endpointOptions.template}" not found`)
+        if (handler) {
+          endpoints[endpoint] = handler(getEndpointOptions, Model)
+        } else if (endpointOptions.template) {
+          const _handler = templates[endpointOptions.template]
+
+          if (_handler) {
+            endpoints[endpoint] = _handler(getEndpointOptions, Model)
+          } else {
+            throw Error(`Template "${endpointOptions.template}" not found`)
+          }
         }
       }
     }
@@ -70,10 +72,8 @@ module.exports = (options) => {
  */
 function create(getOptions, Model) {
   return async (req, res) => {
-    let options = getOptions()
-
     try {
-      if (options === true) options = {}
+      const options = decoratorGetOptions(getOptions)
 
       const context = {
         req,
@@ -92,11 +92,7 @@ function create(getOptions, Model) {
         return res.status(400).json({ errors })
       }
 
-      if (typeof options.fields === 'function') {
-        options.fields = await options.fields(context)
-      }
-
-      context.fields = options.fields ? req.only(options.fields) : req.body
+      context.fields = await getContextFields(req, options, context)
 
       if (options.formatter) {
         await options.formatter(context)
@@ -139,10 +135,8 @@ function create(getOptions, Model) {
  */
 function index(getOptions, Model) {
   return async (req, res) => {
-    let options = getOptions()
-
     try {
-      if (options === true) options = {}
+      const options = decoratorGetOptions(getOptions)
 
       if (options.model) {
         Model = getModel(options.model)
@@ -194,10 +188,8 @@ function index(getOptions, Model) {
  */
 function show(getOptions, Model) {
   return async (req, res) => {
-    let options = getOptions()
-
     try {
-      if (options === true) options = {}
+      const options = decoratorGetOptions(getOptions)
 
       if (options.model) {
         Model = getModel(options.model)
@@ -265,9 +257,7 @@ function show(getOptions, Model) {
 function update(getOptions, Model) {
   return async (req, res) => {
     try {
-      let options = getOptions()
-
-      if (options === true) options = {}
+      const options = decoratorGetOptions(getOptions)
 
       const context = {
         req,
@@ -314,11 +304,7 @@ function update(getOptions, Model) {
         return res.status(400).json({ errors })
       }
 
-      if (typeof options.fields === 'function') {
-        options.fields = await options.fields(context)
-      }
-
-      context.fields = options.fields ? req.only(options.fields) : req.body
+      context.fields = await getContextFields(req, options, context)
 
       if (options.formatter) {
         await options.formatter(context)
@@ -367,9 +353,7 @@ function update(getOptions, Model) {
 function bulkUpdate(getOptions, Model) {
   return async (req, res) => {
     try {
-      let options = getOptions()
-
-      if (options === true) options = {}
+      const options = decoratorGetOptions(getOptions)
 
       const context = {
         req,
@@ -396,11 +380,7 @@ function bulkUpdate(getOptions, Model) {
         return res.status(400).json({ errors })
       }
 
-      if (typeof options.fields === 'function') {
-        options.fields = await options.fields(context)
-      }
-
-      context.fields = options.fields ? req.only(options.fields) : req.body
+      context.fields = await getContextFields(req, options, context)
 
       if (options.formatter) {
         await options.formatter(context)
@@ -447,9 +427,7 @@ function bulkUpdate(getOptions, Model) {
 function destroy(getOptions, Model) {
   return async (req, res) => {
     try {
-      let options = getOptions()
-
-      if (options === true) options = {}
+      const options = decoratorGetOptions(getOptions)
 
       const context = {
         req,
@@ -539,9 +517,7 @@ function destroy(getOptions, Model) {
 function bulkDestroy(getOptions, Model) {
   return async (req, res) => {
     try {
-      let options = getOptions()
-
-      if (options === true) options = {}
+      const options = decoratorGetOptions(getOptions)
 
       const context = {
         req,
@@ -593,6 +569,21 @@ function bulkDestroy(getOptions, Model) {
 }
 
 /**
+ * DECORATOR-GET-OPTIONS
+ * @param getOptions {Function}
+ * @returns {Object}
+ */
+function decoratorGetOptions(getOptions) {
+  const options = getOptions()
+
+  if (options === true) {
+    return {}
+  } else {
+    return options
+  }
+}
+
+/**
  * GET-CONTEXT-STATE
  * @param req {Object}
  * @param options {Object}
@@ -637,6 +628,21 @@ async function getValidationErrors(req, options) {
       return errors
     }
   }
+}
+
+/**
+ * GET-CONTEXT-FIELDS
+ * @param req {Object}
+ * @param options {Object}
+ * @param context {Object}
+ * @returns {Promise<Object>}
+ */
+async function getContextFields(req, options, context) {
+  if (typeof options.fields === 'function') {
+    options.fields = await options.fields(context)
+  }
+
+  return options.fields ? req.only(options.fields) : req.body
 }
 
 /**
