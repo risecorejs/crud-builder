@@ -56,7 +56,7 @@ module.exports = (options) => {
  * CREATE
  * @param getOptions {Function: () => ({
  *   model: string|Object?,
- *   state: Object?,
+ *   state: Object|Function?,
  *   validator: boolean?,
  *   rules: Object|Function?,
  *   fields: string|Object|Array|Function?,
@@ -77,7 +77,7 @@ function create(getOptions, Model) {
 
       const context = {
         req,
-        state: options.state || {},
+        state: await getContextState(req, options),
         fields: null,
         instance: null
       }
@@ -86,16 +86,10 @@ function create(getOptions, Model) {
         Model = getModel(options.model)
       }
 
-      if (options.validator !== false && options.rules) {
-        if (typeof options.rules === 'function') {
-          options.rules = await options.rules(context)
-        }
+      const errors = await getValidationErrors(req, options)
 
-        const errors = await req.validator(options.rules)
-
-        if (errors) {
-          return res.status(400).json({ errors })
-        }
+      if (errors) {
+        return res.status(400).json({ errors })
       }
 
       if (typeof options.fields === 'function') {
@@ -254,7 +248,7 @@ function show(getOptions, Model) {
  * UPDATE
  * @param getOptions {Function: () => ({
  *   model: string|Object?,
- *   state: Object?,
+ *   state: Object|Function?,
  *   key: "id" | string | false?,
  *   queryBuilder: Function?,
  *   validator: boolean?,
@@ -277,7 +271,7 @@ function update(getOptions, Model) {
 
       const context = {
         req,
-        state: options.state || {},
+        state: await getContextState(req, options),
         fields: null,
         instance: null
       }
@@ -314,16 +308,10 @@ function update(getOptions, Model) {
         return res.sendStatus(404)
       }
 
-      if (options.validator !== false && options.rules) {
-        if (typeof options.rules === 'function') {
-          options.rules = await options.rules(context)
-        }
+      const errors = await getValidationErrors(req, options)
 
-        const errors = await req.validator(options.rules)
-
-        if (errors) {
-          return res.status(400).json({ errors })
-        }
+      if (errors) {
+        return res.status(400).json({ errors })
       }
 
       if (typeof options.fields === 'function') {
@@ -363,7 +351,7 @@ function update(getOptions, Model) {
  * BULK-UPDATE
  * @param getOptions {Function: () => ({
  *   model: string|Object?,
- *   state: Object?,
+ *   state: Object|Function?,
  *   queryBuilder: Function?,
  *   validator: boolean?,
  *   rules: Object|Function?,
@@ -385,7 +373,7 @@ function bulkUpdate(getOptions, Model) {
 
       const context = {
         req,
-        state: options.state || {},
+        state: await getContextState(req, options),
         fields: null,
         result: null
       }
@@ -402,16 +390,10 @@ function bulkUpdate(getOptions, Model) {
         Object.assign(queryOptions, _queryOptions)
       }
 
-      if (options.validator !== false && options.rules) {
-        if (typeof options.rules === 'function') {
-          options.rules = await options.rules(context)
-        }
+      const errors = await getValidationErrors(req, options)
 
-        const errors = await req.validator(options.rules)
-
-        if (errors) {
-          return res.status(400).json({ errors })
-        }
+      if (errors) {
+        return res.status(400).json({ errors })
       }
 
       if (typeof options.fields === 'function') {
@@ -451,7 +433,7 @@ function bulkUpdate(getOptions, Model) {
  * DESTROY
  * @param getOptions {Function: () => ({
  *   model: string|Object?,
- *   state: Object?,
+ *   state: Object|Function?,
  *   key: "id" | string | false?,
  *   queryBuilder: Function?,
  *   force: boolean?,
@@ -471,7 +453,7 @@ function destroy(getOptions, Model) {
 
       const context = {
         req,
-        state: options.state || {},
+        state: await getContextState(req, options),
         instance: null
       }
 
@@ -544,7 +526,7 @@ function destroy(getOptions, Model) {
  * BULK-DESTROY
  * @param getOptions {Function: () => ({
  *   model: string|Object?,
- *   state: Object?,
+ *   state: Object|Function?,
  *   queryBuilder: Function?,
  *   force: boolean?,
  *   beforeDestroy: Function?,
@@ -563,7 +545,7 @@ function bulkDestroy(getOptions, Model) {
 
       const context = {
         req,
-        state: options.state || {},
+        state: await getContextState(req, options),
         result: null
       }
 
@@ -611,12 +593,50 @@ function bulkDestroy(getOptions, Model) {
 }
 
 /**
+ * GET-CONTEXT-STATE
+ * @param req {Object}
+ * @param options {Object}
+ * @return {Promise<Object>}
+ */
+async function getContextState(req, options) {
+  if (options.state) {
+    if (typeof options.state === 'function') {
+      return await options.state(req)
+    } else {
+      return options.state
+    }
+  } else {
+    return {}
+  }
+}
+
+/**
  * GET-MODEL
  * @param model {string|Object}
  * @return {Object}
  */
 function getModel(model) {
   return typeof model === 'string' ? models[model] : model
+}
+
+/**
+ * GET-VALIDATION-ERRORS
+ * @param req {Object}
+ * @param options {Object}
+ * @return {Promise<void|Object>}
+ */
+async function getValidationErrors(req, options) {
+  if (options.validator !== false && options.rules) {
+    if (typeof options.rules === 'function') {
+      options.rules = await options.rules(context)
+    }
+
+    const errors = await req.validator(options.rules)
+
+    if (errors) {
+      return errors
+    }
+  }
 }
 
 /**
