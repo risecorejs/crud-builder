@@ -1,7 +1,15 @@
 const models = require('@risecorejs/core/models')
 const httpStatusCodes = require('http-status-codes')
 
-const templates = { create, index, show, update, destroy }
+const templates = {
+  create,
+  index,
+  show,
+  update,
+  bulkUpdate,
+  destroy,
+  bulkDestroy
+}
 
 /**
  * CRUD-BUILDER
@@ -116,9 +124,9 @@ function create(getOptions, Model) {
         return res.status(201).json(response)
       }
 
-      return res.status(201).json(instance)
+      return res.status(201).json({ result: context.instance })
     } catch (err) {
-      return errorResponse(res, err)
+      return errorResponse(err, res)
     }
   }
 }
@@ -172,9 +180,9 @@ function index(getOptions, Model) {
         return res.json(response)
       }
 
-      return res.json(instances)
+      return res.json({ result: instances })
     } catch (err) {
-      return errorResponse(res, err)
+      return errorResponse(err, res)
     }
   }
 }
@@ -235,9 +243,9 @@ function show(getOptions, Model) {
         return res.json(response)
       }
 
-      return res.json(instance)
+      return res.json({ result: instance })
     } catch (err) {
-      return errorResponse(res, err)
+      return errorResponse(err, res)
     }
   }
 }
@@ -289,7 +297,7 @@ function update(getOptions, Model) {
       }
 
       if (options.queryBuilder) {
-        const _queryOptions = await options.queryBuilder(req, context.state)
+        const _queryOptions = await options.queryBuilder(context)
 
         if (_queryOptions.where) {
           Object.assign(queryOptions.where, _queryOptions.where)
@@ -344,9 +352,97 @@ function update(getOptions, Model) {
         return res.json(response)
       }
 
-      return res.json(context.instance)
+      return res.json({ result: context.instance })
     } catch (err) {
-      return errorResponse(res, err)
+      return errorResponse(err, res)
+    }
+  }
+}
+
+/**
+ * BULK-UPDATE
+ * @param getOptions {Function: () => ({
+ *   model: string|Object?,
+ *   state: Object?,
+ *   queryBuilder: Function?,
+ *   validator: boolean?,
+ *   rules: Object|Function?,
+ *   fields: string|Object|Array|Function?,
+ *   formatter: Function?,
+ *   beforeUpdate: Function?,
+ *   afterUpdate: Function?,
+ *   response: Function?
+ * }|true)}
+ * @param Model {Object}
+ * @return {Function}
+ */
+function bulkUpdate(getOptions, Model) {
+  return async (req, res) => {
+    try {
+      let options = getOptions()
+
+      if (options === true) options = {}
+
+      const context = {
+        req,
+        state: options.state || {},
+        fields: null,
+        result: null
+      }
+
+      if (options.model) {
+        Model = getModel(options.model)
+      }
+
+      const queryOptions = {}
+
+      if (options.queryBuilder) {
+        const _queryOptions = await options.queryBuilder(context)
+
+        Object.assign(queryOptions, _queryOptions)
+      }
+
+      if (options.validator !== false && options.rules) {
+        if (typeof options.rules === 'function') {
+          options.rules = await options.rules(context)
+        }
+
+        const errors = await req.validator(options.rules)
+
+        if (errors) {
+          return res.status(400).json({ errors })
+        }
+      }
+
+      if (typeof options.fields === 'function') {
+        options.fields = await options.fields(context)
+      }
+
+      context.fields = options.fields ? req.only(options.fields) : req.body
+
+      if (options.formatter) {
+        await options.formatter(context)
+      }
+
+      if (options.beforeUpdate) {
+        await options.beforeUpdate(context)
+      }
+
+      context.result = await Model.update(context.fields, queryOptions)
+
+      if (options.afterUpdate) {
+        await options.afterUpdate(context)
+      }
+
+      if (options.response) {
+        const response = await options.response(context)
+
+        return res.json(response)
+      }
+
+      return res.json({ result: context.result })
+    } catch (err) {
+      return errorResponse(err, res)
     }
   }
 }
@@ -355,6 +451,7 @@ function update(getOptions, Model) {
  * DESTROY
  * @param getOptions {Function: () => ({
  *   model: string|Object?,
+ *   state: Object?,
  *   key: "id" | string | false?,
  *   queryBuilder: Function?,
  *   force: boolean?,
@@ -372,6 +469,12 @@ function destroy(getOptions, Model) {
 
       if (options === true) options = {}
 
+      const context = {
+        req,
+        state: options.state || {},
+        instance: null
+      }
+
       if (options.model) {
         Model = getModel(options.model)
       }
@@ -387,7 +490,7 @@ function destroy(getOptions, Model) {
       }
 
       if (options.queryBuilder) {
-        const _queryOptions = await options.queryBuilder(req)
+        const _queryOptions = await options.queryBuilder(context)
 
         if (_queryOptions.where) {
           Object.assign(queryOptions.where, _queryOptions.where)
@@ -398,9 +501,9 @@ function destroy(getOptions, Model) {
         Object.assign(queryOptions, _queryOptions)
       }
 
-      const instance = await Model.findOne(queryOptions)
+      context.instance = await Model.findOne(queryOptions)
 
-      if (!instance) {
+      if (!context.instance) {
         return res.sendStatus(404)
       }
 
@@ -408,31 +511,101 @@ function destroy(getOptions, Model) {
 
       if (options.force) {
         if (typeof options.force === 'function') {
-          destroyOptions.force = await options.force(req)
+          destroyOptions.force = await options.force(context)
         } else {
           destroyOptions.force = true
         }
       }
 
       if (options.beforeDestroy) {
-        await options.beforeDestroy(instance, req)
+        await options.beforeDestroy(context)
       }
 
-      await instance.destroy(destroyOptions)
+      await context.instance.destroy(destroyOptions)
 
       if (options.afterDestroy) {
-        await options.afterDestroy(instance, req)
+        await options.afterDestroy(context)
       }
 
       if (options.response) {
-        const response = await options.response(instance, req)
+        const response = await options.response(context)
 
         return res.json(response)
       }
 
-      return res.json(instance)
+      return res.json({ result: context.instance })
     } catch (err) {
-      return errorResponse(res, err)
+      return errorResponse(err, res)
+    }
+  }
+}
+
+/**
+ * BULK-DESTROY
+ * @param getOptions {Function: () => ({
+ *   model: string|Object?,
+ *   state: Object?,
+ *   queryBuilder: Function?,
+ *   force: boolean?,
+ *   beforeDestroy: Function?,
+ *   afterDestroy: Function?,
+ *   response: Function?
+ * }|true)}
+ * @param Model {Object}
+ * @return {Function}
+ */
+function bulkDestroy(getOptions, Model) {
+  return async (req, res) => {
+    try {
+      let options = getOptions()
+
+      if (options === true) options = {}
+
+      const context = {
+        req,
+        state: options.state || {},
+        result: null
+      }
+
+      if (options.model) {
+        Model = getModel(options.model)
+      }
+
+      const queryOptions = {}
+
+      if (options.queryBuilder) {
+        const _queryOptions = await options.queryBuilder(context)
+
+        Object.assign(queryOptions, _queryOptions)
+      }
+
+      if (options.force) {
+        if (typeof options.force === 'function') {
+          queryOptions.force = await options.force(context)
+        } else {
+          queryOptions.force = true
+        }
+      }
+
+      if (options.beforeDestroy) {
+        await options.beforeDestroy(context)
+      }
+
+      context.result = await Model.destroy(queryOptions)
+
+      if (options.afterDestroy) {
+        await options.afterDestroy(context)
+      }
+
+      if (options.response) {
+        const response = await options.response(context)
+
+        return res.json(response)
+      }
+
+      return res.json({ result: context.result })
+    } catch (err) {
+      return errorResponse(err, res)
     }
   }
 }
@@ -448,11 +621,11 @@ function getModel(model) {
 
 /**
  * ERROR-RESPONSE
- * @param res {Object}
  * @param err {Object}
+ * @param res {Object}
  * @return {any}
  */
-function errorResponse(res, err) {
+function errorResponse(err, res) {
   const status = err.status || err.response?.status || 500
 
   return res.status(status).json({
