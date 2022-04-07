@@ -86,7 +86,7 @@ function create(getOptions, Model) {
         Model = getModel(options.model)
       }
 
-      const errors = await getValidationErrors(req, options)
+      const errors = await getValidationErrors(req, options, context)
 
       if (errors) {
         return res.status(400).json({ errors })
@@ -298,7 +298,7 @@ function update(getOptions, Model) {
         return res.sendStatus(404)
       }
 
-      const errors = await getValidationErrors(req, options)
+      const errors = await getValidationErrors(req, options, context)
 
       if (errors) {
         return res.status(400).json({ errors })
@@ -374,7 +374,7 @@ function bulkUpdate(getOptions, Model) {
         Object.assign(queryOptions, _queryOptions)
       }
 
-      const errors = await getValidationErrors(req, options)
+      const errors = await getValidationErrors(req, options, context)
 
       if (errors) {
         return res.status(400).json({ errors })
@@ -614,9 +614,10 @@ function getModel(model) {
  * GET-VALIDATION-ERRORS
  * @param req {Object}
  * @param options {Object}
+ * @param context {Object}
  * @return {Promise<void|Object>}
  */
-async function getValidationErrors(req, options) {
+async function getValidationErrors(req, options, context) {
   if (options.validator !== false && options.rules) {
     if (typeof options.rules === 'function') {
       options.rules = await options.rules(context)
@@ -652,6 +653,8 @@ async function getContextFields(req, options, context) {
  * @return {any}
  */
 function errorResponse(err, res) {
+  console.error(err)
+
   const status = err.status || err.response?.status || 500
 
   return res.status(status).json({
