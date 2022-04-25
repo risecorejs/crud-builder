@@ -639,11 +639,11 @@ async function getValidationErrors(req, options, context) {
  * @returns {Promise<Object>}
  */
 async function getContextFields(req, options, context) {
-  if (typeof options.fields === 'function') {
-    options.fields = await options.fields(context)
+  if (typeof options.only === 'function') {
+    options.only = await options.only(context)
   }
 
-  return options.fields ? req.only(options.fields) : req.body
+  return options.only ? req.only(options.only) : req.body
 }
 
 /**
