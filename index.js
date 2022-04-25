@@ -77,6 +77,7 @@ function create(getOptions, Model) {
 
       const context = {
         req,
+        res,
         state: await getContextState(req, options),
         fields: null,
         instance: null
@@ -261,6 +262,7 @@ function update(getOptions, Model) {
 
       const context = {
         req,
+        res,
         state: await getContextState(req, options),
         fields: null,
         instance: null
@@ -357,6 +359,7 @@ function bulkUpdate(getOptions, Model) {
 
       const context = {
         req,
+        res,
         state: await getContextState(req, options),
         fields: null,
         result: null
@@ -431,6 +434,7 @@ function destroy(getOptions, Model) {
 
       const context = {
         req,
+        res,
         state: await getContextState(req, options),
         instance: null
       }
@@ -521,6 +525,7 @@ function bulkDestroy(getOptions, Model) {
 
       const context = {
         req,
+        res,
         state: await getContextState(req, options),
         result: null
       }
