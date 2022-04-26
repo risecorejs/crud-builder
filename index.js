@@ -65,6 +65,7 @@ module.exports = (options) => {
  *   formatter: Function?,
  *   beforeCreate: Function?,
  *   afterCreate: Function?,
+ *   sendStatus: boolean,
  *   response: Function?
  * }|true)}
  * @param Model {Object}
@@ -109,13 +110,22 @@ function create(getOptions, Model) {
         await options.afterCreate(context)
       }
 
+      const status = 201
+
+      if (options.sendStatus) {
+        return res.sendtatus(status)
+      }
+
       if (options.response) {
         const response = await options.response(context)
 
-        return res.status(201).json(response)
+        return res.status(status).json(response)
       }
 
-      return res.status(201).json({ result: context.instance })
+      return res.status(status).json({
+        status,
+        result: context.instance
+      })
     } catch (err) {
       return errorResponse(err, res)
     }
@@ -129,6 +139,7 @@ function create(getOptions, Model) {
  *   method: "findAndCountAll"|"findAll"?,
  *   pagination: boolean?,
  *   queryBuilder: Function?,
+ *   sendStatus: boolean,
  *   response: Function?
  * }|true)}
  * @param Model {Object}
@@ -163,13 +174,22 @@ function index(getOptions, Model) {
 
       const instances = await Model[options.method](queryOptions)
 
+      const status = 200
+
+      if (options.sendStatus) {
+        return res.sendtatus(status)
+      }
+
       if (options.response) {
         const response = await options.response(instances, req)
 
         return res.json(response)
       }
 
-      return res.json({ result: instances })
+      return res.json({
+        status,
+        result: instances
+      })
     } catch (err) {
       return errorResponse(err, res)
     }
@@ -182,6 +202,7 @@ function index(getOptions, Model) {
  *   model: string|Object?,
  *   key: "id" | string | false?,
  *   queryBuilder: Function?,
+ *   sendStatus: boolean,
  *   response: Function?
  * }|true)}
  * @param Model {Object}
@@ -224,13 +245,22 @@ function show(getOptions, Model) {
         return res.sendStatus(404)
       }
 
+      const status = 200
+
+      if (options.sendStatus) {
+        return res.sendtatus(status)
+      }
+
       if (options.response) {
         const response = await options.response(instance, req)
 
         return res.json(response)
       }
 
-      return res.json({ result: instance })
+      return res.json({
+        status,
+        result: instance
+      })
     } catch (err) {
       return errorResponse(err, res)
     }
@@ -250,6 +280,7 @@ function show(getOptions, Model) {
  *   formatter: Function?,
  *   beforeUpdate: Function?,
  *   afterUpdate: Function?,
+ *   sendStatus: boolean,
  *   response: Function?
  * }|true)}
  * @param Model {Object}
@@ -316,10 +347,18 @@ function update(getOptions, Model) {
         await options.beforeUpdate(context)
       }
 
-      await context.instance.update(context.fields)
+      if (context.fields) {
+        await context.instance.update(context.fields)
+      }
 
       if (options.afterUpdate) {
         await options.afterUpdate(context)
+      }
+
+      const status = 200
+
+      if (options.sendStatus) {
+        return res.sendtatus(status)
       }
 
       if (options.response) {
@@ -328,7 +367,10 @@ function update(getOptions, Model) {
         return res.json(response)
       }
 
-      return res.json({ result: context.instance })
+      return res.json({
+        status,
+        result: context.instance
+      })
     } catch (err) {
       return errorResponse(err, res)
     }
@@ -347,6 +389,7 @@ function update(getOptions, Model) {
  *   formatter: Function?,
  *   beforeUpdate: Function?,
  *   afterUpdate: Function?,
+ *   sendStatus: boolean,
  *   response: Function?
  * }|true)}
  * @param Model {Object}
@@ -393,10 +436,18 @@ function bulkUpdate(getOptions, Model) {
         await options.beforeUpdate(context)
       }
 
-      context.result = await Model.update(context.fields, queryOptions)
+      if (context.fields) {
+        context.result = await Model.update(context.fields, queryOptions)
+      }
 
       if (options.afterUpdate) {
         await options.afterUpdate(context)
+      }
+
+      const status = 200
+
+      if (options.sendStatus) {
+        return res.sendtatus(status)
       }
 
       if (options.response) {
@@ -405,7 +456,10 @@ function bulkUpdate(getOptions, Model) {
         return res.json(response)
       }
 
-      return res.json({ result: context.result })
+      return res.json({
+        status,
+        result: context.result
+      })
     } catch (err) {
       return errorResponse(err, res)
     }
@@ -422,6 +476,7 @@ function bulkUpdate(getOptions, Model) {
  *   force: boolean?,
  *   beforeDestroy: Function?,
  *   afterDestroy: Function?,
+ *   sendStatus: boolean,
  *   response: Function?
  * }|true)}
  * @param Model {Object}
@@ -491,13 +546,22 @@ function destroy(getOptions, Model) {
         await options.afterDestroy(context)
       }
 
+      const status = 200
+
+      if (options.sendStatus) {
+        return res.sendtatus(status)
+      }
+
       if (options.response) {
         const response = await options.response(context)
 
         return res.json(response)
       }
 
-      return res.json({ result: context.instance })
+      return res.json({
+        status,
+        result: context.instance
+      })
     } catch (err) {
       return errorResponse(err, res)
     }
@@ -513,6 +577,7 @@ function destroy(getOptions, Model) {
  *   force: boolean?,
  *   beforeDestroy: Function?,
  *   afterDestroy: Function?,
+ *   sendStatus: boolean,
  *   response: Function?
  * }|true)}
  * @param Model {Object}
@@ -560,13 +625,22 @@ function bulkDestroy(getOptions, Model) {
         await options.afterDestroy(context)
       }
 
+      const status = 200
+
+      if (options.sendStatus) {
+        return res.sendtatus(status)
+      }
+
       if (options.response) {
         const response = await options.response(context)
 
         return res.json(response)
       }
 
-      return res.json({ result: context.result })
+      return res.json({
+        status,
+        result: context.result
+      })
     } catch (err) {
       return errorResponse(err, res)
     }
