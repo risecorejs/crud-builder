@@ -65,7 +65,7 @@ module.exports = (getOptions, Model) => async (req, res) => {
     const status = 201
 
     if (options.sendStatus) {
-      return res.sendtatus(status)
+      return res.sendStatus(status)
     }
 
     if (options.response) {
