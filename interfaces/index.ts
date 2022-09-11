@@ -13,28 +13,33 @@ export interface IOptions {
 export interface IMethods {
   create?: true | ICreateMethodOptions // ...
 
-  index: true | IBaseMethodOptions
-  show: true | IBaseMethodOptions
-  count: true | IBaseMethodOptions
-  update: true | IBaseMethodOptions
-  bulkUpdate: true | IBaseMethodOptions
-  destroy: true | IBaseMethodOptions
-  bulkDestroy: true | IBaseMethodOptions
-  restore: true | IBaseMethodOptions
-  bulkRestore: true | IBaseMethodOptions
+  index?: true | IBaseMethodOptions
+  show?: true | IBaseMethodOptions
+  count?: true | IBaseMethodOptions
+  update?: true | IBaseMethodOptions
+  bulkUpdate?: true | IBaseMethodOptions
+  destroy?: true | IBaseMethodOptions
+  bulkDestroy?: true | IBaseMethodOptions
+  restore?: true | IBaseMethodOptions
+  bulkRestore?: true | IBaseMethodOptions
 }
 
 export interface ICreateMethodOptions extends IBaseMethodOptions {
   template?: 'create'
-  state?: object | ((req?: express.Request) => object)
+  state?: object | ((req: express.Request) => object)
   validator?: boolean
   rules?: IValidatorRules
   only?: TOnlyKeys
-  formatter?: (ctx: ICreateContext) => void
+  formatter?: (ctx: ICreateMethodContext) => void
+  beforeCreate?: (ctx: ICreateMethodContext) => void
+  afterCreate?: (ctx: ICreateMethodContext) => void
+  sendStatus?: boolean
+  response?: (ctx: ICreateMethodContext) => void
 }
 
-export interface ICreateContext {
+export interface ICreateMethodContext {
   req: express.Request
+  res: express.Response
   state: object
   fields: null | object
   instance: object

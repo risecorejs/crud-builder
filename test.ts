@@ -3,12 +3,6 @@ import crudBuilder from './index'
 const endpoints = crudBuilder({
   model: 'User',
   methods: {
-    create: true,
-    index: {},
-    show
+    create: {}
   }
 })
-
-function show() {
-  return {}
-}
