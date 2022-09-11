@@ -11,17 +11,19 @@ export interface IOptions {
 }
 
 export interface IMethods {
-  create?: true | ICreateMethodOptions // ...
+  create?: true | ICreateMethodOptions
 
-  index?: true | IBaseMethodOptions
-  show?: true | IBaseMethodOptions
-  count?: true | IBaseMethodOptions
-  update?: true | IBaseMethodOptions
-  bulkUpdate?: true | IBaseMethodOptions
-  destroy?: true | IBaseMethodOptions
-  bulkDestroy?: true | IBaseMethodOptions
-  restore?: true | IBaseMethodOptions
-  bulkRestore?: true | IBaseMethodOptions
+  index?: true
+  show?: true
+  count?: true
+  update?: true
+  bulkUpdate?: true
+  destroy?: true
+  bulkDestroy?: true
+  restore?: true
+  bulkRestore?: true
+
+  [key: string]: any
 }
 
 export interface ICreateMethodOptions extends IBaseMethodOptions {
@@ -48,4 +50,8 @@ export interface ICreateMethodContext {
 export interface IBaseMethodOptions {
   template?: TTemplates
   model?: string | object
+}
+
+export interface IEndpoints {
+  [key: string]: (req: express.Request, res: express.Response) => any
 }

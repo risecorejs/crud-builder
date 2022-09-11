@@ -2,7 +2,7 @@ const { getModel } = require('./utils')
 
 const templates = require('./templates')
 
-import { IOptions, IEndpoints, IEndpointBaseOptions } from './interfaces'
+import { IOptions, IEndpoints } from './interfaces'
 
 /**
  * CRUD-BUILDER
@@ -31,6 +31,6 @@ export default function (options: IOptions): IEndpoints {
   return endpoints
 }
 
-function getEndpointOptions(endpoint: object | Function): IEndpointBaseOptions {
+function getEndpointOptions(endpoint: object | Function) {
   return typeof endpoint === 'function' ? endpoint() : endpoint
 }
