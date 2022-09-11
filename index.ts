@@ -1,8 +1,8 @@
-const { getModel } = require('./utils')
+import { getModel } from './utils'
 
 const templates = require('./templates')
 
-import { IOptions, IEndpoints } from './interfaces'
+import { IOptions, IEndpoints, IBaseMethodOptions } from './interfaces'
 
 /**
  * CRUD-BUILDER
@@ -14,16 +14,16 @@ export default function (options: IOptions): IEndpoints {
 
   const Model = getModel(options.model)
 
-  for (const [key, endpoint] of Object.entries(options.endpoints)) {
-    const endpointOptions = getEndpointOptions(endpoint)
+  for (const [key, method] of Object.entries(options.methods)) {
+    const methodOptions = getMethodOptions(method)
 
     if (templates.has(key)) {
-      endpoints[key] = templates.get(key).apply(null, [getEndpointOptions, Model])
-    } else if (endpointOptions.template) {
-      if (templates.has(endpointOptions.template)) {
-        endpoints[key] = templates.get(endpointOptions.template).apply(null, [getEndpointOptions, Model])
+      endpoints[key] = templates.get(key).apply(null, [getMethodOptions, Model])
+    } else if (methodOptions !== true && methodOptions.template) {
+      if (templates.has(methodOptions.template)) {
+        endpoints[key] = templates.get(methodOptions.template).apply(null, [getMethodOptions, Model])
       } else {
-        throw Error(`Template "${endpointOptions.template}" not found`)
+        throw Error(`Template "${methodOptions.template}" not found`)
       }
     }
   }
@@ -31,6 +31,11 @@ export default function (options: IOptions): IEndpoints {
   return endpoints
 }
 
-function getEndpointOptions(endpoint: object | Function) {
-  return typeof endpoint === 'function' ? endpoint() : endpoint
+/**
+ * GET-METHOD-OPTIONS
+ * @param method {true | object | (() => any)}
+ * @return {true | IBaseMethodOptions}
+ */
+function getMethodOptions(method: true | object | (() => any)): true | IBaseMethodOptions {
+  return typeof method === 'function' ? method() : method
 }
