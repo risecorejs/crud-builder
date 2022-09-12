@@ -50,6 +50,7 @@ export default function (getOptions: () => IMethodCreateOptions, Model: object):
         await options.beforeCreate(context)
       }
 
+      // @ts-ignore
       context.instance = await Model.create(context.fields)
 
       if (options.afterCreate) {
