@@ -2,7 +2,7 @@ import { getModel } from './utils'
 
 const templates = require('./templates')
 
-import { IOptions, IEndpoints, IBaseMethodOptions } from './interfaces'
+import { IOptions, IEndpoints, IMethodBaseOptions } from './interfaces'
 
 /**
  * CRUD-BUILDER
@@ -14,16 +14,20 @@ export default function (options: IOptions): IEndpoints {
 
   const Model = getModel(options.model)
 
-  for (const [key, method] of Object.entries(options.methods)) {
-    const methodOptions = getMethodOptions(method)
+  for (const [key, value] of Object.entries(options.methods)) {
+    const methodOptions = getMethodOptions(value)
 
-    if (templates.has(key)) {
-      endpoints[key] = templates.get(key).apply(null, [getMethodOptions, Model])
-    } else if (methodOptions !== true && methodOptions.template) {
-      if (templates.has(methodOptions.template)) {
-        endpoints[key] = templates.get(methodOptions.template).apply(null, [getMethodOptions, Model])
+    if (methodOptions === true) {
+      if (templates.has(key)) {
+        endpoints[key] = templates.get(key).apply(null, [getMethodOptions, Model])
       } else {
-        throw Error(`Template "${methodOptions.template}" not found`)
+        throw Error(`Template "${key}" not found`)
+      }
+    } else {
+      if (templates.has(methodOptions.template || key)) {
+        endpoints[key] = templates.get(methodOptions.template || key).apply(null, [getMethodOptions, Model])
+      } else {
+        throw Error(`Template "${methodOptions.template || key}" not found`)
       }
     }
   }
@@ -33,9 +37,15 @@ export default function (options: IOptions): IEndpoints {
 
 /**
  * GET-METHOD-OPTIONS
- * @param method {true | object | (() => any)}
- * @return {true | IBaseMethodOptions}
+ * @param methodOptions {true | object | (() => any)}
+ * @return {IMethodBaseOptions}
  */
-function getMethodOptions(method: true | object | (() => any)): true | IBaseMethodOptions {
-  return typeof method === 'function' ? method() : method
+function getMethodOptions(methodOptions: true | object | (() => any)): IMethodBaseOptions {
+  if (methodOptions === true) {
+    return {}
+  } else if (typeof methodOptions === 'function') {
+    return methodOptions()
+  } else {
+    return methodOptions
+  }
 }

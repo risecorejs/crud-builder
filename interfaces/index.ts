@@ -3,7 +3,7 @@ import express from 'express'
 import { IRules as IValidatorRules } from '@risecorejs/validator/interfaces'
 import { TKeys as TOnlyKeys } from '@risecorejs/only/types'
 
-import { TTemplates } from '../types'
+import { TTemplates, TMethodWrapper, TMethodState, TMethodOnly } from '../types'
 
 export interface IOptions {
   model: string | object
@@ -11,7 +11,7 @@ export interface IOptions {
 }
 
 export interface IMethods {
-  create?: true | ICreateMethodOptions
+  create?: TMethodWrapper<IMethodCreateOptions>
 
   index?: true
   show?: true
@@ -26,30 +26,36 @@ export interface IMethods {
   [key: string]: any
 }
 
-export interface ICreateMethodOptions extends IBaseMethodOptions {
+export interface IMethodCreateOptions extends IMethodBaseOptions, IMethodValidatorOptions, IMethodOnly {
   template?: 'create'
-  state?: object | ((req: express.Request) => object)
-  validator?: boolean
-  rules?: IValidatorRules
-  only?: TOnlyKeys
-  formatter?: (ctx: ICreateMethodContext) => void
-  beforeCreate?: (ctx: ICreateMethodContext) => void
-  afterCreate?: (ctx: ICreateMethodContext) => void
+  state?: TMethodState
+  formatter?: (ctx: IMethodContext) => void | Promise<void>
+  beforeCreate?: (ctx: IMethodContext) => void | Promise<void>
+  afterCreate?: (ctx: IMethodContext) => void | Promise<void>
   sendStatus?: boolean
-  response?: (ctx: ICreateMethodContext) => void
+  response?: (ctx: IMethodContext) => any | Promise<any>
 }
 
-export interface ICreateMethodContext {
+export interface IMethodContext {
   req: express.Request
   res: express.Response
   state: object
-  fields: null | object
-  instance: object
+  fields: object
+  instance: null | object
 }
 
-export interface IBaseMethodOptions {
+export interface IMethodBaseOptions {
   template?: TTemplates
   model?: string | object
+}
+
+export interface IMethodValidatorOptions {
+  validator?: boolean
+  rules?: IValidatorRules | ((ctx: IMethodContext) => IValidatorRules | Promise<IValidatorRules>)
+}
+
+export interface IMethodOnly {
+  only?: TMethodOnly
 }
 
 export interface IEndpoints {

@@ -2,7 +2,8 @@ import httpStatusCodes from 'http-status-codes'
 import models from '@risecorejs/core/models'
 import express from 'express'
 
-import { ICreateMethodOptions } from './interfaces'
+import { IMethodContext, IMethodOnly, IMethodValidatorOptions } from './interfaces'
+import { TMethodOnly, TMethodState } from './types'
 
 /**
  * DECORATOR-GET-OPTIONS
@@ -22,15 +23,15 @@ export function decoratorGetOptions(getOptions: () => true | object): object {
 /**
  * GET-CONTEXT-STATE
  * @param req {express.Request}
- * @param options {ICreateMethodOptions}
- * @return {Promise<object>}
+ * @param state {TMethodState}
+ * @return {object}
  */
-export async function getContextState(req: express.Request, options: ICreateMethodOptions): Promise<object> {
-  if (options.state) {
-    if (typeof options.state === 'function') {
-      return await options.state(req)
+export function getContextState(req: express.Request, state: TMethodState | undefined): object {
+  if (state) {
+    if (typeof state === 'function') {
+      return state(req)
     } else {
-      return options.state
+      return state
     }
   } else {
     return {}
@@ -114,33 +115,37 @@ export function getQueryOptions() {
 
 /**
  * GET-VALIDATION-ERRORS
- * @param req {Object}
- * @param options {Object}
- * @param context {Object}
- * @return {Promise<void|Object>}
+ * @param req {express.Request}
+ * @param options {IMethodValidatorOptions}
+ * @param context {IMethodContext}
+ * @return {Promise<void|object>}
  */
-export async function getValidationErrors(req, options, context) {
+export async function getValidationErrors(
+  req: express.Request,
+  options: IMethodValidatorOptions,
+  context: IMethodContext
+): Promise<void | object | null> {
   if (options.validator !== false && options.rules) {
     if (typeof options.rules === 'function') {
       options.rules = await options.rules(context)
     }
 
-    const errors = await req.validator(options.rules)
-
-    if (errors) {
-      return errors
-    }
+    return req.validator(options.rules)
   }
 }
 
 /**
  * GET-CONTEXT-FIELDS
- * @param req {Object}
- * @param options {Object}
- * @param context {Object}
- * @returns {Promise<Object>}
+ * @param req {express.Request}
+ * @param options {TMethodOnly}
+ * @param context {IMethodContext}
+ * @returns {Promise<object>}
  */
-export async function getContextFields(req, options, context) {
+export async function getContextFields(
+  req: express.Request,
+  options: IMethodOnly,
+  context: IMethodContext
+): Promise<object> {
   if (typeof options.only === 'function') {
     options.only = await options.only(context)
   }
@@ -150,11 +155,11 @@ export async function getContextFields(req, options, context) {
 
 /**
  * ERROR-RESPONSE
- * @param err {Object}
- * @param res {Object}
+ * @param err {any}
+ * @param res {express.Response}
  * @return {any}
  */
-export function errorResponse(err, res) {
+export function errorResponse(err: any, res: express.Response) {
   console.error(err)
 
   const status = err.status || err.response?.status || 500
