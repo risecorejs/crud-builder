@@ -80,7 +80,7 @@ export function getQueryOptions() {
      * @param ctx {IMethodContext?}
      * @returns {Promise<object>}
      */
-    async single(req: express.Request, options, ctx?: IMethodContext) {
+    async single(req: express.Request, options: IMethodQueryBuilderOptions, ctx?: IMethodContext) {
       const queryOptions: IFields = {
         where: {}
       }

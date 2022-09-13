@@ -75,7 +75,7 @@ export interface IMethodOnlyOptions {
 
 export interface IMethodQueryBuilderOptions {
   key?: string | false
-  queryBuilder?: object | ((ctxOrReq: IMethodContext | express.Request) => object)
+  queryBuilder?: IFields | ((ctxOrReq: IMethodContext | express.Request) => IFields)
 }
 
 export interface IEndpoints {
