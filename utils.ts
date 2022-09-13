@@ -2,8 +2,21 @@ import httpStatusCodes from 'http-status-codes'
 import models from '@risecorejs/core/models'
 import express from 'express'
 
-import { IMethodContext, IMethodOnly, IMethodValidatorOptions } from './interfaces'
+import { IMethodBaseOptions, IMethodContext, IMethodOnlyOptions, IMethodValidatorOptions } from './interfaces'
 import { TMethodOnly, TMethodState } from './types'
+
+/**
+ * GET-METHOD-OPTIONS
+ * @param value {true  | (() => any)}
+ * @return {any}
+ */
+export function getMethodOptions(value: true | (() => any)): any {
+  if (value === true) {
+    return {}
+  } else {
+    return value()
+  }
+}
 
 /**
  * DECORATOR-GET-OPTIONS
@@ -26,7 +39,7 @@ export function decoratorGetOptions(getOptions: () => true | object): object {
  * @param state {TMethodState}
  * @return {object}
  */
-export function getContextState(req: express.Request, state: TMethodState | undefined): object {
+export function getContextState(req: express.Request, state: TMethodState | undefined): object | Promise<object> {
   if (state) {
     if (typeof state === 'function') {
       return state(req)
@@ -143,14 +156,18 @@ export async function getValidationErrors(
  */
 export async function getContextFields(
   req: express.Request,
-  options: IMethodOnly,
+  options: IMethodOnlyOptions,
   context: IMethodContext
 ): Promise<object> {
-  if (typeof options.only === 'function') {
-    options.only = await options.only(context)
-  }
+  if (options.only) {
+    if (typeof options.only === 'function') {
+      options.only = await options.only(context)
+    }
 
-  return options.only ? req.only(options.only) : req.body
+    return req.only(options.only)
+  } else {
+    return req.body
+  }
 }
 
 /**

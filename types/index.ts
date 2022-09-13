@@ -16,7 +16,7 @@ export type TTemplates =
   | 'restore'
   | 'bulkRestore'
 
-export type TMethodWrapper<I> = true | I | (() => I)
+export type TMethodWrapper<I> = true | (() => I)
 
 export type TMethodState = object | ((req: express.Request) => object | Promise<object>)
 

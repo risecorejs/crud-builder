@@ -1,20 +1,27 @@
 import express from 'express'
 import httpStatusCodes from 'http-status-codes'
 
-import { getContextState, getModel, getValidationErrors, errorResponse, getContextFields } from '../utils'
+import {
+  getMethodOptions,
+  getContextState,
+  getModel,
+  getValidationErrors,
+  getContextFields,
+  errorResponse
+} from '../utils'
 
-import { IMethodContext, IMethodCreateOptions } from '../interfaces'
+import { IMethodCreateOptions, IMethodContext } from '../interfaces'
 
 /**
  * CREATE
- * @param getOptions {() => IMethodCreateOptions)}
+ * @param value {true  | (() => IMethodCreateOptions)}
  * @param Model {object}
  * @return {express.Handler}
  */
-export default function (getOptions: () => IMethodCreateOptions, Model: object): express.Handler {
+export default function (value: true | (() => IMethodCreateOptions), Model: object): express.Handler {
   return async (req: express.Request, res: express.Response) => {
     try {
-      const options = getOptions()
+      const options: IMethodCreateOptions = getMethodOptions(value)
 
       const context: IMethodContext = {
         req,

@@ -26,7 +26,7 @@ export interface IMethods {
   [key: string]: any
 }
 
-export interface IMethodCreateOptions extends IMethodBaseOptions, IMethodValidatorOptions, IMethodOnly {
+export interface IMethodCreateOptions extends IMethodBaseOptions, IMethodValidatorOptions, IMethodOnlyOptions {
   template?: 'create'
   state?: TMethodState
   formatter?: (ctx: IMethodContext) => void | Promise<void>
@@ -54,7 +54,7 @@ export interface IMethodValidatorOptions {
   rules?: IValidatorRules | ((ctx: IMethodContext) => IValidatorRules | Promise<IValidatorRules>)
 }
 
-export interface IMethodOnly {
+export interface IMethodOnlyOptions {
   only?: TMethodOnly
 }
 

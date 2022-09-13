@@ -1,6 +1,5 @@
-import { getModel } from './utils'
-
-const templates = require('./templates')
+import { getMethodOptions, getModel } from './utils'
+import templates from './templates'
 
 import { IOptions, IEndpoints, IMethodBaseOptions } from './interfaces'
 
@@ -15,20 +14,12 @@ export default function (options: IOptions): IEndpoints {
   const Model = getModel(options.model)
 
   for (const [key, value] of Object.entries(options.methods)) {
-    const methodOptions = getMethodOptions(value)
+    const methodOptions: true | IMethodBaseOptions = getMethodOptions(value)
 
     if (methodOptions === true) {
-      if (templates.has(key)) {
-        endpoints[key] = templates.get(key).apply(null, [getMethodOptions, Model])
-      } else {
-        throw Error(`Template "${key}" not found`)
-      }
+      fillingEndpoints(endpoints, key, value, Model)
     } else {
-      if (templates.has(methodOptions.template || key)) {
-        endpoints[key] = templates.get(methodOptions.template || key).apply(null, [getMethodOptions, Model])
-      } else {
-        throw Error(`Template "${methodOptions.template || key}" not found`)
-      }
+      fillingEndpoints(endpoints, methodOptions.template || key, value, Model)
     }
   }
 
@@ -36,16 +27,16 @@ export default function (options: IOptions): IEndpoints {
 }
 
 /**
- * GET-METHOD-OPTIONS
- * @param methodOptions {true | object | (() => any)}
- * @return {IMethodBaseOptions}
+ * FILLING-ENDPOINTS
+ * @param endpoints {IEndpoints}
+ * @param key {string}
+ * @param value {true | (() => any)}
+ * @param Model {object}
  */
-function getMethodOptions(methodOptions: true | object | (() => any)): IMethodBaseOptions {
-  if (methodOptions === true) {
-    return {}
-  } else if (typeof methodOptions === 'function') {
-    return methodOptions()
+function fillingEndpoints(endpoints: IEndpoints, key: string, value: true | (() => any), Model: object) {
+  if (templates.has(key)) {
+    endpoints[key] = templates.get(key).apply(null, [value, Model])
   } else {
-    return methodOptions
+    throw Error(`Template "${key}" not found`)
   }
 }
