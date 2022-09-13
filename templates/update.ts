@@ -1,42 +1,57 @@
 import express from 'express'
-import httpStatusCodes from 'http-status-codes'
 
 import {
   getMethodOptions,
   getContextState,
   getModel,
-  getValidationErrors,
   getContextFields,
+  getQueryOptions,
+  getValidationErrors,
   errorResponse
 } from '../utils'
 
-import { IMethodCreateOptions, IMethodContext } from '../interfaces'
+import { IMethodContext, IMethodUpdateOptions } from '../interfaces'
 import { TGettingOptionsInstruction } from '../types'
+import httpStatusCodes from 'http-status-codes'
 
 /**
- * CREATE
+ * UPDATE
  * @param Model {object}
- * @param gettingOptionsInstruction {TGettingOptionsInstruction<IMethodCreateOptions>)}
+ * @param gettingOptionsInstruction {TGettingOptionsInstruction<IMethodUpdateOptions>)}
  * @return {express.Handler}
  */
 export default function (
   Model: object,
-  gettingOptionsInstruction: TGettingOptionsInstruction<IMethodCreateOptions>
+  gettingOptionsInstruction: TGettingOptionsInstruction<IMethodUpdateOptions>
 ): express.Handler {
   return async (req: express.Request, res: express.Response) => {
     try {
-      const options: IMethodCreateOptions = getMethodOptions(gettingOptionsInstruction)
+      const options: IMethodUpdateOptions = getMethodOptions(gettingOptionsInstruction)
 
       const ctx: IMethodContext = {
         req,
         res,
-        state: await getContextState(req, options.state),
+        state: await getContextState(req, options),
         fields: null,
         instance: null
       }
 
       if (options.model) {
         Model = getModel(options.model)
+      }
+
+      const queryOptions = await getQueryOptions().single(req, options, ctx)
+
+      // @ts-ignore
+      ctx.instance = await Model.findOne(queryOptions)
+
+      if (!ctx.instance) {
+        const status = 404
+
+        return res.status(status).json({
+          status,
+          message: 'Not found'
+        })
       }
 
       const errors = await getValidationErrors(req, options, ctx)
@@ -57,18 +72,20 @@ export default function (
         await options.formatter(ctx)
       }
 
-      if (options.beforeCreate) {
-        await options.beforeCreate(ctx)
+      if (options.beforeUpdate) {
+        await options.beforeUpdate(ctx)
       }
 
-      // @ts-ignore
-      ctx.instance = await Model.create(ctx.fields)
-
-      if (options.afterCreate) {
-        await options.afterCreate(ctx)
+      if (ctx.fields) {
+        // @ts-ignore
+        await ctx.instance.update(ctx.fields)
       }
 
-      const status = 201
+      if (options.afterUpdate) {
+        await options.afterUpdate(ctx)
+      }
+
+      const status = 200
 
       if (options.sendStatus) {
         return res.sendStatus(status)

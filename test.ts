@@ -1,14 +1,15 @@
 import only from '@risecorejs/only'
 import crudBuilder from './index'
 
-import { IMethodCreateOptions } from './interfaces'
+import { IMethodUpdateOptions } from './interfaces'
 
 const endpoints = crudBuilder('User', {
-  create
+  update
 })
 
-function create(): IMethodCreateOptions {
+function update(): IMethodUpdateOptions {
   return {
-    template: 'create'
+    template: 'update',
+    queryBuilder: (req) => ({})
   }
 }

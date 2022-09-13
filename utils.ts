@@ -2,7 +2,14 @@ import httpStatusCodes from 'http-status-codes'
 import models from '@risecorejs/core/models'
 import express from 'express'
 
-import { IErrorResponse, IMethodContext, IMethodOnlyOptions, IMethodValidatorOptions } from './interfaces'
+import {
+  IErrorResponse,
+  IFields,
+  IMethodContext,
+  IMethodOnlyOptions,
+  IMethodQueryBuilderOptions,
+  IMethodValidatorOptions
+} from './interfaces'
 import { TGettingOptionsInstruction, TMethodOnly, TMethodState } from './types'
 
 /**
@@ -15,21 +22,6 @@ export function getMethodOptions(gettingOptionsInstruction: TGettingOptionsInstr
     return {}
   } else {
     return gettingOptionsInstruction()
-  }
-}
-
-/**
- * DECORATOR-GET-OPTIONS
- * @param getOptions {() => true | object}
- * @returns {object}
- */
-export function decoratorGetOptions(getOptions: () => true | object): object {
-  const options = getOptions()
-
-  if (options === true) {
-    return {}
-  } else {
-    return options
   }
 }
 
@@ -63,16 +55,16 @@ export function getModel(model: string | object): object {
 export function getQueryOptions() {
   return {
     /**
-     * TYPE-1
-     * @param req {Object}
-     * @param options {Object}
-     * @param context {Object?}
-     * @returns {Promise<Object>}
+     * MULTIPLE
+     * @param req {express.Request}
+     * @param options {IMethodQueryBuilderOptions}
+     * @param ctx {IMethodContext?}
+     * @returns {Promise<object>}
      */
-    async type1(req, options, context) {
+    multiple(req: express.Request, options: IMethodQueryBuilderOptions, ctx?: IMethodContext) {
       if (options.queryBuilder) {
         if (typeof options.queryBuilder === 'function') {
-          return await options.queryBuilder(context || req)
+          return options.queryBuilder(ctx || req)
         } else {
           return options.queryBuilder
         }
@@ -82,14 +74,14 @@ export function getQueryOptions() {
     },
 
     /**
-     * TYPE-2
-     * @param req {Object}
+     * SINGLE
+     * @param req {express.Request}
      * @param options {Object}
-     * @param context {Object?}
-     * @returns {Promise<Object>}
+     * @param ctx {IMethodContext?}
+     * @returns {Promise<object>}
      */
-    async type2(req, options, context) {
-      const queryOptions = {
+    async single(req: express.Request, options, ctx?: IMethodContext) {
+      const queryOptions: IFields = {
         where: {}
       }
 
@@ -101,7 +93,7 @@ export function getQueryOptions() {
 
       if (options.queryBuilder) {
         if (typeof options.queryBuilder === 'function') {
-          const _queryOptions = await options.queryBuilder(context || req)
+          const _queryOptions = await options.queryBuilder(ctx || req)
 
           if (_queryOptions.where) {
             Object.assign(queryOptions.where, _queryOptions.where)
@@ -158,7 +150,7 @@ export async function getContextFields(
   req: express.Request,
   options: IMethodOnlyOptions,
   ctx: IMethodContext
-): Promise<object> {
+): Promise<null | object> {
   if (options.only) {
     if (typeof options.only === 'function') {
       options.only = await options.only(ctx)

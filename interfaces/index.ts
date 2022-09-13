@@ -14,7 +14,9 @@ export interface IMethods {
   index?: true
   show?: true
   count?: true
-  update?: true
+
+  update?: TMethodWrapper<IMethodUpdateOptions>
+
   bulkUpdate?: true
   destroy?: true
   bulkDestroy?: true
@@ -34,11 +36,26 @@ export interface IMethodCreateOptions extends IMethodBaseOptions, IMethodValidat
   response?: (ctx: IMethodContext) => IFields | Promise<IFields>
 }
 
+export interface IMethodUpdateOptions
+  extends IMethodBaseOptions,
+    IMethodValidatorOptions,
+    IMethodOnlyOptions,
+    IMethodQueryBuilderOptions {
+  template?: 'update'
+  state?: TMethodState
+  queryBuilder?: object | ((req: express.Request) => object)
+  formatter?: (ctx: IMethodContext) => void | Promise<void>
+  beforeUpdate?: (ctx: IMethodContext) => void | Promise<void>
+  afterUpdate?: (ctx: IMethodContext) => void | Promise<void>
+  sendStatus?: boolean
+  response?: (ctx: IMethodContext) => IFields | Promise<IFields>
+}
+
 export interface IMethodContext {
   req: express.Request
   res: express.Response
   state: object
-  fields: object
+  fields: null | object
   instance: null | object
 }
 
@@ -54,6 +71,11 @@ export interface IMethodValidatorOptions {
 
 export interface IMethodOnlyOptions {
   only?: TMethodOnly
+}
+
+export interface IMethodQueryBuilderOptions {
+  key?: string | false
+  queryBuilder?: object | ((ctxOrReq: IMethodContext | express.Request) => object)
 }
 
 export interface IEndpoints {
