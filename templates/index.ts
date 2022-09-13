@@ -1,3 +1,5 @@
 import create from './create'
 
-export default { create }
+import { IFields } from '../interfaces'
+
+export default <IFields>{ create }

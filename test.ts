@@ -9,7 +9,6 @@ const endpoints = crudBuilder('User', {
 
 function create(): IMethodCreateOptions {
   return {
-    template: 'create',
-    only: ['message']
+    template: 'create'
   }
 }
