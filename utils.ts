@@ -2,19 +2,19 @@ import httpStatusCodes from 'http-status-codes'
 import models from '@risecorejs/core/models'
 import express from 'express'
 
-import { IMethodBaseOptions, IMethodContext, IMethodOnlyOptions, IMethodValidatorOptions } from './interfaces'
-import { TMethodOnly, TMethodState } from './types'
+import { IErrorResponse, IMethodContext, IMethodOnlyOptions, IMethodValidatorOptions } from './interfaces'
+import { TGettingOptionsInstruction, TMethodOnly, TMethodState } from './types'
 
 /**
  * GET-METHOD-OPTIONS
- * @param value {true  | (() => any)}
+ * @param gettingOptionsInstruction {TGettingOptionsInstruction<any>}
  * @return {any}
  */
-export function getMethodOptions(value: true | (() => any)): any {
-  if (value === true) {
+export function getMethodOptions(gettingOptionsInstruction: TGettingOptionsInstruction<any>): any {
+  if (gettingOptionsInstruction === true) {
     return {}
   } else {
-    return value()
+    return gettingOptionsInstruction()
   }
 }
 
@@ -130,17 +130,17 @@ export function getQueryOptions() {
  * GET-VALIDATION-ERRORS
  * @param req {express.Request}
  * @param options {IMethodValidatorOptions}
- * @param context {IMethodContext}
+ * @param ctx {IMethodContext}
  * @return {Promise<void|object>}
  */
 export async function getValidationErrors(
   req: express.Request,
   options: IMethodValidatorOptions,
-  context: IMethodContext
+  ctx: IMethodContext
 ): Promise<void | object | null> {
   if (options.validator !== false && options.rules) {
     if (typeof options.rules === 'function') {
-      options.rules = await options.rules(context)
+      options.rules = await options.rules(ctx)
     }
 
     return req.validator(options.rules)
@@ -151,17 +151,17 @@ export async function getValidationErrors(
  * GET-CONTEXT-FIELDS
  * @param req {express.Request}
  * @param options {TMethodOnly}
- * @param context {IMethodContext}
+ * @param ctx {IMethodContext}
  * @returns {Promise<object>}
  */
 export async function getContextFields(
   req: express.Request,
   options: IMethodOnlyOptions,
-  context: IMethodContext
+  ctx: IMethodContext
 ): Promise<object> {
   if (options.only) {
     if (typeof options.only === 'function') {
-      options.only = await options.only(context)
+      options.only = await options.only(ctx)
     }
 
     return req.only(options.only)
@@ -181,8 +181,14 @@ export function errorResponse(err: any, res: express.Response) {
 
   const status = err.status || err.response?.status || 500
 
-  return res.status(status).json({
+  const response: IErrorResponse = {
     status,
     message: err.message || httpStatusCodes.getStatusText(status)
-  })
+  }
+
+  if (err.errors) {
+    response.errors = err.errors
+  }
+
+  return res.status(status).json(response)
 }

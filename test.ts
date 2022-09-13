@@ -1,14 +1,15 @@
+import only from '@risecorejs/only'
 import crudBuilder from './index'
 
-const endpoints = crudBuilder({
-  model: 'User',
-  methods: {
-    create: {
-      rules() {
-        return {
-          key: 'string'
-        }
-      }
-    }
-  }
+import { IMethodCreateOptions } from './interfaces'
+
+const endpoints = crudBuilder('User', {
+  create
 })
+
+function create(): IMethodCreateOptions {
+  return {
+    template: 'create',
+    only: ['message']
+  }
+}

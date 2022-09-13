@@ -21,3 +21,5 @@ export type TMethodWrapper<I> = true | (() => I)
 export type TMethodState = object | ((req: express.Request) => object | Promise<object>)
 
 export type TMethodOnly = TOnlyKeys | ((ctx: IMethodContext) => TOnlyKeys | Promise<TOnlyKeys>)
+
+export type TGettingOptionsInstruction<I> = true | (() => I)

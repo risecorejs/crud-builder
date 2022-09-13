@@ -11,19 +11,23 @@ import {
 } from '../utils'
 
 import { IMethodCreateOptions, IMethodContext } from '../interfaces'
+import { TGettingOptionsInstruction } from '../types'
 
 /**
  * CREATE
- * @param value {true  | (() => IMethodCreateOptions)}
  * @param Model {object}
+ * @param gettingOptionsInstruction {TGettingOptionsInstruction<IMethodCreateOptions>)}
  * @return {express.Handler}
  */
-export default function (value: true | (() => IMethodCreateOptions), Model: object): express.Handler {
+export default function (
+  Model: object,
+  gettingOptionsInstruction: TGettingOptionsInstruction<IMethodCreateOptions>
+): express.Handler {
   return async (req: express.Request, res: express.Response) => {
     try {
-      const options: IMethodCreateOptions = getMethodOptions(value)
+      const options: IMethodCreateOptions = getMethodOptions(gettingOptionsInstruction)
 
-      const context: IMethodContext = {
+      const ctx: IMethodContext = {
         req,
         res,
         state: await getContextState(req, options.state),
@@ -35,7 +39,7 @@ export default function (value: true | (() => IMethodCreateOptions), Model: obje
         Model = getModel(options.model)
       }
 
-      const errors = await getValidationErrors(req, options, context)
+      const errors = await getValidationErrors(req, options, ctx)
 
       if (errors) {
         const status = 400
@@ -47,21 +51,21 @@ export default function (value: true | (() => IMethodCreateOptions), Model: obje
         })
       }
 
-      context.fields = await getContextFields(req, options, context)
+      ctx.fields = await getContextFields(req, options, ctx)
 
       if (options.formatter) {
-        await options.formatter(context)
+        await options.formatter(ctx)
       }
 
       if (options.beforeCreate) {
-        await options.beforeCreate(context)
+        await options.beforeCreate(ctx)
       }
 
       // @ts-ignore
-      context.instance = await Model.create(context.fields)
+      ctx.instance = await Model.create(ctx.fields)
 
       if (options.afterCreate) {
-        await options.afterCreate(context)
+        await options.afterCreate(ctx)
       }
 
       const status = 201
@@ -71,7 +75,7 @@ export default function (value: true | (() => IMethodCreateOptions), Model: obje
       }
 
       if (options.response) {
-        const response = await options.response(context)
+        const response = await options.response(ctx)
 
         return res.status(response.status || status).json(response)
       }
@@ -79,7 +83,7 @@ export default function (value: true | (() => IMethodCreateOptions), Model: obje
       return res.status(status).json({
         status,
         message: httpStatusCodes.getStatusText(status),
-        result: context.instance
+        result: ctx.instance
       })
     } catch (err) {
       return errorResponse(err, res)

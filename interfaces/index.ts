@@ -1,13 +1,11 @@
 import express from 'express'
 
 import { IRules as IValidatorRules } from '@risecorejs/validator/interfaces'
-import { TKeys as TOnlyKeys } from '@risecorejs/only/types'
 
 import { TTemplates, TMethodWrapper, TMethodState, TMethodOnly } from '../types'
 
-export interface IOptions {
-  model: string | object
-  methods: IMethods
+export interface IFields {
+  [key: string]: any
 }
 
 export interface IMethods {
@@ -33,7 +31,7 @@ export interface IMethodCreateOptions extends IMethodBaseOptions, IMethodValidat
   beforeCreate?: (ctx: IMethodContext) => void | Promise<void>
   afterCreate?: (ctx: IMethodContext) => void | Promise<void>
   sendStatus?: boolean
-  response?: (ctx: IMethodContext) => any | Promise<any>
+  response?: (ctx: IMethodContext) => IFields | Promise<IFields>
 }
 
 export interface IMethodContext {
@@ -59,5 +57,11 @@ export interface IMethodOnlyOptions {
 }
 
 export interface IEndpoints {
-  [key: string]: (req: express.Request, res: express.Response) => any
+  [key: string]: express.Handler
+}
+
+export interface IErrorResponse {
+  status: number
+  message: string
+  errors?: any
 }

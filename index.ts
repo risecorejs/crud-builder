@@ -1,25 +1,29 @@
-import { getMethodOptions, getModel } from './utils'
+import _ from 'lodash'
+
+import { getModel, getMethodOptions } from './utils'
 import templates from './templates'
 
-import { IOptions, IEndpoints, IMethodBaseOptions } from './interfaces'
+import { IMethods, IEndpoints, IMethodBaseOptions } from './interfaces'
+import { TGettingOptionsInstruction } from './types'
 
 /**
  * CRUD-BUILDER
- * @param options {IOptions}
+ * @param model {string | object}
+ * @param methods {IMethods}
  * @return {IEndpoints}
  */
-export default function (options: IOptions): IEndpoints {
+export default function (model: string | object, methods: IMethods): IEndpoints {
   const endpoints: IEndpoints = {}
 
-  const Model = getModel(options.model)
+  const Model = getModel(model)
 
-  for (const [key, value] of Object.entries(options.methods)) {
-    const methodOptions: true | IMethodBaseOptions = getMethodOptions(value)
+  for (const [methodName, gettingOptionsInstruction] of Object.entries(methods)) {
+    const methodOptions: IMethodBaseOptions = getMethodOptions(gettingOptionsInstruction)
 
-    if (methodOptions === true) {
-      fillingEndpoints(endpoints, key, value, Model)
+    if (_.isEmpty(methodOptions)) {
+      fillingEndpoints(endpoints, Model, methodName, gettingOptionsInstruction)
     } else {
-      fillingEndpoints(endpoints, methodOptions.template || key, value, Model)
+      fillingEndpoints(endpoints, Model, methodOptions.template || methodName, gettingOptionsInstruction)
     }
   }
 
@@ -29,14 +33,21 @@ export default function (options: IOptions): IEndpoints {
 /**
  * FILLING-ENDPOINTS
  * @param endpoints {IEndpoints}
- * @param key {string}
- * @param value {true | (() => any)}
  * @param Model {object}
+ * @param methodName {string}
+ * @param gettingOptionsInstruction {TGettingOptionsInstruction<any>>}
  */
-function fillingEndpoints(endpoints: IEndpoints, key: string, value: true | (() => any), Model: object) {
-  if (templates.has(key)) {
-    endpoints[key] = templates.get(key).apply(null, [value, Model])
+function fillingEndpoints(
+  endpoints: IEndpoints,
+  Model: object,
+  methodName: string,
+  gettingOptionsInstruction: TGettingOptionsInstruction<any>
+) {
+  const template = templates[methodName]
+
+  if (template) {
+    endpoints[methodName] = template(Model, gettingOptionsInstruction)
   } else {
-    throw Error(`Template "${key}" not found`)
+    throw Error(`Template "${methodName}" not found`)
   }
 }
