@@ -48,7 +48,9 @@ export interface IMethodUpdateOptions
 
 // FIND-ONE-OPTIONS
 export interface IMethodFindOneOptions extends IMethodBaseOptions, IMethodQueryBuilderOptions {
+  template?: 'show'
   key?: string | false
+  queryBuilder?: object | ((req: express.Request) => object)
   response?: TMethodResponseHandlerWithInstance
 }
 
