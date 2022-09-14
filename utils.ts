@@ -5,7 +5,7 @@ import express from 'express'
 import {
   IErrorResponse,
   IFields,
-  IMethodContext,
+  IMethodContextOptions,
   IMethodOnlyOptions,
   IMethodQueryBuilderOptions,
   IMethodValidatorOptions
@@ -58,13 +58,13 @@ export function getQueryOptions() {
      * MULTIPLE
      * @param req {express.Request}
      * @param options {IMethodQueryBuilderOptions}
-     * @param ctx {IMethodContext?}
+     * @param ctx {IMethodContextOptions?}
      * @returns {Promise<IFields>}
      */
     multiple(
       req: express.Request,
       options: IMethodQueryBuilderOptions,
-      ctx?: IMethodContext
+      ctx?: IMethodContextOptions
     ): IFields | Promise<IFields> {
       if (options.queryBuilder) {
         if (typeof options.queryBuilder === 'function') {
@@ -81,10 +81,14 @@ export function getQueryOptions() {
      * SINGLE
      * @param req {express.Request}
      * @param options {Object}
-     * @param ctx {IMethodContext?}
+     * @param ctx {IMethodContextOptions?}
      * @returns {Promise<object>}
      */
-    async single(req: express.Request, options: IMethodQueryBuilderOptions, ctx?: IMethodContext): Promise<IFields> {
+    async single(
+      req: express.Request,
+      options: IMethodQueryBuilderOptions,
+      ctx?: IMethodContextOptions
+    ): Promise<IFields> {
       const queryOptions: IFields = {
         where: {}
       }
@@ -126,13 +130,13 @@ export function getQueryOptions() {
  * GET-VALIDATION-ERRORS
  * @param req {express.Request}
  * @param options {IMethodValidatorOptions}
- * @param ctx {IMethodContext}
+ * @param ctx {IMethodContextOptions}
  * @return {Promise<void|object>}
  */
 export async function getValidationErrors(
   req: express.Request,
   options: IMethodValidatorOptions,
-  ctx: IMethodContext
+  ctx: IMethodContextOptions
 ): Promise<void | object | null> {
   if (options.validator !== false && options.rules) {
     if (typeof options.rules === 'function') {
@@ -147,13 +151,13 @@ export async function getValidationErrors(
  * GET-CONTEXT-FIELDS
  * @param req {express.Request}
  * @param options {TMethodOnly}
- * @param ctx {IMethodContext}
+ * @param ctx {IMethodContextOptions}
  * @returns {Promise<object>}
  */
 export async function getContextFields(
   req: express.Request,
   options: IMethodOnlyOptions,
-  ctx: IMethodContext
+  ctx: IMethodContextOptions
 ): Promise<null | object> {
   if (options.only) {
     if (typeof options.only === 'function') {

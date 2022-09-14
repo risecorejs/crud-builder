@@ -2,7 +2,16 @@ import express from 'express'
 
 import { IRules as IValidatorRules } from '@risecorejs/validator/interfaces'
 
-import { TMethodWrapper, TTemplateHandler, TTemplates, TMethodState, TMethodOnly, TModel } from '../types'
+import {
+  TMethodWrapper,
+  TTemplates,
+  TMethodState,
+  TMethodOnly,
+  TModel,
+  TMethodResponseHandlerWithContext,
+  TMethodResponseHandlerWithInstance,
+  TMethodHookHandler
+} from '../types'
 
 export interface IFields<T = any> {
   [key: string]: T
@@ -12,21 +21,17 @@ export interface IMethods {
   [key: string]: TMethodWrapper<any>
 }
 
-export interface ITemplates {
-  create: TTemplateHandler<IMethodCreateOptions>
-  update: TTemplateHandler<IMethodUpdateOptions>
-}
-
+// CREATE-OPTIONS
 export interface IMethodCreateOptions extends IMethodBaseOptions, IMethodValidatorOptions, IMethodOnlyOptions {
   template?: 'create'
   state?: TMethodState
-  formatter?: (ctx: IMethodContext) => void | Promise<void>
-  beforeCreate?: (ctx: IMethodContext) => void | Promise<void>
-  afterCreate?: (ctx: IMethodContext) => void | Promise<void>
-  sendStatus?: boolean
-  response?: (ctx: IMethodContext) => IFields | Promise<IFields>
+  formatter?: TMethodHookHandler
+  beforeCreate?: TMethodHookHandler
+  afterCreate?: TMethodHookHandler
+  response?: TMethodResponseHandlerWithContext
 }
 
+// UPDATE-OPTIONS
 export interface IMethodUpdateOptions
   extends IMethodBaseOptions,
     IMethodValidatorOptions,
@@ -34,15 +39,21 @@ export interface IMethodUpdateOptions
     IMethodQueryBuilderOptions {
   template?: 'update'
   state?: TMethodState
-  queryBuilder?: object | ((req: express.Request) => object)
-  formatter?: (ctx: IMethodContext) => void | Promise<void>
-  beforeUpdate?: (ctx: IMethodContext) => void | Promise<void>
-  afterUpdate?: (ctx: IMethodContext) => void | Promise<void>
-  sendStatus?: boolean
-  response?: (ctx: IMethodContext) => IFields | Promise<IFields>
+  queryBuilder?: object | ((ctx: IMethodContextOptions) => object)
+  formatter?: TMethodHookHandler
+  beforeUpdate?: TMethodHookHandler
+  afterUpdate?: TMethodHookHandler
+  response?: TMethodResponseHandlerWithContext
 }
 
-export interface IMethodContext {
+// FIND-ONE-OPTIONS
+export interface IMethodFindOneOptions extends IMethodBaseOptions, IMethodQueryBuilderOptions {
+  key?: string | false
+  response?: TMethodResponseHandlerWithInstance
+}
+
+// CONTEXT-OPTIONS
+export interface IMethodContextOptions {
   req: express.Request
   res: express.Response
   state: object
@@ -50,14 +61,17 @@ export interface IMethodContext {
   instance: null | object
 }
 
+// BASE-OPTIONS
 export interface IMethodBaseOptions {
   template?: TTemplates
   model?: TModel
+  sendStatus?: boolean
+  response?: TMethodResponseHandlerWithContext | TMethodResponseHandlerWithInstance
 }
 
 export interface IMethodValidatorOptions {
   validator?: boolean
-  rules?: IValidatorRules | ((ctx: IMethodContext) => IValidatorRules | Promise<IValidatorRules>)
+  rules?: IValidatorRules | ((ctx: IMethodContextOptions) => IValidatorRules | Promise<IValidatorRules>)
 }
 
 export interface IMethodOnlyOptions {
@@ -66,7 +80,7 @@ export interface IMethodOnlyOptions {
 
 export interface IMethodQueryBuilderOptions {
   key?: string | false
-  queryBuilder?: IFields | ((ctxOrReq: IMethodContext | express.Request) => IFields)
+  queryBuilder?: IFields | ((ctxOrReq: IMethodContextOptions | express.Request) => IFields)
 }
 
 export interface IEndpoints {

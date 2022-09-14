@@ -10,7 +10,7 @@ import {
   errorResponse
 } from '../utils'
 
-import { IMethodCreateOptions, IMethodContext } from '../interfaces'
+import { IMethodCreateOptions, IMethodContextOptions } from '../interfaces'
 import { TGettingOptionsInstruction } from '../types'
 
 /**
@@ -27,7 +27,7 @@ export default function (
     try {
       const options = getMethodOptions<IMethodCreateOptions>(gettingOptionsInstruction)
 
-      const ctx: IMethodContext = {
+      const ctx: IMethodContextOptions = {
         req,
         res,
         state: await getContextState(req, options.state),
