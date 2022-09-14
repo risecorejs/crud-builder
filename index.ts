@@ -14,10 +14,7 @@ export default function (model: TModel, methods: IMethods): IEndpoints {
   const endpoints: IEndpoints = {}
 
   for (const [methodName, gettingOptionsInstruction] of Object.entries(methods)) {
-    const methodOptions: {
-      template?: TTemplates
-      model?: TModel
-    } = getMethodOptions(gettingOptionsInstruction)
+    const methodOptions = getMethodOptions<{ template?: TTemplates; model?: TModel }>(gettingOptionsInstruction)
 
     const templateName = methodOptions.template || methodName
 
