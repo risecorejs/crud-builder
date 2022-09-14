@@ -9,7 +9,9 @@ const endpoints = crudBuilder('User', {
 function update(): IMethodUpdateOptions {
   return {
     template: 'update',
-    queryBuilder: (ctx) => {
+    response(ctx) {
+      ctx.instance.asdas
+
       return {}
     }
   }
