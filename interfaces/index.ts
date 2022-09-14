@@ -63,9 +63,8 @@ export interface IMethodFindOneOptions extends IMethodBaseOptions, IMethodQueryB
 }
 
 // FIND-All-OPTIONS
-export interface IMethodFindAllOptions extends IMethodBaseOptions, IMethodQueryBuilderOptions {
+export interface IMethodFindAllOptions extends IMethodBaseOptions, Omit<IMethodQueryBuilderOptions, 'key'> {
   template?: 'index'
-  key?: string | false
   queryBuilder?: object | ((req: express.Request) => object)
   response?: TMethodResponseHandlerWithInstances
   method?: 'findAndCountAll' | 'findAll'
