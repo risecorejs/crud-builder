@@ -3,22 +3,22 @@ import httpStatusCodes from 'http-status-codes'
 
 import { getMethodOptions, getContextState, getQueryOptions, errorResponse } from '../utils'
 
-import { IMethodDestroyOptions, IMethodContextOptionsWithoutFields, IFields } from '../interfaces'
+import { IMethodRestoreOptions, IMethodContextOptionsWithoutFields, IFields } from '../interfaces'
 import { TGettingOptionsInstruction } from '../types'
 
 /**
- * DESTROY
+ * RESTORE
  * @param Model {object}
- * @param gettingOptionsInstruction {TGettingOptionsInstruction<IMethodDestroyOptions>)}
+ * @param gettingOptionsInstruction {TGettingOptionsInstruction<IMethodRestoreOptions>)}
  * @return {express.Handler}
  */
 export default function (
   Model: object,
-  gettingOptionsInstruction: TGettingOptionsInstruction<IMethodDestroyOptions>
+  gettingOptionsInstruction: TGettingOptionsInstruction<IMethodRestoreOptions>
 ): express.Handler {
   return async (req: express.Request, res: express.Response) => {
     try {
-      const options = getMethodOptions<IMethodDestroyOptions>(gettingOptionsInstruction)
+      const options = getMethodOptions<IMethodRestoreOptions>(gettingOptionsInstruction)
 
       const ctx: IMethodContextOptionsWithoutFields = {
         req,
@@ -29,8 +29,10 @@ export default function (
 
       const queryOptions = await getQueryOptions().single(req, options, ctx)
 
+      queryOptions.paranoid = false
+
       // @ts-ignore
-      ctx.instance = <null | IFields>await Model.findOne(queryOptions)
+      ctx.instance = await Model.findOne(queryOptions)
 
       if (!ctx.instance) {
         const status = 404
@@ -41,24 +43,14 @@ export default function (
         })
       }
 
-      const destroyOptions: IFields = {}
-
-      if (options.force) {
-        if (typeof options.force === 'function') {
-          destroyOptions.force = await options.force(ctx)
-        } else {
-          destroyOptions.force = true
-        }
+      if (options.beforeRestore) {
+        await options.beforeRestore(ctx)
       }
 
-      if (options.beforeDestroy) {
-        await options.beforeDestroy(ctx)
-      }
+      await ctx.instance.restore()
 
-      await ctx.instance.destroy(destroyOptions)
-
-      if (options.afterDestroy) {
-        await options.afterDestroy(ctx)
+      if (options.afterRestore) {
+        await options.afterRestore(ctx)
       }
 
       const status = 200

@@ -83,10 +83,20 @@ export interface IMethodCountOptions
 export interface IMethodDestroyOptions extends IMethodBaseOptions, IMethodQueryBuilderOptions {
   template?: 'destroy'
   state?: TMethodState
-  queryBuilder?: IFields | IMethodQueryBuilderHandlerWithContext
+  queryBuilder?: IFields | IMethodQueryBuilderHandlerWithContext<IMethodContextOptionsWithoutFields>
   force?: boolean | ((ctx: IMethodContextOptionsWithoutFields) => boolean | Promise<boolean>)
   beforeDestroy?: TMethodHookHandler<IMethodContextOptionsWithoutFields>
   afterDestroy?: TMethodHookHandler<IMethodContextOptionsWithoutFields>
+  response?: TMethodResponseHandlerWithContext<IMethodContextOptionsWithoutFields>
+}
+
+// RESTORE-OPTIONS
+export interface IMethodRestoreOptions extends IMethodBaseOptions, IMethodQueryBuilderOptions {
+  template?: 'restore'
+  state?: TMethodState
+  queryBuilder?: IFields | IMethodQueryBuilderHandlerWithContext<IMethodContextOptionsWithoutFields>
+  beforeRestore?: TMethodHookHandler<IMethodContextOptionsWithoutFields>
+  afterRestore?: TMethodHookHandler<IMethodContextOptionsWithoutFields>
   response?: TMethodResponseHandlerWithContext<IMethodContextOptionsWithoutFields>
 }
 

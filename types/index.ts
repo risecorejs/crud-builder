@@ -31,7 +31,7 @@ export type TMethodResponseHandlerWithInstances = (
   req: express.Request
 ) => IFields | Promise<IFields>
 export type TMethodHookHandler<T = IMethodContextOptions> = (ctx: T) => void | Promise<void>
-export type IMethodQueryBuilderHandlerWithContext = (ctx: IMethodContextOptions) => IFields
+export type IMethodQueryBuilderHandlerWithContext<T = IMethodContextOptions> = (ctx: T) => IFields
 export type IMethodQueryBuilderHandlerWithRequest = (req: express.Request) => IFields
 
 export type TGettingOptionsInstruction<T = any> = true | (() => T)

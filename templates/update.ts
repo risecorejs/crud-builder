@@ -72,7 +72,6 @@ export default function (
       }
 
       if (ctx.fields) {
-        // @ts-ignore
         await ctx.instance.update(ctx.fields)
       }
 
