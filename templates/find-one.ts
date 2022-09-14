@@ -3,7 +3,7 @@ import httpStatusCodes from 'http-status-codes'
 
 import { getMethodOptions, getQueryOptions, errorResponse } from '../utils'
 
-import { IMethodFindOneOptions } from '../interfaces'
+import { IFields, IMethodFindOneOptions } from '../interfaces'
 import { TGettingOptionsInstruction } from '../types'
 
 /**
@@ -23,7 +23,7 @@ export default function (
       const queryOptions = await getQueryOptions().single(req, options)
 
       // @ts-ignore
-      const instance: object | null = await Model.findOne(queryOptions)
+      const instance: null | IFields = await Model.findOne(queryOptions)
 
       if (!instance) {
         const status = 404

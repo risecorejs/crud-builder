@@ -30,7 +30,7 @@ export default function (
       const queryOptions = await getQueryOptions().single(req, options, ctx)
 
       // @ts-ignore
-      ctx.instance = <null | object>await Model.findOne(queryOptions)
+      ctx.instance = <null | IFields>await Model.findOne(queryOptions)
 
       if (!ctx.instance) {
         const status = 404

@@ -49,7 +49,7 @@ export interface IMethodUpdateOptions
     IMethodQueryBuilderOptions {
   template?: 'update'
   state?: TMethodState
-  queryBuilder?: object | IMethodQueryBuilderHandlerWithContext
+  queryBuilder?: IFields | IMethodQueryBuilderHandlerWithContext
   formatter?: TMethodHookHandler
   beforeUpdate?: TMethodHookHandler
   afterUpdate?: TMethodHookHandler
@@ -59,15 +59,14 @@ export interface IMethodUpdateOptions
 // FIND-ONE-OPTIONS
 export interface IMethodFindOneOptions extends IMethodBaseOptions, IMethodQueryBuilderOptions {
   template?: 'show'
-  key?: string | false
-  queryBuilder?: object | IMethodQueryBuilderHandlerWithRequest
+  queryBuilder?: IFields | IMethodQueryBuilderHandlerWithRequest
   response?: TMethodResponseHandlerWithInstance
 }
 
 // FIND-All-OPTIONS
 export interface IMethodFindAllOptions extends IMethodBaseOptions, Omit<IMethodQueryBuilderOptions, 'key'> {
   template?: 'index'
-  queryBuilder?: object | IMethodQueryBuilderHandlerWithRequest
+  queryBuilder?: IFields | IMethodQueryBuilderHandlerWithRequest
   response?: TMethodResponseHandlerWithInstances
   method?: 'findAndCountAll' | 'findAll'
   pagination?: boolean
@@ -84,7 +83,7 @@ export interface IMethodCountOptions
 export interface IMethodDestroyOptions extends IMethodBaseOptions, IMethodQueryBuilderOptions {
   template?: 'destroy'
   state?: TMethodState
-  queryBuilder?: object | IMethodQueryBuilderHandlerWithContext
+  queryBuilder?: IFields | IMethodQueryBuilderHandlerWithContext
   force?: boolean | ((ctx: IMethodContextOptionsWithoutFields) => boolean | Promise<boolean>)
   beforeDestroy?: TMethodHookHandler<IMethodContextOptionsWithoutFields>
   afterDestroy?: TMethodHookHandler<IMethodContextOptionsWithoutFields>
@@ -95,9 +94,9 @@ export interface IMethodDestroyOptions extends IMethodBaseOptions, IMethodQueryB
 export interface IMethodContextOptions {
   req: express.Request
   res: express.Response
-  state: object
-  fields: null | object
-  instance: null | object
+  state: IFields
+  fields: null | IFields
+  instance: null | IFields
 }
 
 // CONTEXT-OPTIONS-WITHOUT-FIELDS

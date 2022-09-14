@@ -3,7 +3,7 @@ import httpStatusCodes from 'http-status-codes'
 
 import { getMethodOptions, getContextState, getValidationErrors, getContextFields, errorResponse } from '../utils'
 
-import { IMethodCreateOptions, IMethodContextOptions } from '../interfaces'
+import { IMethodCreateOptions, IMethodContextOptions, IFields } from '../interfaces'
 import { TGettingOptionsInstruction } from '../types'
 
 /**
@@ -51,7 +51,7 @@ export default function (
       }
 
       // @ts-ignore
-      ctx.instance = <object>await Model.create(ctx.fields)
+      ctx.instance = <IFields>await Model.create(ctx.fields)
 
       if (options.afterCreate) {
         await options.afterCreate(ctx)

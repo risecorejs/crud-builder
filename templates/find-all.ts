@@ -39,7 +39,7 @@ export default function (
       Object.assign(queryOptions, _queryOptions)
 
       // @ts-ignore
-      const instances: object[] = await Model[options.method](queryOptions)
+      const instances: IFields[] = await Model[options.method](queryOptions)
 
       const status = 200
 
