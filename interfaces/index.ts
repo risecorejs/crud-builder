@@ -62,7 +62,7 @@ export interface IMethodCreateOptions
   formatter?: TMethodHookHandler<IMethodContextOptionsWithoutInstance>
   beforeCreate?: TMethodHookHandler<IMethodContextOptionsWithoutInstance>
   afterCreate?: TMethodHookHandler<IMethodContextOptionsWithoutInstance & { instance: Model }>
-  response?: TMethodResponseHandlerWithContext
+  response?: TMethodResponseHandlerWithContext<IMethodContextOptionsWithoutInstance & { instance: Model }>
 }
 
 // UPDATE-OPTIONS
@@ -146,6 +146,7 @@ export interface IMethodBaseOptions {
   sendStatus?: boolean
   response?:
     | TMethodResponseHandlerWithContext
+    | TMethodResponseHandlerWithContext<IMethodContextOptionsWithoutInstance & { instance: Model }>
     | TMethodResponseHandlerWithInstance
     | TMethodResponseHandlerWithInstances
 }

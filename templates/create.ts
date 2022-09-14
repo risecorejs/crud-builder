@@ -66,7 +66,7 @@ export default function (
       }
 
       if (options.response) {
-        const response = await options.response(ctx)
+        const response = await options.response(<IMethodContextOptionsWithoutInstance & { instance: Model }>ctx)
 
         return res.status(response.status || status).json(response)
       }
