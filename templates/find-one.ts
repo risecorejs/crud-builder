@@ -1,7 +1,7 @@
 import express from 'express'
 import httpStatusCodes from 'http-status-codes'
 
-import { getMethodOptions, getModel, getQueryOptions, errorResponse } from '../utils'
+import { getMethodOptions, getQueryOptions, errorResponse } from '../utils'
 
 import { IMethodFindOneOptions } from '../interfaces'
 import { TGettingOptionsInstruction } from '../types'
@@ -20,17 +20,18 @@ export default function (
     try {
       const options = getMethodOptions<IMethodFindOneOptions>(gettingOptionsInstruction)
 
-      if (options.model) {
-        Model = getModel(options.model)
-      }
-
       const queryOptions = await getQueryOptions().single(req, options)
 
       // @ts-ignore
       const instance: object | null = await Model.findOne(queryOptions)
 
       if (!instance) {
-        return res.sendStatus(404)
+        const status = 404
+
+        return res.status(status).json({
+          status,
+          message: 'Not found'
+        })
       }
 
       const status = 200

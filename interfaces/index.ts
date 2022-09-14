@@ -11,7 +11,9 @@ import {
   TMethodResponseHandlerWithContext,
   TMethodResponseHandlerWithInstance,
   TMethodHookHandler,
-  TMethodResponseHandlerWithInstances
+  TMethodResponseHandlerWithInstances,
+  IMethodQueryBuilderHandlerWithContext,
+  IMethodQueryBuilderHandlerWithRequest
 } from '../types'
 
 // FIELDS
@@ -47,7 +49,7 @@ export interface IMethodUpdateOptions
     IMethodQueryBuilderOptions {
   template?: 'update'
   state?: TMethodState
-  queryBuilder?: object | ((ctx: IMethodContextOptions) => object)
+  queryBuilder?: object | IMethodQueryBuilderHandlerWithContext
   formatter?: TMethodHookHandler
   beforeUpdate?: TMethodHookHandler
   afterUpdate?: TMethodHookHandler
@@ -58,14 +60,14 @@ export interface IMethodUpdateOptions
 export interface IMethodFindOneOptions extends IMethodBaseOptions, IMethodQueryBuilderOptions {
   template?: 'show'
   key?: string | false
-  queryBuilder?: object | ((req: express.Request) => object)
+  queryBuilder?: object | IMethodQueryBuilderHandlerWithRequest
   response?: TMethodResponseHandlerWithInstance
 }
 
 // FIND-All-OPTIONS
 export interface IMethodFindAllOptions extends IMethodBaseOptions, Omit<IMethodQueryBuilderOptions, 'key'> {
   template?: 'index'
-  queryBuilder?: object | ((req: express.Request) => object)
+  queryBuilder?: object | IMethodQueryBuilderHandlerWithRequest
   response?: TMethodResponseHandlerWithInstances
   method?: 'findAndCountAll' | 'findAll'
   pagination?: boolean
@@ -74,7 +76,20 @@ export interface IMethodFindAllOptions extends IMethodBaseOptions, Omit<IMethodQ
 // COUNT-OPTIONS
 export interface IMethodCountOptions
   extends Omit<IMethodBaseOptions, 'sendStatus' | 'response'>,
-    Omit<IMethodQueryBuilderOptions, 'key'> {}
+    Omit<IMethodQueryBuilderOptions, 'key'> {
+  template?: 'count'
+}
+
+// DESTROY-OPTIONS
+export interface IMethodDestroyOptions extends IMethodBaseOptions, IMethodQueryBuilderOptions {
+  template?: 'destroy'
+  state?: TMethodState
+  queryBuilder?: object | IMethodQueryBuilderHandlerWithContext
+  force?: boolean | ((ctx: IMethodContextOptionsWithoutFields) => boolean | Promise<boolean>)
+  beforeDestroy?: TMethodHookHandler<IMethodContextOptionsWithoutFields>
+  afterDestroy?: TMethodHookHandler<IMethodContextOptionsWithoutFields>
+  response?: TMethodResponseHandlerWithContext<IMethodContextOptionsWithoutFields>
+}
 
 // CONTEXT-OPTIONS
 export interface IMethodContextOptions {
@@ -84,6 +99,9 @@ export interface IMethodContextOptions {
   fields: null | object
   instance: null | object
 }
+
+// CONTEXT-OPTIONS-WITHOUT-FIELDS
+export interface IMethodContextOptionsWithoutFields extends Omit<IMethodContextOptions, 'fields'> {}
 
 // BASE-OPTIONS
 export interface IMethodBaseOptions {
@@ -110,7 +128,9 @@ export interface IMethodOnlyOptions {
 // QUERY-BUILDER-OPTIONS
 export interface IMethodQueryBuilderOptions {
   key?: string | false
-  queryBuilder?: IFields | ((ctxOrReq: IMethodContextOptions | express.Request) => IFields)
+  queryBuilder?:
+    | IFields
+    | ((ctxOrReq: IMethodContextOptions | IMethodContextOptionsWithoutFields | express.Request) => IFields)
 }
 
 // ERROR-RESPONSE

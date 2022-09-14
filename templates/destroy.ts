@@ -1,37 +1,29 @@
 import express from 'express'
 import httpStatusCodes from 'http-status-codes'
 
-import {
-  getMethodOptions,
-  getContextState,
-  getQueryOptions,
-  getValidationErrors,
-  getContextFields,
-  errorResponse
-} from '../utils'
+import { getMethodOptions, getContextState, getQueryOptions, errorResponse } from '../utils'
 
-import { IMethodUpdateOptions, IMethodContextOptions } from '../interfaces'
+import { IMethodDestroyOptions, IMethodContextOptionsWithoutFields, IFields } from '../interfaces'
 import { TGettingOptionsInstruction } from '../types'
 
 /**
- * UPDATE
+ * DESTROY
  * @param Model {object}
- * @param gettingOptionsInstruction {TGettingOptionsInstruction<IMethodUpdateOptions>)}
+ * @param gettingOptionsInstruction {TGettingOptionsInstruction<IMethodDestroyOptions>)}
  * @return {express.Handler}
  */
 export default function (
   Model: object,
-  gettingOptionsInstruction: TGettingOptionsInstruction<IMethodUpdateOptions>
+  gettingOptionsInstruction: TGettingOptionsInstruction<IMethodDestroyOptions>
 ): express.Handler {
   return async (req: express.Request, res: express.Response) => {
     try {
-      const options = getMethodOptions<IMethodUpdateOptions>(gettingOptionsInstruction)
+      const options = getMethodOptions<IMethodDestroyOptions>(gettingOptionsInstruction)
 
-      const ctx: IMethodContextOptions = {
+      const ctx: IMethodContextOptionsWithoutFields = {
         req,
         res,
         state: await getContextState(req, options),
-        fields: null,
         instance: null
       }
 
@@ -49,35 +41,25 @@ export default function (
         })
       }
 
-      const errors = await getValidationErrors(req, options, ctx)
+      const destroyOptions: IFields = {}
 
-      if (errors) {
-        const status = 400
-
-        return res.status(status).json({
-          status,
-          message: 'Validation errors',
-          errors
-        })
+      if (options.force) {
+        if (typeof options.force === 'function') {
+          destroyOptions.force = await options.force(ctx)
+        } else {
+          destroyOptions.force = true
+        }
       }
 
-      ctx.fields = await getContextFields(req, options, ctx)
-
-      if (options.formatter) {
-        await options.formatter(ctx)
+      if (options.beforeDestroy) {
+        await options.beforeDestroy(ctx)
       }
 
-      if (options.beforeUpdate) {
-        await options.beforeUpdate(ctx)
-      }
+      // @ts-ignore
+      await ctx.instance.destroy(destroyOptions)
 
-      if (ctx.fields) {
-        // @ts-ignore
-        await ctx.instance.update(ctx.fields)
-      }
-
-      if (options.afterUpdate) {
-        await options.afterUpdate(ctx)
+      if (options.afterDestroy) {
+        await options.afterDestroy(ctx)
       }
 
       const status = 200

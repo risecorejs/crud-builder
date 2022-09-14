@@ -1,14 +1,7 @@
 import express from 'express'
 import httpStatusCodes from 'http-status-codes'
 
-import {
-  getMethodOptions,
-  getContextState,
-  getModel,
-  getValidationErrors,
-  getContextFields,
-  errorResponse
-} from '../utils'
+import { getMethodOptions, getContextState, getValidationErrors, getContextFields, errorResponse } from '../utils'
 
 import { IMethodCreateOptions, IMethodContextOptions } from '../interfaces'
 import { TGettingOptionsInstruction } from '../types'
@@ -33,10 +26,6 @@ export default function (
         state: await getContextState(req, options.state),
         fields: null,
         instance: null
-      }
-
-      if (options.model) {
-        Model = getModel(options.model)
       }
 
       const errors = await getValidationErrors(req, options, ctx)

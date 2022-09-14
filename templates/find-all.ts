@@ -4,7 +4,7 @@ import httpStatusCodes from 'http-status-codes'
 import { TGettingOptionsInstruction } from '../types'
 import { IFields, IMethodFindAllOptions } from '../interfaces'
 
-import { getModel, getQueryOptions, errorResponse, getMethodOptions } from '../utils'
+import { getQueryOptions, errorResponse, getMethodOptions } from '../utils'
 
 /**
  * FIND-ALL
@@ -19,10 +19,6 @@ export default function (
   return async (req: express.Request, res: express.Response) => {
     try {
       const options = getMethodOptions<IMethodFindAllOptions>(gettingOptionsInstruction)
-
-      if (options.model) {
-        Model = getModel(options.model)
-      }
 
       options.method ||= 'findAndCountAll'
 

@@ -1,7 +1,7 @@
 import express from 'express'
 import httpStatusCodes from 'http-status-codes'
 
-import { getMethodOptions, getModel, getQueryOptions, errorResponse } from '../utils'
+import { getMethodOptions, getQueryOptions, errorResponse } from '../utils'
 
 import { IMethodCountOptions } from '../interfaces'
 import { TGettingOptionsInstruction } from '../types'
@@ -19,10 +19,6 @@ export default function (
   return async (req: express.Request, res: express.Response) => {
     try {
       const options = getMethodOptions<IMethodCountOptions>(gettingOptionsInstruction)
-
-      if (options.model) {
-        Model = getModel(options.model)
-      }
 
       const queryOptions = await getQueryOptions().multiple(req, options)
 

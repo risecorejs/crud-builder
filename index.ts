@@ -13,14 +13,21 @@ import { TModel, TTemplates } from './types'
 export default function (model: TModel, methods: IMethods): IEndpoints {
   const endpoints: IEndpoints = {}
 
-  const Model = getModel(model)
-
   for (const [methodName, gettingOptionsInstruction] of Object.entries(methods)) {
-    const methodOptions: { template?: TTemplates } = getMethodOptions(gettingOptionsInstruction)
+    const methodOptions: {
+      template?: TTemplates
+      model: TModel
+    } = getMethodOptions(gettingOptionsInstruction)
 
     const templateName = methodOptions.template || methodName
 
     const template = templates[templateName]
+
+    const Model = getModel(methodOptions.model || model)
+
+    if (!Model) {
+      throw Error(`Model "${Model}" not found`)
+    }
 
     if (template) {
       endpoints[methodName] = template(Model, gettingOptionsInstruction)

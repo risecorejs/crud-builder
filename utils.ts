@@ -8,7 +8,8 @@ import {
   IMethodContextOptions,
   IMethodOnlyOptions,
   IMethodQueryBuilderOptions,
-  IMethodValidatorOptions
+  IMethodValidatorOptions,
+  IMethodContextOptionsWithoutFields
 } from './interfaces'
 import { TGettingOptionsInstruction, TMethodOnly, TMethodState, TModel } from './types'
 
@@ -87,7 +88,7 @@ export function getQueryOptions() {
     async single(
       req: express.Request,
       options: IMethodQueryBuilderOptions,
-      ctx?: IMethodContextOptions
+      ctx?: IMethodContextOptions | IMethodContextOptionsWithoutFields
     ): Promise<IFields> {
       const queryOptions: IFields = {
         where: {}
