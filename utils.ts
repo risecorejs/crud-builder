@@ -10,16 +10,16 @@ import {
   IMethodQueryBuilderOptions,
   IMethodValidatorOptions
 } from './interfaces'
-import { TGettingOptionsInstruction, TMethodOnly, TMethodState } from './types'
+import { TGettingOptionsInstruction, TMethodOnly, TMethodState, TModel } from './types'
 
 /**
  * GET-METHOD-OPTIONS
  * @param gettingOptionsInstruction {TGettingOptionsInstruction<any>}
  * @return {any}
  */
-export function getMethodOptions(gettingOptionsInstruction: TGettingOptionsInstruction<any>): any {
+export function getMethodOptions<T = any>(gettingOptionsInstruction: TGettingOptionsInstruction<T>): T {
   if (gettingOptionsInstruction === true) {
-    return {}
+    return <T>{}
   } else {
     return gettingOptionsInstruction()
   }
@@ -45,10 +45,10 @@ export function getContextState(req: express.Request, state: TMethodState | unde
 
 /**
  * GET-MODEL
- * @param model {string | object}
+ * @param model {TModel}
  * @return {object}
  */
-export function getModel(model: string | object): object {
+export function getModel(model: TModel): object {
   return typeof model === 'string' ? models[model] : model
 }
 

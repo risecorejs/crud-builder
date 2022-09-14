@@ -22,4 +22,11 @@ export type TMethodState = object | ((req: express.Request) => object | Promise<
 
 export type TMethodOnly = TOnlyKeys | ((ctx: IMethodContext) => TOnlyKeys | Promise<TOnlyKeys>)
 
-export type TGettingOptionsInstruction<T> = true | (() => T)
+export type TGettingOptionsInstruction<T = any> = true | (() => T)
+
+export type TTemplateHandler<T> = (
+  Model: object,
+  gettingOptionsInstruction: TGettingOptionsInstruction<T>
+) => express.Handler
+
+export type TModel = string | object

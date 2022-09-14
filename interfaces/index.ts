@@ -2,28 +2,19 @@ import express from 'express'
 
 import { IRules as IValidatorRules } from '@risecorejs/validator/interfaces'
 
-import { TTemplates, TMethodWrapper, TMethodState, TMethodOnly } from '../types'
+import { TMethodWrapper, TTemplateHandler, TTemplates, TMethodState, TMethodOnly, TModel } from '../types'
 
-export interface IFields {
-  [key: string]: any
+export interface IFields<T = any> {
+  [key: string]: T
 }
 
 export interface IMethods {
-  create?: TMethodWrapper<IMethodCreateOptions>
+  [key: string]: TMethodWrapper<any>
+}
 
-  index?: true
-  show?: true
-  count?: true
-
-  update?: TMethodWrapper<IMethodUpdateOptions>
-
-  bulkUpdate?: true
-  destroy?: true
-  bulkDestroy?: true
-  restore?: true
-  bulkRestore?: true
-
-  [key: string]: any
+export interface ITemplates {
+  create: TTemplateHandler<IMethodCreateOptions>
+  update: TTemplateHandler<IMethodUpdateOptions>
 }
 
 export interface IMethodCreateOptions extends IMethodBaseOptions, IMethodValidatorOptions, IMethodOnlyOptions {
@@ -61,7 +52,7 @@ export interface IMethodContext {
 
 export interface IMethodBaseOptions {
   template?: TTemplates
-  model?: string | object
+  model?: TModel
 }
 
 export interface IMethodValidatorOptions {

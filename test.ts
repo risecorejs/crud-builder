@@ -1,4 +1,3 @@
-import only from '@risecorejs/only'
 import crudBuilder from './index'
 
 import { IMethodUpdateOptions } from './interfaces'
@@ -13,3 +12,5 @@ function update(): IMethodUpdateOptions {
     queryBuilder: (req) => ({})
   }
 }
+
+console.log(endpoints)

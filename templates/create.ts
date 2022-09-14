@@ -25,7 +25,7 @@ export default function (
 ): express.Handler {
   return async (req: express.Request, res: express.Response) => {
     try {
-      const options: IMethodCreateOptions = getMethodOptions(gettingOptionsInstruction)
+      const options = getMethodOptions<IMethodCreateOptions>(gettingOptionsInstruction)
 
       const ctx: IMethodContext = {
         req,
