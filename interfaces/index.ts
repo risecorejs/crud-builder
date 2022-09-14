@@ -25,13 +25,13 @@ export interface IFields<T = any> {
 
 // TEMPLATES
 export interface ITemplates {
-  create?: TTemplateHandler<IMethodCreateOptions>
-  index?: TTemplateHandler<IMethodFindAllOptions>
-  show?: TTemplateHandler<IMethodFindOneOptions>
-  count?: TTemplateHandler<IMethodCountOptions>
-  update?: TTemplateHandler<IMethodUpdateOptions>
-  destroy?: TTemplateHandler<IMethodDestroyOptions>
-  restore?: TTemplateHandler<IMethodRestoreOptions>
+  create: TTemplateHandler<IMethodCreateOptions>
+  index: TTemplateHandler<IMethodFindAllOptions>
+  show: TTemplateHandler<IMethodFindOneOptions>
+  count: TTemplateHandler<IMethodCountOptions>
+  update: TTemplateHandler<IMethodUpdateOptions>
+  destroy: TTemplateHandler<IMethodDestroyOptions>
+  restore: TTemplateHandler<IMethodRestoreOptions>
 }
 
 // METHODS
