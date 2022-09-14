@@ -14,12 +14,19 @@ import {
   TMethodResponseHandlerWithInstances
 } from '../types'
 
+// FIELDS
 export interface IFields<T = any> {
   [key: string]: T
 }
 
+// METHODS
 export interface IMethods {
   [key: string]: TMethodWrapper<any>
+}
+
+// ENDPOINTS
+export interface IEndpoints {
+  [key: string]: express.Handler
 }
 
 // CREATE-OPTIONS
@@ -65,6 +72,11 @@ export interface IMethodFindAllOptions extends IMethodBaseOptions, IMethodQueryB
   pagination?: boolean
 }
 
+// COUNT-OPTIONS
+export interface IMethodCountOptions
+  extends Omit<IMethodBaseOptions, 'sendStatus' | 'response'>,
+    Omit<IMethodQueryBuilderOptions, 'key'> {}
+
 // CONTEXT-OPTIONS
 export interface IMethodContextOptions {
   req: express.Request
@@ -85,25 +97,25 @@ export interface IMethodBaseOptions {
     | TMethodResponseHandlerWithInstances
 }
 
+// VALIDATOR-OPTIONS
 export interface IMethodValidatorOptions {
   validator?: boolean
   rules?: IValidatorRules | ((ctx: IMethodContextOptions) => IValidatorRules | Promise<IValidatorRules>)
 }
 
+// ONLY-OPTIONS
 export interface IMethodOnlyOptions {
   only?: TMethodOnly
 }
 
+// QUERY-BUILDER-OPTIONS
 export interface IMethodQueryBuilderOptions {
   key?: string | false
   queryBuilder?: IFields | ((ctxOrReq: IMethodContextOptions | express.Request) => IFields)
 }
 
-export interface IEndpoints {
-  [key: string]: express.Handler
-}
-
-export interface IErrorResponse {
+// ERROR-RESPONSE
+export interface IMethodErrorResponse {
   status: number
   message: string
   errors?: any

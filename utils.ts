@@ -3,7 +3,7 @@ import models from '@risecorejs/core/models'
 import express from 'express'
 
 import {
-  IErrorResponse,
+  IMethodErrorResponse,
   IFields,
   IMethodContextOptions,
   IMethodOnlyOptions,
@@ -181,7 +181,7 @@ export function errorResponse(err: any, res: express.Response) {
 
   const status = err.status || err.response?.status || 500
 
-  const response: IErrorResponse = {
+  const response: IMethodErrorResponse = {
     status,
     message: err.message || httpStatusCodes.getStatusText(status)
   }
