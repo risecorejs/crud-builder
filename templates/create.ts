@@ -62,7 +62,7 @@ export default function (
       }
 
       // @ts-ignore
-      ctx.instance = await Model.create(ctx.fields)
+      ctx.instance = <object>await Model.create(ctx.fields)
 
       if (options.afterCreate) {
         await options.afterCreate(ctx)

@@ -26,6 +26,10 @@ export type TMethodState = object | ((req: express.Request) => object | Promise<
 export type TMethodOnly = TOnlyKeys | ((ctx: IMethodContextOptions) => TOnlyKeys | Promise<TOnlyKeys>)
 export type TMethodResponseHandlerWithContext = (ctx: IMethodContextOptions) => IFields | Promise<IFields>
 export type TMethodResponseHandlerWithInstance = (instance: object, req: express.Request) => IFields | Promise<IFields>
+export type TMethodResponseHandlerWithInstances = (
+  instances: object[],
+  req: express.Request
+) => IFields | Promise<IFields>
 export type TMethodHookHandler = (ctx: IMethodContextOptions) => void | Promise<void>
 
 export type TGettingOptionsInstruction<T = any> = true | (() => T)

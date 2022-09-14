@@ -10,7 +10,8 @@ import {
   TModel,
   TMethodResponseHandlerWithContext,
   TMethodResponseHandlerWithInstance,
-  TMethodHookHandler
+  TMethodHookHandler,
+  TMethodResponseHandlerWithInstances
 } from '../types'
 
 export interface IFields<T = any> {
@@ -54,6 +55,16 @@ export interface IMethodFindOneOptions extends IMethodBaseOptions, IMethodQueryB
   response?: TMethodResponseHandlerWithInstance
 }
 
+// FIND-All-OPTIONS
+export interface IMethodFindAllOptions extends IMethodBaseOptions, IMethodQueryBuilderOptions {
+  template?: 'index'
+  key?: string | false
+  queryBuilder?: object | ((req: express.Request) => object)
+  response?: TMethodResponseHandlerWithInstances
+  method?: 'findAndCountAll' | 'findAll'
+  pagination?: boolean
+}
+
 // CONTEXT-OPTIONS
 export interface IMethodContextOptions {
   req: express.Request
@@ -68,7 +79,10 @@ export interface IMethodBaseOptions {
   template?: TTemplates
   model?: TModel
   sendStatus?: boolean
-  response?: TMethodResponseHandlerWithContext | TMethodResponseHandlerWithInstance
+  response?:
+    | TMethodResponseHandlerWithContext
+    | TMethodResponseHandlerWithInstance
+    | TMethodResponseHandlerWithInstances
 }
 
 export interface IMethodValidatorOptions {

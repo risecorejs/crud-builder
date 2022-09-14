@@ -9,7 +9,7 @@ import { TGettingOptionsInstruction } from '../types'
 /**
  * FIND-ONE
  * @param Model {object}
- * @param gettingOptionsInstruction {TGettingOptionsInstruction<IMethodUpdateOptions>)}
+ * @param gettingOptionsInstruction {TGettingOptionsInstruction<IMethodFindOneOptions>)}
  * @return {express.Handler}
  */
 export default function (
@@ -27,7 +27,7 @@ export default function (
       const queryOptions = await getQueryOptions().single(req, options)
 
       // @ts-ignore
-      const instance = await Model.findOne(queryOptions)
+      const instance: object | null = await Model.findOne(queryOptions)
 
       if (!instance) {
         return res.sendStatus(404)
