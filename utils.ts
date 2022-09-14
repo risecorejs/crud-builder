@@ -59,9 +59,13 @@ export function getQueryOptions() {
      * @param req {express.Request}
      * @param options {IMethodQueryBuilderOptions}
      * @param ctx {IMethodContext?}
-     * @returns {Promise<object>}
+     * @returns {Promise<IFields>}
      */
-    multiple(req: express.Request, options: IMethodQueryBuilderOptions, ctx?: IMethodContext) {
+    multiple(
+      req: express.Request,
+      options: IMethodQueryBuilderOptions,
+      ctx?: IMethodContext
+    ): IFields | Promise<IFields> {
       if (options.queryBuilder) {
         if (typeof options.queryBuilder === 'function') {
           return options.queryBuilder(ctx || req)
@@ -80,7 +84,7 @@ export function getQueryOptions() {
      * @param ctx {IMethodContext?}
      * @returns {Promise<object>}
      */
-    async single(req: express.Request, options: IMethodQueryBuilderOptions, ctx?: IMethodContext) {
+    async single(req: express.Request, options: IMethodQueryBuilderOptions, ctx?: IMethodContext): Promise<IFields> {
       const queryOptions: IFields = {
         where: {}
       }
