@@ -1,19 +1,28 @@
 import crudBuilder from './index'
 
-import { IMethodUpdateOptions } from './interfaces'
+import { IMethodCreateOptions } from './interfaces'
 
 const endpoints = crudBuilder('User', {
-  update
+  create
 })
 
-function update(): IMethodUpdateOptions {
+function create(): IMethodCreateOptions {
   return {
-    template: 'update',
-    response(ctx) {
-      ctx.instance.asdas
-
+    template: 'create',
+    model: 'Customer',
+    state(req) {
       return {}
-    }
+    },
+    validator: true,
+    rules(ctx) {
+      return {}
+    },
+    only(ctx) {
+      return ['asd']
+    },
+    formatter(ctx) {},
+    beforeCreate(ctx) {},
+    afterCreate(ctx) {}
   }
 }
 

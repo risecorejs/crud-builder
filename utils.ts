@@ -2,6 +2,8 @@ import httpStatusCodes from 'http-status-codes'
 import models from '@risecorejs/core/models'
 import express from 'express'
 
+import { Model } from 'sequelize'
+
 import {
   IMethodErrorResponse,
   IFields,
@@ -11,6 +13,7 @@ import {
   IMethodValidatorOptions,
   IMethodContextOptionsWithoutFields
 } from './interfaces'
+
 import { TGettingOptionsInstruction, TMethodOnly, TMethodState, TModel } from './types'
 
 /**
@@ -49,7 +52,7 @@ export function getContextState(req: express.Request, state: TMethodState | unde
  * @param model {TModel}
  * @return {object}
  */
-export function getModel(model: TModel): object {
+export function getModel(model: TModel): Model | undefined {
   return typeof model === 'string' ? models[model] : model
 }
 

@@ -1,4 +1,5 @@
 import express from 'express'
+import { Model } from 'sequelize'
 
 import { IRules as IValidatorRules } from '@risecorejs/validator/interfaces'
 
@@ -32,12 +33,15 @@ export interface IEndpoints {
 }
 
 // CREATE-OPTIONS
-export interface IMethodCreateOptions extends IMethodBaseOptions, IMethodValidatorOptions, IMethodOnlyOptions {
+export interface IMethodCreateOptions
+  extends IMethodBaseOptions,
+    IMethodValidatorOptions<Omit<IMethodContextOptions, 'fields' | 'instance'>>,
+    IMethodOnlyOptions<Omit<IMethodContextOptions, 'fields' | 'instance'>> {
   template?: 'create'
   state?: TMethodState
-  formatter?: TMethodHookHandler
-  beforeCreate?: TMethodHookHandler
-  afterCreate?: TMethodHookHandler
+  formatter?: TMethodHookHandler<IMethodContextOptionsWithoutInstance>
+  beforeCreate?: TMethodHookHandler<IMethodContextOptionsWithoutInstance>
+  afterCreate?: TMethodHookHandler<IMethodContextOptionsWithoutInstance & { instance: Model }>
   response?: TMethodResponseHandlerWithContext
 }
 
@@ -106,11 +110,14 @@ export interface IMethodContextOptions {
   res: express.Response
   state: IFields
   fields: null | IFields
-  instance: null | IFields
+  instance: null | Model
 }
 
 // CONTEXT-OPTIONS-WITHOUT-FIELDS
 export interface IMethodContextOptionsWithoutFields extends Omit<IMethodContextOptions, 'fields'> {}
+
+// CONTEXT-OPTIONS-WITHOUT-INSTANCE
+export interface IMethodContextOptionsWithoutInstance extends Omit<IMethodContextOptions, 'instance'> {}
 
 // BASE-OPTIONS
 export interface IMethodBaseOptions {
@@ -124,14 +131,14 @@ export interface IMethodBaseOptions {
 }
 
 // VALIDATOR-OPTIONS
-export interface IMethodValidatorOptions {
+export interface IMethodValidatorOptions<C = IMethodContextOptions> {
   validator?: boolean
-  rules?: IValidatorRules | ((ctx: IMethodContextOptions) => IValidatorRules | Promise<IValidatorRules>)
+  rules?: IValidatorRules | ((ctx: C) => IValidatorRules | Promise<IValidatorRules>)
 }
 
 // ONLY-OPTIONS
-export interface IMethodOnlyOptions {
-  only?: TMethodOnly
+export interface IMethodOnlyOptions<C = IMethodContextOptions> {
+  only?: TMethodOnly<C>
 }
 
 // QUERY-BUILDER-OPTIONS

@@ -1,9 +1,15 @@
 import express from 'express'
+import { Model } from 'sequelize'
 import httpStatusCodes from 'http-status-codes'
 
 import { getMethodOptions, getContextState, getValidationErrors, getContextFields, errorResponse } from '../utils'
 
-import { IMethodCreateOptions, IMethodContextOptions, IFields } from '../interfaces'
+import {
+  IMethodCreateOptions,
+  IMethodContextOptions,
+  IFields,
+  IMethodContextOptionsWithoutInstance
+} from '../interfaces'
 import { TGettingOptionsInstruction } from '../types'
 
 /**
@@ -13,7 +19,7 @@ import { TGettingOptionsInstruction } from '../types'
  * @return {express.Handler}
  */
 export default function (
-  Model: object,
+  Model: Model,
   gettingOptionsInstruction: TGettingOptionsInstruction<IMethodCreateOptions>
 ): express.Handler {
   return async (req: express.Request, res: express.Response) => {
@@ -54,7 +60,7 @@ export default function (
       ctx.instance = <IFields>await Model.create(ctx.fields)
 
       if (options.afterCreate) {
-        await options.afterCreate(ctx)
+        await options.afterCreate(<IMethodContextOptionsWithoutInstance & { instance: Model }>ctx)
       }
 
       const status = 201
