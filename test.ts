@@ -3,11 +3,7 @@ import crudBuilder from './index'
 import { IMethodCreateOptions } from './interfaces'
 
 const endpoints = crudBuilder('User', {
-  create
-})
-
-function create(): IMethodCreateOptions {
-  return {
+  create: () => ({
     template: 'create',
     model: 'Customer',
     state(req) {
@@ -22,8 +18,14 @@ function create(): IMethodCreateOptions {
     },
     formatter(ctx) {},
     beforeCreate(ctx) {},
-    afterCreate(ctx) {}
-  }
-}
+    afterCreate(ctx) {},
+    sendStatus: true,
+    response(ctx) {
+      return {
+        test: 123
+      }
+    }
+  })
+})
 
 console.log(endpoints)

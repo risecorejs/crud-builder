@@ -4,7 +4,6 @@ import { Model } from 'sequelize'
 import { IRules as IValidatorRules } from '@risecorejs/validator/interfaces'
 
 import {
-  TMethodWrapper,
   TTemplates,
   TMethodState,
   TMethodOnly,
@@ -14,7 +13,9 @@ import {
   TMethodHookHandler,
   TMethodResponseHandlerWithInstances,
   IMethodQueryBuilderHandlerWithContext,
-  IMethodQueryBuilderHandlerWithRequest
+  IMethodQueryBuilderHandlerWithRequest,
+  TGettingOptionsInstruction,
+  TTemplateHandler
 } from '../types'
 
 // FIELDS
@@ -22,9 +23,28 @@ export interface IFields<T = any> {
   [key: string]: T
 }
 
+// TEMPLATES
+export interface ITemplates {
+  create?: TTemplateHandler<IMethodCreateOptions>
+  index?: TTemplateHandler<IMethodFindAllOptions>
+  show?: TTemplateHandler<IMethodFindOneOptions>
+  count?: TTemplateHandler<IMethodCountOptions>
+  update?: TTemplateHandler<IMethodUpdateOptions>
+  destroy?: TTemplateHandler<IMethodDestroyOptions>
+  restore?: TTemplateHandler<IMethodRestoreOptions>
+}
+
 // METHODS
 export interface IMethods {
-  [key: string]: TMethodWrapper<any>
+  create?: TGettingOptionsInstruction<IMethodCreateOptions>
+  index?: TGettingOptionsInstruction<IMethodFindAllOptions>
+  show?: TGettingOptionsInstruction<IMethodFindOneOptions>
+  count?: TGettingOptionsInstruction<IMethodCountOptions>
+  update?: TGettingOptionsInstruction<IMethodUpdateOptions>
+  destroy?: TGettingOptionsInstruction<IMethodDestroyOptions>
+  restore?: TGettingOptionsInstruction<IMethodRestoreOptions>
+
+  [key: string]: any
 }
 
 // ENDPOINTS

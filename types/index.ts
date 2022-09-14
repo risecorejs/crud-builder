@@ -5,24 +5,17 @@ import { TKeys as TOnlyKeys } from '@risecorejs/only/types'
 
 import { IFields, IMethodContextOptions } from '../interfaces'
 
-export type TTemplates =
-  | 'create'
-  | 'index'
-  | 'show'
-  | 'count'
-  | 'update'
-  | 'bulkUpdate'
-  | 'destroy'
-  | 'bulkDestroy'
-  | 'restore'
-  | 'bulkRestore'
+export type TTemplates = 'create' | 'index' | 'show' | 'count' | 'update' | 'destroy' | 'restore'
+
+// | 'bulkUpdate'
+// | 'bulkDestroy'
+// | 'bulkRestore'
 
 export type TTemplateHandler<T> = (
   Model: Model,
   gettingOptionsInstruction: TGettingOptionsInstruction<T>
 ) => express.Handler
 
-export type TMethodWrapper<T> = true | (() => T)
 export type TMethodState = object | ((req: express.Request) => object | Promise<object>)
 export type TMethodOnly<C = IMethodContextOptions> = TOnlyKeys | ((ctx: C) => TOnlyKeys | Promise<TOnlyKeys>)
 export type TMethodResponseHandlerWithContext<T = IMethodContextOptions> = (ctx: T) => IFields | Promise<IFields>

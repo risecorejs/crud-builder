@@ -1,20 +1,16 @@
 import express from 'express'
-import { Model } from 'sequelize'
 import httpStatusCodes from 'http-status-codes'
+
+import { Model } from 'sequelize'
 
 import { getMethodOptions, getContextState, getValidationErrors, getContextFields, errorResponse } from '../utils'
 
-import {
-  IMethodCreateOptions,
-  IMethodContextOptions,
-  IFields,
-  IMethodContextOptionsWithoutInstance
-} from '../interfaces'
+import { IMethodCreateOptions, IMethodContextOptions, IMethodContextOptionsWithoutInstance } from '../interfaces'
 import { TGettingOptionsInstruction } from '../types'
 
 /**
  * CREATE
- * @param Model {object}
+ * @param Model {Model}
  * @param gettingOptionsInstruction {TGettingOptionsInstruction<IMethodCreateOptions>)}
  * @return {express.Handler}
  */
@@ -57,7 +53,7 @@ export default function (
       }
 
       // @ts-ignore
-      ctx.instance = <IFields>await Model.create(ctx.fields)
+      ctx.instance = await Model.create(ctx.fields)
 
       if (options.afterCreate) {
         await options.afterCreate(<IMethodContextOptionsWithoutInstance & { instance: Model }>ctx)

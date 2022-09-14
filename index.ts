@@ -16,21 +16,18 @@ export default function (model: TModel, methods: IMethods): IEndpoints {
   for (const [methodName, gettingOptionsInstruction] of Object.entries(methods)) {
     const methodOptions = getMethodOptions<{ template?: TTemplates; model?: TModel }>(gettingOptionsInstruction)
 
-    const templateName = methodOptions.template || methodName
+    const templateName = <TTemplates>(methodOptions.template || methodName)
 
     const template = templates[templateName]
 
-    const Model = getModel(methodOptions.model || model)
+    model = methodOptions.model || model
 
-    if (!Model) {
-      throw Error(`Model "${Model}" not found`)
-    }
+    const Model = getModel(model)
 
-    if (template) {
-      endpoints[methodName] = template(Model, gettingOptionsInstruction)
-    } else {
-      throw Error(`Template "${templateName}" not found`)
-    }
+    if (!Model) throw Error(`Model "${model}" not found`)
+    if (!template) throw Error(`Template "${templateName}" not found`)
+
+    endpoints[methodName] = template(Model, gettingOptionsInstruction)
   }
 
   return endpoints

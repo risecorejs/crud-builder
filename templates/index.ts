@@ -13,10 +13,9 @@ import destroy from './destroy'
 import restore from './destroy'
 // import bulkRestore from './bulk-restore'
 
-import { IFields } from '../interfaces'
-import { TTemplateHandler } from '../types'
+import { ITemplates } from '../interfaces'
 
-export default <IFields<TTemplateHandler<any>>>{
+export default <ITemplates>{
   create,
   index,
   show,
