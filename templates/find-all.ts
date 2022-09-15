@@ -8,7 +8,7 @@ import { getQueryOptions, errorResponse, getMethodOptions } from '../utils'
 
 /**
  * FIND-ALL
- * @param Model {object}
+ * @param Model {typeof CModel}
  * @param gettingOptionsInstruction {TGettingOptionsInstruction<IMethodFindAllOptions>)}
  * @return {express.Handler}
  */

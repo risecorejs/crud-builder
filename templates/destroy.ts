@@ -8,7 +8,7 @@ import { CModel, TGettingOptionsInstruction } from '../types'
 
 /**
  * DESTROY
- * @param Model {object}
+ * @param Model {typeof CModel}
  * @param gettingOptionsInstruction {TGettingOptionsInstruction<IMethodDestroyOptions>)}
  * @return {express.Handler}
  */

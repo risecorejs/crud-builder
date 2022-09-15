@@ -15,7 +15,7 @@ import { CModel, TGettingOptionsInstruction } from '../types'
 
 /**
  * UPDATE
- * @param Model {object}
+ * @param Model {typeof CModel}
  * @param gettingOptionsInstruction {TGettingOptionsInstruction<IMethodUpdateOptions>)}
  * @return {express.Handler}
  */

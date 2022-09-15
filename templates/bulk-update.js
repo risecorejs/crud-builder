@@ -23,7 +23,7 @@ const {
  *   sendStatus: boolean,
  *   response: Function?
  * }|true)}
- * @param Model {Object}
+ * @param Model {typeof CModel}
  * @return {Function}
  */
 module.exports = (getOptions, Model) => async (req, res) => {

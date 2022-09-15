@@ -8,7 +8,7 @@ import { CModel, TGettingOptionsInstruction } from '../types'
 
 /**
  * FIND-ONE
- * @param Model {object}
+ * @param Model {typeof CModel}
  * @param gettingOptionsInstruction {TGettingOptionsInstruction<IMethodFindOneOptions>)}
  * @return {express.Handler}
  */
@@ -34,10 +34,6 @@ export default function (
       }
 
       const status = 200
-
-      if (options.sendStatus) {
-        return res.sendStatus(status)
-      }
 
       if (options.response) {
         const response = await options.response(instance, req)

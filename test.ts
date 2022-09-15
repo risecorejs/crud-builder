@@ -1,6 +1,6 @@
 import crudBuilder from './index'
 
-import { IMethodCreateOptions, IMethodFindAllOptions } from './interfaces'
+import { IMethodCreateOptions, IMethodFindAllOptions, IMethodFindOneOptions } from './interfaces'
 
 const endpoints = crudBuilder('User', {
   // CREATE
@@ -22,6 +22,8 @@ const endpoints = crudBuilder('User', {
     afterCreate(ctx) {},
     sendStatus: true,
     response(ctx) {
+      ctx.instance.update({})
+
       return {
         test: 123
       }
@@ -37,11 +39,25 @@ const endpoints = crudBuilder('User', {
     queryBuilder: (req) => ({}),
     response: (instances, req) => {
       if (Array.isArray(instances)) {
+      } else {
       }
 
       return {
         instances
       }
+    }
+  }),
+
+  // SHOW
+  show: (): IMethodFindOneOptions => ({
+    template: 'show',
+    model: 'Customer',
+    key: 'customerId',
+    queryBuilder: (req) => ({}),
+    response: (instance) => {
+      instance.restore()
+
+      return {}
     }
   })
 })

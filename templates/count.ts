@@ -8,7 +8,7 @@ import { CModel, TGettingOptionsInstruction } from '../types'
 
 /**
  * COUNT
- * @param Model {object}
+ * @param Model {typeof CModel}
  * @param gettingOptionsInstruction {TGettingOptionsInstruction<IMethodCountOptions>)}
  * @return {express.Handler}
  */

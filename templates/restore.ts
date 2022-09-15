@@ -8,7 +8,7 @@ import { CModel, TGettingOptionsInstruction } from '../types'
 
 /**
  * RESTORE
- * @param Model {object}
+ * @param Model {typeof CModel}
  * @param gettingOptionsInstruction {TGettingOptionsInstruction<IMethodRestoreOptions>)}
  * @return {express.Handler}
  */

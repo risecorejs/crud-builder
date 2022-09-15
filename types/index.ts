@@ -23,7 +23,7 @@ export type TMethodState = object | ((req: express.Request) => object | Promise<
 export type TMethodOnly<C = IMethodContextOptions> = TOnlyKeys | ((ctx: C) => TOnlyKeys | Promise<TOnlyKeys>)
 
 export type TMethodResponseHandlerWithContext<T = IMethodContextOptions> = (ctx: T) => IFields | Promise<IFields>
-export type TMethodResponseHandlerWithInstance = (instance: IFields, req: express.Request) => IFields | Promise<IFields>
+export type TMethodResponseHandlerWithInstance = (instance: CModel, req: express.Request) => IFields | Promise<IFields>
 export type TMethodResponseHandlerWithInstances = (
   instances: { rows: CModel[]; count: number } | CModel[],
   req: express.Request

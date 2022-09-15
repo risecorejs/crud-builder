@@ -1,5 +1,4 @@
 import express from 'express'
-import { Model } from 'sequelize'
 
 import { IRules as IValidatorRules } from '@risecorejs/validator/interfaces'
 import { FindOptions } from 'sequelize/types/model'
@@ -16,7 +15,8 @@ import {
   IMethodQueryBuilderHandlerWithContext,
   IMethodQueryBuilderHandlerWithRequest,
   TGettingOptionsInstruction,
-  TTemplateHandler
+  TTemplateHandler,
+  CModel
 } from '../types'
 
 // FIELDS
@@ -62,8 +62,8 @@ export interface IMethodCreateOptions
   state?: TMethodState
   formatter?: TMethodHookHandler<IMethodContextOptionsWithoutInstance>
   beforeCreate?: TMethodHookHandler<IMethodContextOptionsWithoutInstance>
-  afterCreate?: TMethodHookHandler<IMethodContextOptionsWithoutInstance & { instance: Model }>
-  response?: TMethodResponseHandlerWithContext<IMethodContextOptionsWithoutInstance & { instance: Model }>
+  afterCreate?: TMethodHookHandler<IMethodContextOptionsWithoutInstance & { instance: CModel }>
+  response?: TMethodResponseHandlerWithContext<IMethodContextOptionsWithoutInstance & { instance: CModel }>
 }
 
 // FIND-All-OPTIONS
@@ -75,6 +75,13 @@ export interface IMethodFindAllOptions
   pagination?: boolean
   queryBuilder?: FindOptions | IMethodQueryBuilderHandlerWithRequest
   response?: TMethodResponseHandlerWithInstances
+}
+
+// FIND-ONE-OPTIONS
+export interface IMethodFindOneOptions extends Omit<IMethodBaseOptions, 'sendStatus'>, IMethodQueryBuilderOptions {
+  template?: 'show'
+  queryBuilder?: FindOptions | IMethodQueryBuilderHandlerWithRequest
+  response?: TMethodResponseHandlerWithInstance
 }
 
 // UPDATE-OPTIONS
@@ -90,13 +97,6 @@ export interface IMethodUpdateOptions
   beforeUpdate?: TMethodHookHandler
   afterUpdate?: TMethodHookHandler
   response?: TMethodResponseHandlerWithContext
-}
-
-// FIND-ONE-OPTIONS
-export interface IMethodFindOneOptions extends IMethodBaseOptions, IMethodQueryBuilderOptions {
-  template?: 'show'
-  queryBuilder?: IFields | IMethodQueryBuilderHandlerWithRequest
-  response?: TMethodResponseHandlerWithInstance
 }
 
 // COUNT-OPTIONS
@@ -133,7 +133,7 @@ export interface IMethodContextOptions {
   res: express.Response
   state: IFields
   fields: null | IFields
-  instance: null | Model
+  instance: null | CModel
 }
 
 // CONTEXT-OPTIONS-WITHOUT-FIELDS
@@ -149,7 +149,7 @@ export interface IMethodBaseOptions {
   sendStatus?: boolean
   response?:
     | TMethodResponseHandlerWithContext
-    | TMethodResponseHandlerWithContext<IMethodContextOptionsWithoutInstance & { instance: Model }>
+    | TMethodResponseHandlerWithContext<IMethodContextOptionsWithoutInstance & { instance: CModel }>
     | TMethodResponseHandlerWithInstance
     | TMethodResponseHandlerWithInstances
 }
@@ -167,7 +167,7 @@ export interface IMethodOnlyOptions<C = IMethodContextOptions> {
 
 // QUERY-BUILDER-OPTIONS
 export interface IMethodQueryBuilderOptions {
-  key?: string | false
+  key?: 'id' | string | false
   queryBuilder?:
     | IFields
     | ((ctxOrReq: IMethodContextOptions | IMethodContextOptionsWithoutFields | express.Request) => IFields)
