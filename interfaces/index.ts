@@ -97,12 +97,12 @@ export interface IMethodCountOptions
 // UPDATE-OPTIONS
 export interface IMethodUpdateOptions
   extends IMethodBaseOptions,
-    IMethodValidatorOptions,
-    IMethodOnlyOptions,
-    IMethodQueryBuilderOptions {
+    IMethodQueryBuilderOptions,
+    IMethodValidatorOptions<IMethodContextOptionsWithoutInstance & { instance: CModel }>,
+    IMethodOnlyOptions {
   template?: 'update'
   state?: TMethodState
-  queryBuilder?: IFields | IMethodQueryBuilderHandlerWithContext
+  queryBuilder?: FindOptions | IMethodQueryBuilderHandlerWithContext<Omit<IMethodContextOptions, 'fields' | 'instance'>>
   formatter?: TMethodHookHandler
   beforeUpdate?: TMethodHookHandler
   afterUpdate?: TMethodHookHandler

@@ -22,7 +22,7 @@ export type TTemplateHandler<T> = (
 export type TMethodState = object | ((req: express.Request) => object | Promise<object>)
 export type TMethodOnly<C = IMethodContextOptions> = TOnlyKeys | ((ctx: C) => TOnlyKeys | Promise<TOnlyKeys>)
 
-export type TMethodResponseHandlerWithContext<T = IMethodContextOptions> = (ctx: T) => IFields | Promise<IFields>
+export type TMethodResponseHandlerWithContext<C = IMethodContextOptions> = (ctx: C) => IFields | Promise<IFields>
 export type TMethodResponseHandlerWithInstance = (instance: CModel, req: express.Request) => IFields | Promise<IFields>
 export type TMethodResponseHandlerWithInstances = (
   instances: { rows: CModel[]; count: number } | CModel[],
@@ -30,8 +30,8 @@ export type TMethodResponseHandlerWithInstances = (
 ) => IFields | Promise<IFields>
 export type TMethodResponseHandlerWithCount = (count: number, req: express.Request) => IFields | Promise<IFields>
 
-export type TMethodHookHandler<T = IMethodContextOptions> = (ctx: T) => void | Promise<void>
-export type IMethodQueryBuilderHandlerWithContext<T = IMethodContextOptions> = (ctx: T) => FindOptions
+export type TMethodHookHandler<C = IMethodContextOptions> = (ctx: C) => void | Promise<void>
+export type IMethodQueryBuilderHandlerWithContext<C = IMethodContextOptions> = (ctx: C) => FindOptions
 export type IMethodQueryBuilderHandlerWithRequest = (req: express.Request) => FindOptions
 
 export type TGettingOptionsInstruction<T = any> = true | (() => T)

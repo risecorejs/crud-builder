@@ -1,6 +1,6 @@
 import crudBuilder from './index'
 
-import { IMethodCreateOptions, IMethodFindAllOptions, IMethodFindOneOptions } from './interfaces'
+import { IMethodCreateOptions, IMethodFindAllOptions, IMethodFindOneOptions, IMethodUpdateOptions } from './interfaces'
 
 const endpoints = crudBuilder('User', {
   // CREATE
@@ -15,7 +15,7 @@ const endpoints = crudBuilder('User', {
       return {}
     },
     only(ctx) {
-      return ['asd']
+      return []
     },
     formatter(ctx) {},
     beforeCreate(ctx) {},
@@ -66,6 +66,38 @@ const endpoints = crudBuilder('User', {
     queryBuilder: (req) => ({}),
     response: async (count, req) => {
       return { count }
+    }
+  }),
+
+  // UPDATE
+  update: (): IMethodUpdateOptions => ({
+    template: 'update',
+    model: 'Customer',
+    state(req) {
+      return {}
+    },
+    queryBuilder: (ctx) => {
+      // ctx.
+
+      return {}
+    },
+    validator: true,
+    rules(ctx) {
+      ctx.instance
+
+      return {}
+    },
+    only(ctx) {
+      return []
+    },
+    formatter(ctx) {},
+    beforeUpdate(ctx) {},
+    afterUpdate(ctx) {},
+    sendStatus: true,
+    response(ctx) {
+      return {
+        test: 123
+      }
     }
   })
 })

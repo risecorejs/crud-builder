@@ -10,7 +10,7 @@ import {
   errorResponse
 } from '../utils'
 
-import { IMethodUpdateOptions, IMethodContextOptions } from '../interfaces'
+import { IMethodUpdateOptions, IMethodContextOptions, IMethodContextOptionsWithoutInstance } from '../interfaces'
 import { CModel, TGettingOptionsInstruction } from '../types'
 
 /**
