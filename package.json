@@ -18,6 +18,7 @@
     "@risecorejs/middleware": "^3.0.3",
     "@risecorejs/only": "^3.0.4",
     "@risecorejs/validator": "^3.0.4",
+    "@risecorejs/where-builder": "^3.0.5",
     "@types/express": "^4.17.13",
     "@types/sequelize": "^4.28.14",
     "express": "^4.18.1",

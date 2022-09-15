@@ -1,11 +1,10 @@
 import express from 'express'
 import httpStatusCodes from 'http-status-codes'
-import { Model } from 'sequelize'
 
 import { getMethodOptions, getQueryOptions, errorResponse } from '../utils'
 
-import { IFields, IMethodFindOneOptions } from '../interfaces'
-import { TGettingOptionsInstruction } from '../types'
+import { IMethodFindOneOptions } from '../interfaces'
+import { CModel, TGettingOptionsInstruction } from '../types'
 
 /**
  * FIND-ONE
@@ -14,7 +13,7 @@ import { TGettingOptionsInstruction } from '../types'
  * @return {express.Handler}
  */
 export default function (
-  Model: Model,
+  Model: typeof CModel,
   gettingOptionsInstruction: TGettingOptionsInstruction<IMethodFindOneOptions>
 ): express.Handler {
   return async (req: express.Request, res: express.Response) => {
@@ -23,8 +22,7 @@ export default function (
 
       const queryOptions = await getQueryOptions().single(req, options)
 
-      // @ts-ignore
-      const instance: null | IFields = await Model.findOne(queryOptions)
+      const instance = await Model.findOne(queryOptions)
 
       if (!instance) {
         const status = 404

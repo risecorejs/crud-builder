@@ -1,8 +1,7 @@
 import express from 'express'
 import httpStatusCodes from 'http-status-codes'
-import { Model } from 'sequelize'
 
-import { TGettingOptionsInstruction } from '../types'
+import { CModel, TGettingOptionsInstruction } from '../types'
 import { IFields, IMethodFindAllOptions } from '../interfaces'
 
 import { getQueryOptions, errorResponse, getMethodOptions } from '../utils'
@@ -14,7 +13,7 @@ import { getQueryOptions, errorResponse, getMethodOptions } from '../utils'
  * @return {express.Handler}
  */
 export default function (
-  Model: Model,
+  Model: typeof CModel,
   gettingOptionsInstruction: TGettingOptionsInstruction<IMethodFindAllOptions>
 ): express.Handler {
   return async (req: express.Request, res: express.Response) => {
@@ -39,14 +38,9 @@ export default function (
 
       Object.assign(queryOptions, _queryOptions)
 
-      // @ts-ignore
-      const instances: IFields[] = await Model[options.method](queryOptions)
+      const instances = await Model[options.method](queryOptions)
 
       const status = 200
-
-      if (options.sendStatus) {
-        return res.sendStatus(status)
-      }
 
       if (options.response) {
         const response = await options.response(instances, req)

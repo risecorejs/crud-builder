@@ -1,9 +1,10 @@
 import crudBuilder from './index'
 
-import { IMethodCreateOptions } from './interfaces'
+import { IMethodCreateOptions, IMethodFindAllOptions } from './interfaces'
 
 const endpoints = crudBuilder('User', {
-  create: () => ({
+  // CREATE
+  create: (): IMethodCreateOptions => ({
     template: 'create',
     model: 'Customer',
     state(req) {
@@ -23,6 +24,23 @@ const endpoints = crudBuilder('User', {
     response(ctx) {
       return {
         test: 123
+      }
+    }
+  }),
+
+  // INDEX
+  index: (): IMethodFindAllOptions => ({
+    template: 'index',
+    model: 'Customer',
+    method: 'findAndCountAll',
+    pagination: true,
+    queryBuilder: (req) => ({}),
+    response: (instances, req) => {
+      if (Array.isArray(instances)) {
+      }
+
+      return {
+        instances
       }
     }
   })

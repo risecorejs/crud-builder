@@ -1,11 +1,10 @@
 import express from 'express'
 import httpStatusCodes from 'http-status-codes'
-import { Model } from 'sequelize'
 
 import { getMethodOptions, getContextState, getQueryOptions, errorResponse } from '../utils'
 
-import { IMethodRestoreOptions, IMethodContextOptionsWithoutFields, IFields } from '../interfaces'
-import { TGettingOptionsInstruction } from '../types'
+import { IMethodRestoreOptions, IMethodContextOptionsWithoutFields } from '../interfaces'
+import { CModel, TGettingOptionsInstruction } from '../types'
 
 /**
  * RESTORE
@@ -14,7 +13,7 @@ import { TGettingOptionsInstruction } from '../types'
  * @return {express.Handler}
  */
 export default function (
-  Model: Model,
+  Model: typeof CModel,
   gettingOptionsInstruction: TGettingOptionsInstruction<IMethodRestoreOptions>
 ): express.Handler {
   return async (req: express.Request, res: express.Response) => {
@@ -32,7 +31,6 @@ export default function (
 
       queryOptions.paranoid = false
 
-      // @ts-ignore
       ctx.instance = await Model.findOne(queryOptions)
 
       if (!ctx.instance) {

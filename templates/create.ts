@@ -6,16 +6,16 @@ import { Model } from 'sequelize'
 import { getMethodOptions, getContextState, getValidationErrors, getContextFields, errorResponse } from '../utils'
 
 import { IMethodCreateOptions, IMethodContextOptions, IMethodContextOptionsWithoutInstance } from '../interfaces'
-import { TGettingOptionsInstruction } from '../types'
+import { TGettingOptionsInstruction, CModel } from '../types'
 
 /**
  * CREATE
- * @param Model {Model}
+ * @param Model {typeof CModel}
  * @param gettingOptionsInstruction {TGettingOptionsInstruction<IMethodCreateOptions>)}
  * @return {express.Handler}
  */
 export default function (
-  Model: Model,
+  Model: typeof CModel,
   gettingOptionsInstruction: TGettingOptionsInstruction<IMethodCreateOptions>
 ): express.Handler {
   return async (req: express.Request, res: express.Response) => {
@@ -52,8 +52,7 @@ export default function (
         await options.beforeCreate(ctx)
       }
 
-      // @ts-ignore
-      ctx.instance = await Model.create(ctx.fields)
+      ctx.instance = await Model.create(<{}>ctx.fields)
 
       if (options.afterCreate) {
         await options.afterCreate(<IMethodContextOptionsWithoutInstance & { instance: Model }>ctx)

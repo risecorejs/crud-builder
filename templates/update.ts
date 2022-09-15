@@ -1,6 +1,5 @@
 import express from 'express'
 import httpStatusCodes from 'http-status-codes'
-import { Model } from 'sequelize'
 
 import {
   getMethodOptions,
@@ -12,7 +11,7 @@ import {
 } from '../utils'
 
 import { IMethodUpdateOptions, IMethodContextOptions } from '../interfaces'
-import { TGettingOptionsInstruction } from '../types'
+import { CModel, TGettingOptionsInstruction } from '../types'
 
 /**
  * UPDATE
@@ -21,7 +20,7 @@ import { TGettingOptionsInstruction } from '../types'
  * @return {express.Handler}
  */
 export default function (
-  Model: Model,
+  Model: typeof CModel,
   gettingOptionsInstruction: TGettingOptionsInstruction<IMethodUpdateOptions>
 ): express.Handler {
   return async (req: express.Request, res: express.Response) => {
@@ -38,8 +37,7 @@ export default function (
 
       const queryOptions = await getQueryOptions().single(req, options, ctx)
 
-      // @ts-ignore
-      ctx.instance = <null | object>await Model.findOne(queryOptions)
+      ctx.instance = await Model.findOne(queryOptions)
 
       if (!ctx.instance) {
         const status = 404

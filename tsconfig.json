@@ -35,6 +35,7 @@
      "types": [
        "./node_modules/@risecorejs/only/middleware",
        "./node_modules/@risecorejs/validator/middleware",
+       "./node_modules/@risecorejs/where-builder/middleware",
        "./node_modules/@risecorejs/middleware/lib/pagination"
      ],                                                  /* Specify type package names to be included without being referenced in a source file. */
     // "allowUmdGlobalAccess": true,                     /* Allow accessing UMD globals from modules. */

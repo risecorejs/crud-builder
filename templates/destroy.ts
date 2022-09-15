@@ -1,11 +1,10 @@
 import express from 'express'
 import httpStatusCodes from 'http-status-codes'
-import { Model } from 'sequelize'
 
 import { getMethodOptions, getContextState, getQueryOptions, errorResponse } from '../utils'
 
 import { IMethodDestroyOptions, IMethodContextOptionsWithoutFields, IFields } from '../interfaces'
-import { TGettingOptionsInstruction } from '../types'
+import { CModel, TGettingOptionsInstruction } from '../types'
 
 /**
  * DESTROY
@@ -14,7 +13,7 @@ import { TGettingOptionsInstruction } from '../types'
  * @return {express.Handler}
  */
 export default function (
-  Model: Model,
+  Model: typeof CModel,
   gettingOptionsInstruction: TGettingOptionsInstruction<IMethodDestroyOptions>
 ): express.Handler {
   return async (req: express.Request, res: express.Response) => {
@@ -30,8 +29,7 @@ export default function (
 
       const queryOptions = await getQueryOptions().single(req, options, ctx)
 
-      // @ts-ignore
-      ctx.instance = <null | IFields>await Model.findOne(queryOptions)
+      ctx.instance = await Model.findOne(queryOptions)
 
       if (!ctx.instance) {
         const status = 404

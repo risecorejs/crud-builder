@@ -1,11 +1,10 @@
 import express from 'express'
 import httpStatusCodes from 'http-status-codes'
-import { Model } from 'sequelize'
 
 import { getMethodOptions, getQueryOptions, errorResponse } from '../utils'
 
 import { IMethodCountOptions } from '../interfaces'
-import { TGettingOptionsInstruction } from '../types'
+import { CModel, TGettingOptionsInstruction } from '../types'
 
 /**
  * COUNT
@@ -14,7 +13,7 @@ import { TGettingOptionsInstruction } from '../types'
  * @return {express.Handler}
  */
 export default function (
-  Model: Model,
+  Model: typeof CModel,
   gettingOptionsInstruction: TGettingOptionsInstruction<IMethodCountOptions>
 ): express.Handler {
   return async (req: express.Request, res: express.Response) => {
@@ -23,7 +22,6 @@ export default function (
 
       const queryOptions = await getQueryOptions().multiple(req, options)
 
-      // @ts-ignore
       const count: number = await Model.count(queryOptions)
 
       const status = 200

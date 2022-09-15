@@ -2,6 +2,7 @@ import express from 'express'
 import { Model } from 'sequelize'
 
 import { IRules as IValidatorRules } from '@risecorejs/validator/interfaces'
+import { FindOptions } from 'sequelize/types/model'
 
 import {
   TTemplates,
@@ -65,6 +66,17 @@ export interface IMethodCreateOptions
   response?: TMethodResponseHandlerWithContext<IMethodContextOptionsWithoutInstance & { instance: Model }>
 }
 
+// FIND-All-OPTIONS
+export interface IMethodFindAllOptions
+  extends Omit<IMethodBaseOptions, 'sendStatus'>,
+    Omit<IMethodQueryBuilderOptions, 'key'> {
+  template?: 'index'
+  method?: 'findAndCountAll' | 'findAll'
+  pagination?: boolean
+  queryBuilder?: FindOptions | IMethodQueryBuilderHandlerWithRequest
+  response?: TMethodResponseHandlerWithInstances
+}
+
 // UPDATE-OPTIONS
 export interface IMethodUpdateOptions
   extends IMethodBaseOptions,
@@ -85,15 +97,6 @@ export interface IMethodFindOneOptions extends IMethodBaseOptions, IMethodQueryB
   template?: 'show'
   queryBuilder?: IFields | IMethodQueryBuilderHandlerWithRequest
   response?: TMethodResponseHandlerWithInstance
-}
-
-// FIND-All-OPTIONS
-export interface IMethodFindAllOptions extends IMethodBaseOptions, Omit<IMethodQueryBuilderOptions, 'key'> {
-  template?: 'index'
-  queryBuilder?: IFields | IMethodQueryBuilderHandlerWithRequest
-  response?: TMethodResponseHandlerWithInstances
-  method?: 'findAndCountAll' | 'findAll'
-  pagination?: boolean
 }
 
 // COUNT-OPTIONS
