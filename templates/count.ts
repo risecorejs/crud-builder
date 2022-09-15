@@ -22,14 +22,20 @@ export default function (
 
       const queryOptions = await getQueryOptions().multiple(req, options)
 
-      const count: number = await Model.count(queryOptions)
+      const count = await Model.count(queryOptions)
 
       const status = 200
+
+      if (options.response) {
+        const response = await options.response(count, req)
+
+        return res.status(response.status || status).json(response)
+      }
 
       return res.status(status).json({
         status,
         message: httpStatusCodes.getStatusText(status),
-        count
+        result: count
       })
     } catch (err) {
       return errorResponse(err, res)

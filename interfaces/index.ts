@@ -16,7 +16,8 @@ import {
   IMethodQueryBuilderHandlerWithRequest,
   TGettingOptionsInstruction,
   TTemplateHandler,
-  CModel
+  CModel,
+  TMethodResponseHandlerWithCount
 } from '../types'
 
 // FIELDS
@@ -84,6 +85,15 @@ export interface IMethodFindOneOptions extends Omit<IMethodBaseOptions, 'sendSta
   response?: TMethodResponseHandlerWithInstance
 }
 
+// COUNT-OPTIONS
+export interface IMethodCountOptions
+  extends Omit<IMethodBaseOptions, 'sendStatus'>,
+    Omit<IMethodQueryBuilderOptions, 'key'> {
+  template?: 'count'
+  queryBuilder?: FindOptions | IMethodQueryBuilderHandlerWithRequest
+  response?: TMethodResponseHandlerWithCount
+}
+
 // UPDATE-OPTIONS
 export interface IMethodUpdateOptions
   extends IMethodBaseOptions,
@@ -97,13 +107,6 @@ export interface IMethodUpdateOptions
   beforeUpdate?: TMethodHookHandler
   afterUpdate?: TMethodHookHandler
   response?: TMethodResponseHandlerWithContext
-}
-
-// COUNT-OPTIONS
-export interface IMethodCountOptions
-  extends Omit<IMethodBaseOptions, 'sendStatus' | 'response'>,
-    Omit<IMethodQueryBuilderOptions, 'key'> {
-  template?: 'count'
 }
 
 // DESTROY-OPTIONS
@@ -152,6 +155,7 @@ export interface IMethodBaseOptions {
     | TMethodResponseHandlerWithContext<IMethodContextOptionsWithoutInstance & { instance: CModel }>
     | TMethodResponseHandlerWithInstance
     | TMethodResponseHandlerWithInstances
+    | TMethodResponseHandlerWithCount
 }
 
 // VALIDATOR-OPTIONS

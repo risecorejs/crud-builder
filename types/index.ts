@@ -28,6 +28,7 @@ export type TMethodResponseHandlerWithInstances = (
   instances: { rows: CModel[]; count: number } | CModel[],
   req: express.Request
 ) => IFields | Promise<IFields>
+export type TMethodResponseHandlerWithCount = (count: number, req: express.Request) => IFields | Promise<IFields>
 
 export type TMethodHookHandler<T = IMethodContextOptions> = (ctx: T) => void | Promise<void>
 export type IMethodQueryBuilderHandlerWithContext<T = IMethodContextOptions> = (ctx: T) => FindOptions

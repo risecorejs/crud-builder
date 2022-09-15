@@ -42,9 +42,7 @@ const endpoints = crudBuilder('User', {
       } else {
       }
 
-      return {
-        instances
-      }
+      return { instances }
     }
   }),
 
@@ -54,10 +52,20 @@ const endpoints = crudBuilder('User', {
     model: 'Customer',
     key: 'customerId',
     queryBuilder: (req) => ({}),
-    response: (instance) => {
-      instance.restore()
+    response: (instance, req) => {
+      instance.update({})
 
-      return {}
+      return { instance }
+    }
+  }),
+
+  // COUNT
+  count: () => ({
+    template: 'count',
+    model: 'Customer',
+    queryBuilder: (req) => ({}),
+    response: async (count, req) => {
+      return { count }
     }
   })
 })
