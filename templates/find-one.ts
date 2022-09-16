@@ -20,7 +20,7 @@ export default function (
     try {
       const options = getMethodOptions<IMethodFindOneOptions>(gettingOptionsInstruction)
 
-      const queryOptions = await getQueryOptions().single(req, options)
+      const queryOptions = await getQueryOptions().single(req, options.key, options.queryBuilder)
 
       const instance = await Model.findOne(queryOptions)
 

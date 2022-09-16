@@ -1,7 +1,7 @@
 import { getModel, getMethodOptions } from './utils'
 import templates from './templates'
 
-import { IMethods, IEndpoints } from './interfaces'
+import { IMethods, IEndpoints, IMethodBaseOptions } from './interfaces'
 import { TModel, TTemplates } from './types'
 
 /**
@@ -14,7 +14,7 @@ export default function (model: TModel, methods: IMethods): IEndpoints {
   const endpoints: IEndpoints = {}
 
   for (const [methodName, gettingOptionsInstruction] of Object.entries(methods)) {
-    const methodOptions = getMethodOptions<{ template?: TTemplates; model?: TModel }>(gettingOptionsInstruction)
+    const methodOptions = getMethodOptions<IMethodBaseOptions>(gettingOptionsInstruction)
 
     model = methodOptions.model || model
 

@@ -30,19 +30,21 @@ export default function (
         instance: null
       }
 
-      const errors = await getValidationErrors(req, options, ctx)
+      if (options.validator !== false && options.rules) {
+        const errors = await getValidationErrors(req, options.rules, ctx)
 
-      if (errors) {
-        const status = 400
+        if (errors) {
+          const status = 400
 
-        return res.status(status).json({
-          status,
-          message: 'Validation errors',
-          errors
-        })
+          return res.status(status).json({
+            status,
+            message: 'Validation errors',
+            errors
+          })
+        }
       }
 
-      ctx.fields = await getContextFields(req, options, ctx)
+      ctx.fields = await getContextFields(req, options.only, ctx)
 
       if (options.formatter) {
         await options.formatter(ctx)

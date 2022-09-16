@@ -1,6 +1,5 @@
 import express from 'express'
 
-import { IRules as IValidatorRules } from '@risecorejs/validator/interfaces'
 import { FindOptions } from 'sequelize/types/model'
 
 import {
@@ -17,7 +16,9 @@ import {
   TGettingOptionsInstruction,
   TTemplateHandler,
   CModel,
-  TMethodResponseHandlerWithCount
+  TMethodResponseHandlerWithCount,
+  TMethodRules,
+  TMethodKey
 } from '../types'
 
 // FIELDS
@@ -54,23 +55,28 @@ export interface IEndpoints {
   [key: string]: express.Handler
 }
 
+// BASE-OPTIONS
+export interface IMethodBaseOptions {
+  template?: TTemplates
+  model?: TModel
+}
+
 // CREATE-OPTIONS
-export interface IMethodCreateOptions
-  extends IMethodBaseOptions,
-    IMethodValidatorOptions<Omit<IMethodContextOptions, 'fields' | 'instance'>>,
-    IMethodOnlyOptions<Omit<IMethodContextOptions, 'fields' | 'instance'>> {
+export interface IMethodCreateOptions extends IMethodBaseOptions {
   template?: 'create'
   state?: TMethodState
-  formatter?: TMethodHookHandler<IMethodContextOptionsWithoutInstance>
-  beforeCreate?: TMethodHookHandler<IMethodContextOptionsWithoutInstance>
-  afterCreate?: TMethodHookHandler<IMethodContextOptionsWithoutInstance & { instance: CModel }>
-  response?: TMethodResponseHandlerWithContext<IMethodContextOptionsWithoutInstance & { instance: CModel }>
+  validator?: boolean
+  rules?: TMethodRules<Omit<IMethodContextOptions, 'fields' | 'instance'>>
+  only?: TMethodOnly<Omit<IMethodContextOptions, 'fields' | 'instance'>>
+  formatter?: TMethodHookHandler<Omit<IMethodContextOptions, 'instance'>>
+  beforeCreate?: TMethodHookHandler<Omit<IMethodContextOptions, 'instance'>>
+  afterCreate?: TMethodHookHandler<Omit<IMethodContextOptions, 'instance'> & { instance: CModel }>
+  sendStatus?: boolean
+  response?: TMethodResponseHandlerWithContext<Omit<IMethodContextOptions, 'instance'> & { instance: CModel }>
 }
 
 // FIND-All-OPTIONS
-export interface IMethodFindAllOptions
-  extends Omit<IMethodBaseOptions, 'sendStatus'>,
-    Omit<IMethodQueryBuilderOptions, 'key'> {
+export interface IMethodFindAllOptions extends IMethodBaseOptions {
   template?: 'index'
   method?: 'findAndCountAll' | 'findAll'
   pagination?: boolean
@@ -79,54 +85,58 @@ export interface IMethodFindAllOptions
 }
 
 // FIND-ONE-OPTIONS
-export interface IMethodFindOneOptions extends Omit<IMethodBaseOptions, 'sendStatus'>, IMethodQueryBuilderOptions {
+export interface IMethodFindOneOptions extends IMethodBaseOptions {
   template?: 'show'
+  key?: TMethodKey
   queryBuilder?: FindOptions | IMethodQueryBuilderHandlerWithRequest
   response?: TMethodResponseHandlerWithInstance
 }
 
 // COUNT-OPTIONS
-export interface IMethodCountOptions
-  extends Omit<IMethodBaseOptions, 'sendStatus'>,
-    Omit<IMethodQueryBuilderOptions, 'key'> {
+export interface IMethodCountOptions extends IMethodBaseOptions {
   template?: 'count'
   queryBuilder?: FindOptions | IMethodQueryBuilderHandlerWithRequest
   response?: TMethodResponseHandlerWithCount
 }
 
 // UPDATE-OPTIONS
-export interface IMethodUpdateOptions
-  extends IMethodBaseOptions,
-    IMethodQueryBuilderOptions,
-    IMethodValidatorOptions<IMethodContextOptionsWithoutInstance & { instance: CModel }>,
-    IMethodOnlyOptions {
+export interface IMethodUpdateOptions extends IMethodBaseOptions {
   template?: 'update'
   state?: TMethodState
+  key?: TMethodKey
   queryBuilder?: FindOptions | IMethodQueryBuilderHandlerWithContext<Omit<IMethodContextOptions, 'fields' | 'instance'>>
+  validator?: boolean
+  rules?: TMethodRules<Omit<IMethodContextOptions, 'fields'>>
+  only?: TMethodOnly<Omit<IMethodContextOptions, 'fields'>>
   formatter?: TMethodHookHandler
   beforeUpdate?: TMethodHookHandler
   afterUpdate?: TMethodHookHandler
+  sendStatus?: boolean
   response?: TMethodResponseHandlerWithContext
 }
 
 // DESTROY-OPTIONS
-export interface IMethodDestroyOptions extends IMethodBaseOptions, IMethodQueryBuilderOptions {
+export interface IMethodDestroyOptions extends IMethodBaseOptions {
   template?: 'destroy'
   state?: TMethodState
+  key?: TMethodKey
   queryBuilder?: IFields | IMethodQueryBuilderHandlerWithContext<IMethodContextOptionsWithoutFields>
   force?: boolean | ((ctx: IMethodContextOptionsWithoutFields) => boolean | Promise<boolean>)
   beforeDestroy?: TMethodHookHandler<IMethodContextOptionsWithoutFields>
   afterDestroy?: TMethodHookHandler<IMethodContextOptionsWithoutFields>
+  sendStatus?: boolean
   response?: TMethodResponseHandlerWithContext<IMethodContextOptionsWithoutFields>
 }
 
 // RESTORE-OPTIONS
-export interface IMethodRestoreOptions extends IMethodBaseOptions, IMethodQueryBuilderOptions {
+export interface IMethodRestoreOptions extends IMethodBaseOptions {
   template?: 'restore'
   state?: TMethodState
+  key?: TMethodKey
   queryBuilder?: IFields | IMethodQueryBuilderHandlerWithContext<IMethodContextOptionsWithoutFields>
   beforeRestore?: TMethodHookHandler<IMethodContextOptionsWithoutFields>
   afterRestore?: TMethodHookHandler<IMethodContextOptionsWithoutFields>
+  sendStatus?: boolean
   response?: TMethodResponseHandlerWithContext<IMethodContextOptionsWithoutFields>
 }
 
@@ -144,38 +154,6 @@ export interface IMethodContextOptionsWithoutFields extends Omit<IMethodContextO
 
 // CONTEXT-OPTIONS-WITHOUT-INSTANCE
 export interface IMethodContextOptionsWithoutInstance extends Omit<IMethodContextOptions, 'instance'> {}
-
-// BASE-OPTIONS
-export interface IMethodBaseOptions {
-  template?: TTemplates
-  model?: TModel
-  sendStatus?: boolean
-  response?:
-    | TMethodResponseHandlerWithContext
-    | TMethodResponseHandlerWithContext<IMethodContextOptionsWithoutInstance & { instance: CModel }>
-    | TMethodResponseHandlerWithInstance
-    | TMethodResponseHandlerWithInstances
-    | TMethodResponseHandlerWithCount
-}
-
-// VALIDATOR-OPTIONS
-export interface IMethodValidatorOptions<C = IMethodContextOptions> {
-  validator?: boolean
-  rules?: IValidatorRules | ((ctx: C) => IValidatorRules | Promise<IValidatorRules>)
-}
-
-// ONLY-OPTIONS
-export interface IMethodOnlyOptions<C = IMethodContextOptions> {
-  only?: TMethodOnly<C>
-}
-
-// QUERY-BUILDER-OPTIONS
-export interface IMethodQueryBuilderOptions {
-  key?: 'id' | string | false
-  queryBuilder?:
-    | IFields
-    | ((ctxOrReq: IMethodContextOptions | IMethodContextOptionsWithoutFields | express.Request) => IFields)
-}
 
 // ERROR-RESPONSE
 export interface IMethodErrorResponse {

@@ -2,17 +2,21 @@ import httpStatusCodes from 'http-status-codes'
 import models from '@risecorejs/core/models'
 import express from 'express'
 
-import {
-  IMethodErrorResponse,
-  IFields,
-  IMethodContextOptions,
-  IMethodOnlyOptions,
-  IMethodQueryBuilderOptions,
-  IMethodValidatorOptions,
-  IMethodContextOptionsWithoutFields
-} from './interfaces'
+import { FindOptions } from 'sequelize/types/model'
 
-import { CModel, TGettingOptionsInstruction, TMethodOnly, TMethodState, TModel } from './types'
+import { IMethodErrorResponse, IFields } from './interfaces'
+
+import {
+  CModel,
+  IMethodQueryBuilderHandlerWithContext,
+  IMethodQueryBuilderHandlerWithRequest,
+  TGettingOptionsInstruction,
+  TMethodKey,
+  TMethodOnly,
+  TMethodRules,
+  TMethodState,
+  TModel
+} from './types'
 
 /**
  * GET-METHOD-OPTIONS
@@ -28,12 +32,21 @@ export function getMethodOptions<T = any>(gettingOptionsInstruction: TGettingOpt
 }
 
 /**
+ * GET-MODEL
+ * @param model {TModel}
+ * @return {undefined | typeof CModel}
+ */
+export function getModel(model: TModel): undefined | typeof CModel {
+  return typeof model === 'string' ? models[model] : model
+}
+
+/**
  * GET-CONTEXT-STATE
  * @param req {express.Request}
- * @param state {TMethodState}
- * @return {object}
+ * @param state {undefined | TMethodState}
+ * @return {object | Promise<object>}
  */
-export function getContextState(req: express.Request, state: TMethodState | undefined): object | Promise<object> {
+export function getContextState(req: express.Request, state: undefined | TMethodState): object | Promise<object> {
   if (state) {
     if (typeof state === 'function') {
       return state(req)
@@ -46,33 +59,65 @@ export function getContextState(req: express.Request, state: TMethodState | unde
 }
 
 /**
- * GET-MODEL
- * @param model {TModel}
- * @return {object}
+ * GET-VALIDATION-ERRORS
+ * @param req {express.Request}
+ * @param rules {TMethodRules}
+ * @param ctx {any}
+ * @return {Promise<null | object>}
  */
-export function getModel(model: TModel): typeof CModel | undefined {
-  return typeof model === 'string' ? models[model] : model
+export async function getValidationErrors(req: express.Request, rules: TMethodRules, ctx: any): Promise<null | object> {
+  if (typeof rules === 'function') {
+    rules = await rules(ctx)
+  }
+
+  return req.validator(rules)
 }
 
+/**
+ * GET-CONTEXT-FIELDS
+ * @param req {express.Request}
+ * @param only {undefined | TMethodOnly}
+ * @param ctx {any}
+ * @return {Promise<null | object>}
+ */
+export async function getContextFields(
+  req: express.Request,
+  only: undefined | TMethodOnly,
+  ctx: any
+): Promise<null | object> {
+  if (only) {
+    if (typeof only === 'function') {
+      only = await only(ctx)
+    }
+
+    return req.only(only)
+  } else {
+    return req.body
+  }
+}
+
+/**
+ * GET-QUERY-OPTIONS
+ */
 export function getQueryOptions() {
   return {
     /**
      * MULTIPLE
      * @param req {express.Request}
-     * @param options {IMethodQueryBuilderOptions}
-     * @param ctx {IMethodContextOptions?}
-     * @returns {Promise<IFields>}
+     * @param queryBuilder {FindOptions | IMethodQueryBuilderHandlerWithRequest | IMethodQueryBuilderHandlerWithContext}
+     * @param ctx {any?}
+     * @return {FindOptions | Promise<FindOptions>}
      */
     multiple(
       req: express.Request,
-      options: IMethodQueryBuilderOptions,
-      ctx?: IMethodContextOptions
-    ): IFields | Promise<IFields> {
-      if (options.queryBuilder) {
-        if (typeof options.queryBuilder === 'function') {
-          return options.queryBuilder(ctx || req)
+      queryBuilder: FindOptions | IMethodQueryBuilderHandlerWithRequest | IMethodQueryBuilderHandlerWithContext,
+      ctx?: any
+    ): FindOptions | Promise<FindOptions> {
+      if (queryBuilder) {
+        if (typeof queryBuilder === 'function') {
+          return queryBuilder(ctx || req)
         } else {
-          return options.queryBuilder
+          return queryBuilder
         }
       } else {
         return {}
@@ -82,28 +127,34 @@ export function getQueryOptions() {
     /**
      * SINGLE
      * @param req {express.Request}
-     * @param options {Object}
-     * @param ctx {IMethodContextOptions?}
-     * @returns {Promise<object>}
+     * @param key {undefined | TMethodKey}
+     * @param queryBuilder {undefined | FindOptions | IMethodQueryBuilderHandlerWithRequest | IMethodQueryBuilderHandlerWithContext}
+     * @param ctx {any?}
+     * @return {Promise<FindOptions>}
      */
     async single(
       req: express.Request,
-      options: IMethodQueryBuilderOptions,
-      ctx?: IMethodContextOptions | IMethodContextOptionsWithoutFields
-    ): Promise<IFields> {
+      key: undefined | TMethodKey,
+      queryBuilder:
+        | undefined
+        | FindOptions
+        | IMethodQueryBuilderHandlerWithRequest
+        | IMethodQueryBuilderHandlerWithContext,
+      ctx?: any
+    ): Promise<FindOptions> {
       const queryOptions: IFields = {
         where: {}
       }
 
-      if (options.key !== false) {
-        options.key ||= 'id'
+      if (key !== false) {
+        key ||= 'id'
 
-        queryOptions.where[options.key] = req.params[options.key]
+        queryOptions.where[key] = req.params[key]
       }
 
-      if (options.queryBuilder) {
-        if (typeof options.queryBuilder === 'function') {
-          const _queryOptions = await options.queryBuilder(ctx || req)
+      if (queryBuilder) {
+        if (typeof queryBuilder === 'function') {
+          const _queryOptions = await queryBuilder(ctx || req)
 
           if (_queryOptions.where) {
             Object.assign(queryOptions.where, _queryOptions.where)
@@ -113,62 +164,18 @@ export function getQueryOptions() {
 
           Object.assign(queryOptions, _queryOptions)
         } else {
-          if (options.queryBuilder.where) {
-            Object.assign(queryOptions.where, options.queryBuilder.where)
+          if (queryBuilder.where) {
+            Object.assign(queryOptions.where, queryBuilder.where)
 
-            delete options.queryBuilder.where
+            delete queryBuilder.where
           }
 
-          Object.assign(queryOptions, options.queryBuilder)
+          Object.assign(queryOptions, queryBuilder)
         }
       }
 
       return queryOptions
     }
-  }
-}
-
-/**
- * GET-VALIDATION-ERRORS
- * @param req {express.Request}
- * @param options {IMethodValidatorOptions}
- * @param ctx {IMethodContextOptions}
- * @return {Promise<void|object>}
- */
-export async function getValidationErrors(
-  req: express.Request,
-  options: IMethodValidatorOptions,
-  ctx: IMethodContextOptions
-): Promise<void | object | null> {
-  if (options.validator !== false && options.rules) {
-    if (typeof options.rules === 'function') {
-      options.rules = await options.rules(ctx)
-    }
-
-    return req.validator(options.rules)
-  }
-}
-
-/**
- * GET-CONTEXT-FIELDS
- * @param req {express.Request}
- * @param options {TMethodOnly}
- * @param ctx {IMethodContextOptions}
- * @returns {Promise<object>}
- */
-export async function getContextFields(
-  req: express.Request,
-  options: IMethodOnlyOptions,
-  ctx: IMethodContextOptions
-): Promise<null | object> {
-  if (options.only) {
-    if (typeof options.only === 'function') {
-      options.only = await options.only(ctx)
-    }
-
-    return req.only(options.only)
-  } else {
-    return req.body
   }
 }
 
