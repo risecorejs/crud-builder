@@ -61,13 +61,17 @@ export interface IMethodBaseOptions {
   model?: TModel
 }
 
-// CONTEXT-OPTIONS
-export interface IMethodContextOptions {
+// BASE-CONTEXT-OPTIONS
+export interface IMethodBaseContextOptions {
   req: express.Request
   res: express.Response
-  state: IFields
-  fields: null | IFields
-  instance: null | CModel
+  state: object
+}
+
+// CONTEXT-OPTIONS
+export interface IMethodContextOptions extends IMethodBaseContextOptions {
+  fields?: null | IFields
+  instance?: null | CModel
 }
 
 // CONTEXT-OPTIONS-WITHOUT-FIELDS
@@ -142,13 +146,32 @@ export interface IMethodDestroyOptions extends IMethodBaseOptions {
   template?: 'destroy'
   state?: TMethodState
   key?: TMethodKey
-  queryBuilder?: IFields | IMethodQueryBuilderHandlerWithContext<IMethodContextOptionsWithoutFields>
+  queryBuilder?: FindOptions | IMethodQueryBuilderHandlerWithContext<IMethodContextOptionsWithoutFields>
   force?: boolean | ((ctx: IMethodContextOptionsWithoutFields) => boolean | Promise<boolean>)
   beforeDestroy?: TMethodHookHandler<IMethodContextOptionsWithoutFields>
   afterDestroy?: TMethodHookHandler<IMethodContextOptionsWithoutFields>
   sendStatus?: boolean
   response?: TMethodResponseHandlerWithContext<IMethodContextOptionsWithoutFields>
 }
+
+// BULK-DESTROY-OPTIONS
+export interface IMethodBulkDestroyOptions extends IMethodBaseOptions {
+  template?: 'bulkDestroy'
+  state?: TMethodState
+  queryBuilder?: FindOptions | IMethodQueryBuilderHandlerWithContext<IMethodBulkDestroyContextOptionsWithoutCount>
+  force?: boolean | ((ctx: IMethodBulkDestroyContextOptionsWithoutCount) => boolean | Promise<boolean>)
+  beforeDestroy?: TMethodHookHandler<IMethodBulkDestroyContextOptionsWithoutCount>
+  afterDestroy?: TMethodHookHandler<IMethodBulkDestroyContextOptionsWithoutCount & { count: number }>
+  sendStatus?: boolean
+  response?: TMethodResponseHandlerWithContext<IMethodBulkDestroyContextOptionsWithoutCount & { count: number }>
+}
+
+// BULK-DESTROY-CONTEXT-OPTIONS
+export interface IMethodBulkDestroyContextOptions extends IMethodBaseContextOptions {
+  count?: number
+}
+
+export interface IMethodBulkDestroyContextOptionsWithoutCount extends Omit<IMethodBulkDestroyContextOptions, 'count'> {}
 
 // RESTORE-OPTIONS
 export interface IMethodRestoreOptions extends IMethodBaseOptions {

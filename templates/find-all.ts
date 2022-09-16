@@ -1,8 +1,10 @@
 import express from 'express'
 import httpStatusCodes from 'http-status-codes'
 
+import { FindOptions } from 'sequelize'
+
 import { CModel, TGettingOptionsInstruction } from '../types'
-import { IFields, IMethodFindAllOptions } from '../interfaces'
+import { IMethodFindAllOptions } from '../interfaces'
 
 import { getQueryOptions, errorResponse, getMethodOptions } from '../utils'
 
@@ -22,7 +24,7 @@ export default function (
 
       options.method ||= 'findAndCountAll'
 
-      const queryOptions: IFields = {
+      const queryOptions: FindOptions & { distinct?: boolean } = {
         order: [['id', 'DESC']]
       }
 

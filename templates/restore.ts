@@ -23,8 +23,7 @@ export default function (
       const ctx: IMethodContextOptionsWithoutFields = {
         req,
         res,
-        state: await getContextState(req, options),
-        instance: null
+        state: await getContextState(req, options)
       }
 
       const queryOptions = await getQueryOptions().single(req, options.key, options.queryBuilder, ctx)

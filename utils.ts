@@ -114,7 +114,7 @@ export function getQueryOptions() {
         | undefined
         | FindOptions
         | IMethodQueryBuilderHandlerWithRequest
-        | IMethodQueryBuilderHandlerWithContext,
+        | IMethodQueryBuilderHandlerWithContext<any>,
       ctx?: any
     ): FindOptions | Promise<FindOptions> {
       if (queryBuilder) {
@@ -190,7 +190,9 @@ export function getQueryOptions() {
  * @return {any}
  */
 export function errorResponse(err: any, res: express.Response) {
-  console.error(err)
+  if (err.consoleError !== false) {
+    console.error(err)
+  }
 
   const status = err.status || err.response?.status || 500
 

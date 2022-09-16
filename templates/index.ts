@@ -8,7 +8,7 @@ import update from './update'
 // import bulkUpdate from './bulk-update'
 
 import destroy from './destroy'
-// import bulkDestroy from './bulk-destroy'
+import bulkDestroy from './bulk-destroy'
 
 import restore from './restore'
 // import bulkRestore from './bulk-restore'
@@ -22,5 +22,6 @@ export default <ITemplates>{
   count,
   update,
   destroy,
+  bulkDestroy,
   restore
 }

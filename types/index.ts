@@ -9,10 +9,9 @@ import { IRules as IValidatorRules } from '@risecorejs/validator/interfaces'
 
 export class CModel extends Model {}
 
-export type TTemplates = 'create' | 'index' | 'show' | 'count' | 'update' | 'destroy' | 'restore'
+export type TTemplates = 'create' | 'index' | 'show' | 'count' | 'update' | 'destroy' | 'bulkDestroy' | 'restore'
 
 // | 'bulkUpdate'
-// | 'bulkDestroy'
 // | 'bulkRestore'
 
 export type TModel = string | typeof CModel | any
@@ -41,5 +40,7 @@ export type TMethodResponseHandlerWithCount = (count: number, req: express.Reque
 
 export type TMethodHookHandler<C = IMethodContextOptions> = (ctx: C) => void | Promise<void>
 
-export type IMethodQueryBuilderHandlerWithRequest = (req: express.Request) => FindOptions
-export type IMethodQueryBuilderHandlerWithContext<C = IMethodContextOptions> = (ctx: C) => FindOptions
+export type IMethodQueryBuilderHandlerWithRequest = (req: express.Request) => FindOptions | Promise<FindOptions>
+export type IMethodQueryBuilderHandlerWithContext<C = IMethodContextOptions> = (
+  ctx: C
+) => FindOptions | Promise<FindOptions>

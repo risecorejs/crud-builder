@@ -1,9 +1,11 @@
 import express from 'express'
 import httpStatusCodes from 'http-status-codes'
 
+import { DestroyOptions } from 'sequelize'
+
 import { getMethodOptions, getContextState, getQueryOptions, errorResponse } from '../utils'
 
-import { IMethodDestroyOptions, IMethodContextOptionsWithoutFields, IFields } from '../interfaces'
+import { IMethodDestroyOptions, IMethodContextOptionsWithoutFields } from '../interfaces'
 import { CModel, TGettingOptionsInstruction } from '../types'
 
 /**
@@ -23,8 +25,7 @@ export default function (
       const ctx: IMethodContextOptionsWithoutFields = {
         req,
         res,
-        state: await getContextState(req, options),
-        instance: null
+        state: await getContextState(req, options)
       }
 
       const queryOptions = await getQueryOptions().single(req, options.key, options.queryBuilder, ctx)
@@ -40,7 +41,7 @@ export default function (
         })
       }
 
-      const destroyOptions: IFields = {}
+      const destroyOptions: DestroyOptions = {}
 
       if (options.force) {
         if (typeof options.force === 'function') {

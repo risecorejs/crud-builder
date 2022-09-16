@@ -1,16 +1,17 @@
 import crudBuilder from './index'
 
 import {
-  IMethodCountOptions,
   IMethodCreateOptions,
-  IMethodDestroyOptions,
   IMethodFindAllOptions,
   IMethodFindOneOptions,
+  IMethodCountOptions,
+  IMethodUpdateOptions,
+  IMethodDestroyOptions,
   IMethodRestoreOptions,
-  IMethodUpdateOptions
+  IMethodBulkDestroyOptions
 } from './interfaces'
 
-const endpoints = crudBuilder('User', {
+export = crudBuilder('User', {
   // CREATE
   create: (): IMethodCreateOptions => ({
     template: 'create',
@@ -122,6 +123,27 @@ const endpoints = crudBuilder('User', {
     }
   }),
 
+  // BULK-DESTROY
+  bulkDestroy: (): IMethodBulkDestroyOptions => ({
+    template: 'bulkDestroy',
+    model: 'Customer',
+    state(req) {
+      return {}
+    },
+    queryBuilder(ctx) {
+      return {}
+    },
+    force(ctx) {
+      return true
+    },
+    beforeDestroy(ctx) {},
+    afterDestroy(ctx) {},
+    sendStatus: true,
+    response(ctx) {
+      return {}
+    }
+  }),
+
   // RESTORE
   restore: (): IMethodRestoreOptions => ({
     template: 'restore',
@@ -141,5 +163,3 @@ const endpoints = crudBuilder('User', {
     }
   })
 })
-
-console.log(endpoints)
