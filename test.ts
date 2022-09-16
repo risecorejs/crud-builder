@@ -1,6 +1,14 @@
 import crudBuilder from './index'
 
-import { IMethodCreateOptions, IMethodFindAllOptions, IMethodFindOneOptions, IMethodUpdateOptions } from './interfaces'
+import {
+  IMethodCountOptions,
+  IMethodCreateOptions,
+  IMethodDestroyOptions,
+  IMethodFindAllOptions,
+  IMethodFindOneOptions,
+  IMethodRestoreOptions,
+  IMethodUpdateOptions
+} from './interfaces'
 
 const endpoints = crudBuilder('User', {
   // CREATE
@@ -54,7 +62,7 @@ const endpoints = crudBuilder('User', {
   }),
 
   // COUNT
-  count: () => ({
+  count: (): IMethodCountOptions => ({
     template: 'count',
     model: 'Customer',
     queryBuilder(req) {
@@ -72,6 +80,7 @@ const endpoints = crudBuilder('User', {
     state(req) {
       return {}
     },
+    key: 'customerId',
     queryBuilder(ctx) {
       return {}
     },
@@ -85,6 +94,47 @@ const endpoints = crudBuilder('User', {
     formatter(ctx) {},
     beforeUpdate(ctx) {},
     afterUpdate(ctx) {},
+    sendStatus: true,
+    response(ctx) {
+      return {}
+    }
+  }),
+
+  // DESTROY
+  destroy: (): IMethodDestroyOptions => ({
+    template: 'destroy',
+    model: 'Customer',
+    state(req) {
+      return {}
+    },
+    key: 'customerId',
+    queryBuilder(ctx) {
+      return {}
+    },
+    force(ctx) {
+      return true
+    },
+    beforeDestroy(ctx) {},
+    afterDestroy(ctx) {},
+    sendStatus: true,
+    response(ctx) {
+      return {}
+    }
+  }),
+
+  // RESTORE
+  restore: (): IMethodRestoreOptions => ({
+    template: 'restore',
+    model: 'Customer',
+    state(req) {
+      return {}
+    },
+    key: 'customerId',
+    queryBuilder(ctx) {
+      return {}
+    },
+    beforeRestore(ctx) {},
+    afterRestore(ctx) {},
     sendStatus: true,
     response(ctx) {
       return {}

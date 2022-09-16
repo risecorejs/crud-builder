@@ -61,6 +61,28 @@ export interface IMethodBaseOptions {
   model?: TModel
 }
 
+// CONTEXT-OPTIONS
+export interface IMethodContextOptions {
+  req: express.Request
+  res: express.Response
+  state: IFields
+  fields: null | IFields
+  instance: null | CModel
+}
+
+// CONTEXT-OPTIONS-WITHOUT-FIELDS
+export interface IMethodContextOptionsWithoutFields extends Omit<IMethodContextOptions, 'fields'> {}
+
+// CONTEXT-OPTIONS-WITHOUT-INSTANCE
+export interface IMethodContextOptionsWithoutInstance extends Omit<IMethodContextOptions, 'instance'> {}
+
+// ERROR-RESPONSE
+export interface IMethodErrorResponse {
+  status: number
+  message: string
+  errors?: any
+}
+
 // CREATE-OPTIONS
 export interface IMethodCreateOptions extends IMethodBaseOptions {
   template?: 'create'
@@ -138,26 +160,4 @@ export interface IMethodRestoreOptions extends IMethodBaseOptions {
   afterRestore?: TMethodHookHandler<IMethodContextOptionsWithoutFields>
   sendStatus?: boolean
   response?: TMethodResponseHandlerWithContext<IMethodContextOptionsWithoutFields>
-}
-
-// CONTEXT-OPTIONS
-export interface IMethodContextOptions {
-  req: express.Request
-  res: express.Response
-  state: IFields
-  fields: null | IFields
-  instance: null | CModel
-}
-
-// CONTEXT-OPTIONS-WITHOUT-FIELDS
-export interface IMethodContextOptionsWithoutFields extends Omit<IMethodContextOptions, 'fields'> {}
-
-// CONTEXT-OPTIONS-WITHOUT-INSTANCE
-export interface IMethodContextOptionsWithoutInstance extends Omit<IMethodContextOptions, 'instance'> {}
-
-// ERROR-RESPONSE
-export interface IMethodErrorResponse {
-  status: number
-  message: string
-  errors?: any
 }

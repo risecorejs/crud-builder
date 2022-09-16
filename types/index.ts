@@ -15,7 +15,7 @@ export type TTemplates = 'create' | 'index' | 'show' | 'count' | 'update' | 'des
 // | 'bulkDestroy'
 // | 'bulkRestore'
 
-export type TModel = string | typeof CModel
+export type TModel = string | typeof CModel | any
 
 export type TGettingOptionsInstruction<T = any> = true | (() => T)
 
