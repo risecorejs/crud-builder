@@ -1,8 +1,9 @@
 import { FindOptions } from 'sequelize/types/model'
 
-import { IMethodBaseOptions, IMethodContextOptionsWithoutFields } from '../index'
+import { IMethodBaseContextOptions, IMethodBaseOptions } from '../index'
 
 import {
+  CModel,
   IMethodQueryBuilderHandlerWithContext,
   TMethodHookHandler,
   TMethodKey,
@@ -14,10 +15,18 @@ export interface IMethodDestroyOptions extends IMethodBaseOptions {
   template?: 'destroy'
   state?: TMethodState
   key?: TMethodKey
-  queryBuilder?: FindOptions | IMethodQueryBuilderHandlerWithContext<IMethodContextOptionsWithoutFields>
-  force?: boolean | ((ctx: IMethodContextOptionsWithoutFields) => boolean | Promise<boolean>)
-  beforeDestroy?: TMethodHookHandler<IMethodContextOptionsWithoutFields>
-  afterDestroy?: TMethodHookHandler<IMethodContextOptionsWithoutFields>
+  queryBuilder?: FindOptions | IMethodQueryBuilderHandlerWithContext<IMethodDestroyContextOptionsWithoutInstance>
+  force?:
+    | boolean
+    | ((ctx: IMethodDestroyContextOptionsWithoutInstance & { instance: CModel }) => boolean | Promise<boolean>)
+  beforeDestroy?: TMethodHookHandler<IMethodDestroyContextOptionsWithoutInstance & { instance: CModel }>
+  afterDestroy?: TMethodHookHandler<IMethodDestroyContextOptionsWithoutInstance & { instance: CModel }>
   sendStatus?: boolean
-  response?: TMethodResponseHandlerWithContext<IMethodContextOptionsWithoutFields>
+  response?: TMethodResponseHandlerWithContext<IMethodDestroyContextOptionsWithoutInstance & { instance: CModel }>
 }
+
+export interface IMethodDestroyContextOptions extends IMethodBaseContextOptions {
+  instance?: null | CModel
+}
+
+export interface IMethodDestroyContextOptionsWithoutInstance extends Omit<IMethodDestroyContextOptions, 'instance'> {}

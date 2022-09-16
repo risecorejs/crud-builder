@@ -10,11 +10,9 @@ import {
 export interface IMethodBulkRestoreOptions extends IMethodBaseOptions {
   template?: 'bulkRestore'
   state?: TMethodState
-  queryBuilder?: IFields | IMethodQueryBuilderHandlerWithContext<IMethodBulkRestoreContextOptions>
-  beforeRestore?: TMethodHookHandler<IMethodBulkRestoreContextOptions>
-  afterRestore?: TMethodHookHandler<IMethodBulkRestoreContextOptions>
+  queryBuilder?: IFields | IMethodQueryBuilderHandlerWithContext<IMethodBaseContextOptions>
+  beforeRestore?: TMethodHookHandler<IMethodBaseContextOptions>
+  afterRestore?: TMethodHookHandler<IMethodBaseContextOptions>
   sendStatus?: boolean
-  response?: TMethodResponseHandlerWithContext<IMethodBulkRestoreContextOptions>
+  response?: TMethodResponseHandlerWithContext<IMethodBaseContextOptions>
 }
-
-export interface IMethodBulkRestoreContextOptions extends IMethodBaseContextOptions {}

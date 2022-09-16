@@ -3,7 +3,7 @@ import httpStatusCodes from 'http-status-codes'
 
 import { getMethodOptions, getContextState, getValidationErrors, getContextFields, errorResponse } from '../utils'
 
-import { IMethodCreateOptions, IMethodContextOptions } from '../interfaces'
+import { IMethodCreateOptions, IMethodCreateContextOptions } from '../interfaces'
 import { CModel, TGettingOptionsInstruction } from '../types'
 
 /**
@@ -20,7 +20,7 @@ export default function (
     try {
       const options = getMethodOptions<IMethodCreateOptions>(gettingOptionsInstruction)
 
-      const ctx: IMethodContextOptions = {
+      const ctx: IMethodCreateContextOptions = {
         req,
         res,
         state: await getContextState(req, options.state)

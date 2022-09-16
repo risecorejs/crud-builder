@@ -5,7 +5,7 @@ import { DestroyOptions } from 'sequelize/types/model'
 
 import { getMethodOptions, getContextState, getQueryOptions, errorResponse } from '../utils'
 
-import { IMethodDestroyOptions, IMethodContextOptionsWithoutFields } from '../interfaces'
+import { IMethodDestroyOptions, IMethodDestroyContextOptions } from '../interfaces'
 import { CModel, TGettingOptionsInstruction } from '../types'
 
 /**
@@ -22,7 +22,7 @@ export default function (
     try {
       const options = getMethodOptions<IMethodDestroyOptions>(gettingOptionsInstruction)
 
-      const ctx: IMethodContextOptionsWithoutFields = {
+      const ctx: IMethodDestroyContextOptions = {
         req,
         res,
         state: await getContextState(req, options)
@@ -45,20 +45,20 @@ export default function (
 
       if (options.force) {
         if (typeof options.force === 'function') {
-          destroyOptions.force = await options.force(ctx)
+          destroyOptions.force = await options.force(<any>ctx)
         } else {
           destroyOptions.force = true
         }
       }
 
       if (options.beforeDestroy) {
-        await options.beforeDestroy(ctx)
+        await options.beforeDestroy(<any>ctx)
       }
 
       await ctx.instance.destroy(destroyOptions)
 
       if (options.afterDestroy) {
-        await options.afterDestroy(ctx)
+        await options.afterDestroy(<any>ctx)
       }
 
       const status = 200
@@ -68,7 +68,7 @@ export default function (
       }
 
       if (options.response) {
-        const response = await options.response(ctx)
+        const response = await options.response(<any>ctx)
 
         return res.status(response.status || status).json(response)
       }
