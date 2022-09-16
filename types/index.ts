@@ -1,5 +1,6 @@
 import express from 'express'
-import { Model } from 'sequelize'
+
+import { Model } from 'sequelize/types/model'
 
 import { TKeys as TOnlyKeys } from '@risecorejs/only/types'
 import { FindOptions } from 'sequelize/types/model'
@@ -9,10 +10,18 @@ import { IRules as IValidatorRules } from '@risecorejs/validator/interfaces'
 
 export class CModel extends Model {}
 
-export type TTemplates = 'create' | 'index' | 'show' | 'count' | 'update' | 'destroy' | 'bulkDestroy' | 'restore'
+export type TTemplates =
+  | 'create'
+  | 'index'
+  | 'show'
+  | 'count'
+  | 'update'
+  | 'destroy'
+  | 'bulkDestroy'
+  | 'restore'
+  | 'bulkRestore'
 
 // | 'bulkUpdate'
-// | 'bulkRestore'
 
 export type TModel = string | typeof CModel | any
 

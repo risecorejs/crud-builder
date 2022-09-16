@@ -1,25 +1,14 @@
 import express from 'express'
 
-import { FindOptions } from 'sequelize/types/model'
+import { TTemplates, TModel, TGettingOptionsInstruction, TTemplateHandler, CModel } from '../types'
 
-import {
-  TTemplates,
-  TModel,
-  TMethodState,
-  TMethodOnly,
-  TMethodResponseHandlerWithContext,
-  TMethodResponseHandlerWithInstance,
-  TMethodHookHandler,
-  TMethodResponseHandlerWithInstances,
-  IMethodQueryBuilderHandlerWithContext,
-  IMethodQueryBuilderHandlerWithRequest,
-  TGettingOptionsInstruction,
-  TTemplateHandler,
-  CModel,
-  TMethodResponseHandlerWithCount,
-  TMethodRules,
-  TMethodKey
-} from '../types'
+import { IMethodRestoreOptions } from './templates/restore'
+import { IMethodCountOptions } from './templates/count'
+import { IMethodDestroyOptions } from './templates/destroy'
+import { IMethodUpdateOptions } from './templates/update'
+import { IMethodCreateOptions } from './templates/create'
+import { IMethodFindAllOptions } from './templates/find-all'
+import { IMethodFindOneOptions } from './templates/find-one'
 
 // FIELDS
 export interface IFields<T = any> {
@@ -87,100 +76,16 @@ export interface IMethodErrorResponse {
   errors?: any
 }
 
-// CREATE-OPTIONS
-export interface IMethodCreateOptions extends IMethodBaseOptions {
-  template?: 'create'
-  state?: TMethodState
-  validator?: boolean
-  rules?: TMethodRules<Omit<IMethodContextOptions, 'fields' | 'instance'>>
-  only?: TMethodOnly<Omit<IMethodContextOptions, 'fields' | 'instance'>>
-  formatter?: TMethodHookHandler<IMethodContextOptionsWithoutInstance>
-  beforeCreate?: TMethodHookHandler<IMethodContextOptionsWithoutInstance>
-  afterCreate?: TMethodHookHandler<IMethodContextOptionsWithoutInstance & { instance: CModel }>
-  sendStatus?: boolean
-  response?: TMethodResponseHandlerWithContext<IMethodContextOptionsWithoutInstance & { instance: CModel }>
-}
+export * from './templates/create'
 
-// FIND-All-OPTIONS
-export interface IMethodFindAllOptions extends IMethodBaseOptions {
-  template?: 'index'
-  method?: 'findAndCountAll' | 'findAll'
-  pagination?: boolean
-  queryBuilder?: FindOptions | IMethodQueryBuilderHandlerWithRequest
-  response?: TMethodResponseHandlerWithInstances
-}
+export * from './templates/find-all'
+export * from './templates/find-one'
+export * from './templates/count'
 
-// FIND-ONE-OPTIONS
-export interface IMethodFindOneOptions extends IMethodBaseOptions {
-  template?: 'show'
-  key?: TMethodKey
-  queryBuilder?: FindOptions | IMethodQueryBuilderHandlerWithRequest
-  response?: TMethodResponseHandlerWithInstance
-}
+export * from './templates/update'
 
-// COUNT-OPTIONS
-export interface IMethodCountOptions extends IMethodBaseOptions {
-  template?: 'count'
-  queryBuilder?: FindOptions | IMethodQueryBuilderHandlerWithRequest
-  response?: TMethodResponseHandlerWithCount
-}
+export * from './templates/destroy'
+export * from './templates/bulk-destroy'
 
-// UPDATE-OPTIONS
-export interface IMethodUpdateOptions extends IMethodBaseOptions {
-  template?: 'update'
-  state?: TMethodState
-  key?: TMethodKey
-  queryBuilder?: FindOptions | IMethodQueryBuilderHandlerWithContext<Omit<IMethodContextOptions, 'fields' | 'instance'>>
-  validator?: boolean
-  rules?: TMethodRules<Omit<IMethodContextOptions, 'fields' | 'instance'> & { instance: CModel }>
-  only?: TMethodOnly<Omit<IMethodContextOptions, 'fields' | 'instance'> & { instance: CModel }>
-  formatter?: TMethodHookHandler<IMethodContextOptionsWithoutInstance & { instance: CModel }>
-  beforeUpdate?: TMethodHookHandler<IMethodContextOptionsWithoutInstance & { instance: CModel }>
-  afterUpdate?: TMethodHookHandler<IMethodContextOptionsWithoutInstance & { instance: CModel }>
-  sendStatus?: boolean
-  response?: TMethodResponseHandlerWithContext<IMethodContextOptionsWithoutInstance & { instance: CModel }>
-}
-
-// DESTROY-OPTIONS
-export interface IMethodDestroyOptions extends IMethodBaseOptions {
-  template?: 'destroy'
-  state?: TMethodState
-  key?: TMethodKey
-  queryBuilder?: FindOptions | IMethodQueryBuilderHandlerWithContext<IMethodContextOptionsWithoutFields>
-  force?: boolean | ((ctx: IMethodContextOptionsWithoutFields) => boolean | Promise<boolean>)
-  beforeDestroy?: TMethodHookHandler<IMethodContextOptionsWithoutFields>
-  afterDestroy?: TMethodHookHandler<IMethodContextOptionsWithoutFields>
-  sendStatus?: boolean
-  response?: TMethodResponseHandlerWithContext<IMethodContextOptionsWithoutFields>
-}
-
-// BULK-DESTROY-OPTIONS
-export interface IMethodBulkDestroyOptions extends IMethodBaseOptions {
-  template?: 'bulkDestroy'
-  state?: TMethodState
-  queryBuilder?: FindOptions | IMethodQueryBuilderHandlerWithContext<IMethodBulkDestroyContextOptionsWithoutCount>
-  force?: boolean | ((ctx: IMethodBulkDestroyContextOptionsWithoutCount) => boolean | Promise<boolean>)
-  beforeDestroy?: TMethodHookHandler<IMethodBulkDestroyContextOptionsWithoutCount>
-  afterDestroy?: TMethodHookHandler<IMethodBulkDestroyContextOptionsWithoutCount & { count: number }>
-  sendStatus?: boolean
-  response?: TMethodResponseHandlerWithContext<IMethodBulkDestroyContextOptionsWithoutCount & { count: number }>
-}
-
-// BULK-DESTROY-CONTEXT-OPTIONS
-export interface IMethodBulkDestroyContextOptions extends IMethodBaseContextOptions {
-  count?: number
-}
-
-export interface IMethodBulkDestroyContextOptionsWithoutCount extends Omit<IMethodBulkDestroyContextOptions, 'count'> {}
-
-// RESTORE-OPTIONS
-export interface IMethodRestoreOptions extends IMethodBaseOptions {
-  template?: 'restore'
-  state?: TMethodState
-  key?: TMethodKey
-  queryBuilder?: IFields | IMethodQueryBuilderHandlerWithContext<IMethodContextOptionsWithoutFields>
-  beforeRestore?: TMethodHookHandler<IMethodContextOptionsWithoutFields>
-  afterRestore?: TMethodHookHandler<IMethodContextOptionsWithoutFields>
-  sendStatus?: boolean
-  response?: TMethodResponseHandlerWithContext<IMethodContextOptionsWithoutFields>
-}
+export * from './templates/restore'
+export * from './templates/bulk-restore'
