@@ -9,6 +9,8 @@ import { IMethodUpdateOptions } from './templates/update'
 import { IMethodCreateOptions } from './templates/create'
 import { IMethodFindAllOptions } from './templates/find-all'
 import { IMethodFindOneOptions } from './templates/find-one'
+import { IMethodBulkDestroyOptions } from './templates/bulk-destroy'
+import { IMethodBulkRestoreOptions } from './templates/bulk-restore'
 
 // FIELDS
 export interface IFields<T = any> {
@@ -18,23 +20,35 @@ export interface IFields<T = any> {
 // TEMPLATES
 export interface ITemplates {
   create: TTemplateHandler<IMethodCreateOptions>
+
   index: TTemplateHandler<IMethodFindAllOptions>
   show: TTemplateHandler<IMethodFindOneOptions>
   count: TTemplateHandler<IMethodCountOptions>
+
   update: TTemplateHandler<IMethodUpdateOptions>
+
   destroy: TTemplateHandler<IMethodDestroyOptions>
+  bulkDestroy: TTemplateHandler<IMethodBulkDestroyOptions>
+
   restore: TTemplateHandler<IMethodRestoreOptions>
+  bulkRestore: TTemplateHandler<IMethodBulkRestoreOptions>
 }
 
 // METHODS
 export interface IMethods {
   create?: TGettingOptionsInstruction<IMethodCreateOptions>
+
   index?: TGettingOptionsInstruction<IMethodFindAllOptions>
   show?: TGettingOptionsInstruction<IMethodFindOneOptions>
   count?: TGettingOptionsInstruction<IMethodCountOptions>
+
   update?: TGettingOptionsInstruction<IMethodUpdateOptions>
+
   destroy?: TGettingOptionsInstruction<IMethodDestroyOptions>
+  bulkDestroy?: TGettingOptionsInstruction<IMethodBulkDestroyOptions>
+
   restore?: TGettingOptionsInstruction<IMethodRestoreOptions>
+  bulkRestore: TGettingOptionsInstruction<IMethodBulkRestoreOptions>
 
   [key: string]: any
 }

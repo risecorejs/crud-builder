@@ -11,17 +11,22 @@ import destroy from './destroy'
 import bulkDestroy from './bulk-destroy'
 
 import restore from './restore'
-// import bulkRestore from './bulk-restore'
+import bulkRestore from './bulk-restore'
 
 import { ITemplates } from '../interfaces'
 
 export default <ITemplates>{
   create,
+
   index,
   show,
   count,
+
   update,
+
   destroy,
   bulkDestroy,
-  restore
+
+  restore,
+  bulkRestore
 }
