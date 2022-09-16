@@ -1,6 +1,6 @@
 import { FindOptions } from 'sequelize/types/model'
 
-import { IFields, IMethodBaseContextOptions, IMethodBaseOptions, IMethodContextOptions } from '../index'
+import { IFields, IMethodBaseContextOptions, IMethodBaseOptions } from '../index'
 
 import {
   CModel,
@@ -17,10 +17,12 @@ export interface IMethodUpdateOptions extends IMethodBaseOptions {
   template?: 'update'
   state?: TMethodState
   key?: TMethodKey
-  queryBuilder?: FindOptions | IMethodQueryBuilderHandlerWithContext<Omit<IMethodContextOptions, 'fields' | 'instance'>>
+  queryBuilder?:
+    | FindOptions
+    | IMethodQueryBuilderHandlerWithContext<Omit<IMethodUpdateContextOptions, 'fields' | 'instance'>>
   validator?: boolean
-  rules?: TMethodRules<Omit<IMethodContextOptions, 'fields' | 'instance'> & { instance: CModel }>
-  only?: TMethodOnly<Omit<IMethodContextOptions, 'fields' | 'instance'> & { instance: CModel }>
+  rules?: TMethodRules<Omit<IMethodUpdateContextOptions, 'fields' | 'instance'> & { instance: CModel }>
+  only?: TMethodOnly<Omit<IMethodUpdateContextOptions, 'fields' | 'instance'> & { instance: CModel }>
   formatter?: TMethodHookHandler<IMethodUpdateContextOptionsWithoutInstance & { instance: CModel }>
   beforeUpdate?: TMethodHookHandler<IMethodUpdateContextOptionsWithoutInstance & { instance: CModel }>
   afterUpdate?: TMethodHookHandler<IMethodUpdateContextOptionsWithoutInstance & { instance: CModel }>

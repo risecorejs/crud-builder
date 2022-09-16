@@ -4,7 +4,7 @@ import { TKeys as TOnlyKeys } from '@risecorejs/only/types'
 import { IRules as IValidatorRules } from '@risecorejs/validator/interfaces'
 import { FindOptions } from 'sequelize/types/model'
 
-import { IFields, IMethodContextOptions } from '../interfaces'
+import { IFields } from '../interfaces'
 
 export class CModel extends Model {}
 
@@ -31,13 +31,11 @@ export type TTemplateHandler<T> = (
 ) => express.Handler
 
 export type TMethodState = object | ((req: express.Request) => object | Promise<object>)
-export type TMethodRules<C = IMethodContextOptions> =
-  | IValidatorRules
-  | ((ctx: C) => IValidatorRules | Promise<IValidatorRules>)
-export type TMethodOnly<C = IMethodContextOptions> = TOnlyKeys | ((ctx: C) => TOnlyKeys | Promise<TOnlyKeys>)
+export type TMethodRules<C = any> = IValidatorRules | ((ctx: C) => IValidatorRules | Promise<IValidatorRules>)
+export type TMethodOnly<C = any> = TOnlyKeys | ((ctx: C) => TOnlyKeys | Promise<TOnlyKeys>)
 export type TMethodKey = 'id' | string | false
 
-export type TMethodResponseHandlerWithContext<C = IMethodContextOptions> = (ctx: C) => IFields | Promise<IFields>
+export type TMethodResponseHandlerWithContext<C = any> = (ctx: C) => IFields | Promise<IFields>
 export type TMethodResponseHandlerWithInstance = (instance: CModel, req: express.Request) => IFields | Promise<IFields>
 export type TMethodResponseHandlerWithInstances = (
   instances: { rows: CModel[]; count: number } | CModel[],
@@ -45,9 +43,7 @@ export type TMethodResponseHandlerWithInstances = (
 ) => IFields | Promise<IFields>
 export type TMethodResponseHandlerWithCount = (count: number, req: express.Request) => IFields | Promise<IFields>
 
-export type TMethodHookHandler<C = IMethodContextOptions> = (ctx: C) => void | Promise<void>
+export type TMethodHookHandler<C = any> = (ctx: C) => void | Promise<void>
 
 export type IMethodQueryBuilderHandlerWithRequest = (req: express.Request) => FindOptions | Promise<FindOptions>
-export type IMethodQueryBuilderHandlerWithContext<C = IMethodContextOptions> = (
-  ctx: C
-) => FindOptions | Promise<FindOptions>
+export type IMethodQueryBuilderHandlerWithContext<C = any> = (ctx: C) => FindOptions | Promise<FindOptions>

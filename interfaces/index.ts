@@ -1,6 +1,6 @@
 import express from 'express'
 
-import { TTemplates, TModel, TGettingOptionsInstruction, TTemplateHandler, CModel } from '../types'
+import { TTemplates, TModel, TGettingOptionsInstruction, TTemplateHandler } from '../types'
 
 import { IMethodCreateOptions } from './templates/create'
 
@@ -87,12 +87,6 @@ export interface IMethodBaseContextOptions {
   req: express.Request
   res: express.Response
   state: object
-}
-
-// CONTEXT-OPTIONS
-export interface IMethodContextOptions extends IMethodBaseContextOptions {
-  fields?: null | IFields
-  instance?: null | CModel
 }
 
 // ERROR-RESPONSE
