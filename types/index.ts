@@ -14,12 +14,11 @@ export type TTemplates =
   | 'show'
   | 'count'
   | 'update'
+  | 'bulkUpdate'
   | 'destroy'
   | 'bulkDestroy'
   | 'restore'
   | 'bulkRestore'
-
-// | 'bulkUpdate'
 
 export type TModel = string | typeof CModel | any
 

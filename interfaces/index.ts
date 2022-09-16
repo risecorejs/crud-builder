@@ -9,6 +9,7 @@ import { IMethodFindOneOptions } from './templates/find-one'
 import { IMethodCountOptions } from './templates/count'
 
 import { IMethodUpdateOptions } from './templates/update'
+import { IMethodBulkUpdateOptions } from './templates/bulk-update'
 
 import { IMethodDestroyOptions } from './templates/destroy'
 import { IMethodBulkDestroyOptions } from './templates/bulk-destroy'
@@ -23,6 +24,7 @@ export * from './templates/find-one'
 export * from './templates/count'
 
 export * from './templates/update'
+export * from './templates/bulk-update'
 
 export * from './templates/destroy'
 export * from './templates/bulk-destroy'
@@ -44,6 +46,7 @@ export interface ITemplates {
   count: TTemplateHandler<IMethodCountOptions>
 
   update: TTemplateHandler<IMethodUpdateOptions>
+  bulkUpdate: TTemplateHandler<IMethodBulkUpdateOptions>
 
   destroy: TTemplateHandler<IMethodDestroyOptions>
   bulkDestroy: TTemplateHandler<IMethodBulkDestroyOptions>
@@ -61,6 +64,7 @@ export interface IMethods {
   count?: TGettingOptionsInstruction<IMethodCountOptions>
 
   update?: TGettingOptionsInstruction<IMethodUpdateOptions>
+  bulkUpdate?: TGettingOptionsInstruction<IMethodBulkUpdateOptions>
 
   destroy?: TGettingOptionsInstruction<IMethodDestroyOptions>
   bulkDestroy?: TGettingOptionsInstruction<IMethodBulkDestroyOptions>

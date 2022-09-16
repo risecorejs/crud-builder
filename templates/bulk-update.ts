@@ -10,40 +10,27 @@ import {
   errorResponse
 } from '../utils'
 
-import { IMethodUpdateOptions, IMethodUpdateContextOptions } from '../interfaces'
+import { IMethodBulkUpdateOptions, IMethodBulkUpdateContextOptions } from '../interfaces'
 import { CModel, TGettingOptionsInstruction } from '../types'
 
 /**
- * UPDATE
+ * BULK-UPDATE
  * @param Model {typeof CModel}
- * @param gettingOptionsInstruction {TGettingOptionsInstruction<IMethodUpdateOptions>)}
+ * @param gettingOptionsInstruction {TGettingOptionsInstruction<IMethodBulkUpdateOptions>)}
  * @return {express.Handler}
  */
 export default function (
   Model: typeof CModel,
-  gettingOptionsInstruction: TGettingOptionsInstruction<IMethodUpdateOptions>
+  gettingOptionsInstruction: TGettingOptionsInstruction<IMethodBulkUpdateOptions>
 ): express.Handler {
   return async (req: express.Request, res: express.Response) => {
     try {
-      const options = getMethodOptions<IMethodUpdateOptions>(gettingOptionsInstruction)
+      const options = getMethodOptions<IMethodBulkUpdateOptions>(gettingOptionsInstruction)
 
-      const ctx: IMethodUpdateContextOptions = {
+      const ctx: IMethodBulkUpdateContextOptions = {
         req,
         res,
-        state: await getContextState(req, options.state)
-      }
-
-      const queryOptions = await getQueryOptions().single(req, options.key, options.queryBuilder, ctx)
-
-      ctx.instance = await Model.findOne(queryOptions)
-
-      if (!ctx.instance) {
-        const status = 404
-
-        return res.status(status).json({
-          status,
-          message: 'Not found'
-        })
+        state: await getContextState(req, options)
       }
 
       if (options.validator !== false && options.rules) {
@@ -63,19 +50,21 @@ export default function (
       ctx.fields = await getContextFields(req, options.only, ctx)
 
       if (options.formatter) {
-        await options.formatter(<any>ctx)
+        await options.formatter(ctx)
       }
 
       if (options.beforeUpdate) {
-        await options.beforeUpdate(<any>ctx)
+        await options.beforeUpdate(ctx)
       }
 
       if (ctx.fields) {
-        await ctx.instance.update(ctx.fields)
+        const queryOptions = await getQueryOptions().multiple(req, options.queryBuilder, ctx)
+
+        await Model.update(ctx.fields, <any>queryOptions)
       }
 
       if (options.afterUpdate) {
-        await options.afterUpdate(<any>ctx)
+        await options.afterUpdate(ctx)
       }
 
       const status = 200
@@ -92,8 +81,7 @@ export default function (
 
       return res.status(status).json({
         status,
-        message: httpStatusCodes.getStatusText(status),
-        result: ctx.instance
+        message: httpStatusCodes.getStatusText(status)
       })
     } catch (err) {
       return errorResponse(err, res)
