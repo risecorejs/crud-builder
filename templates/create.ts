@@ -1,11 +1,9 @@
 import express from 'express'
 import httpStatusCodes from 'http-status-codes'
 
-import { Model } from 'sequelize'
-
 import { getMethodOptions, getContextState, getValidationErrors, getContextFields, errorResponse } from '../utils'
 
-import { IMethodCreateOptions, IMethodContextOptions, IMethodContextOptionsWithoutInstance } from '../interfaces'
+import { IMethodCreateOptions, IMethodContextOptions } from '../interfaces'
 import { TGettingOptionsInstruction, CModel } from '../types'
 
 /**
@@ -54,10 +52,10 @@ export default function (
         await options.beforeCreate(ctx)
       }
 
-      ctx.instance = await Model.create(<{}>ctx.fields)
+      ctx.instance = await Model.create(<any>ctx.fields)
 
       if (options.afterCreate) {
-        await options.afterCreate(<IMethodContextOptionsWithoutInstance & { instance: Model }>ctx)
+        await options.afterCreate(<any>ctx)
       }
 
       const status = 201
@@ -67,7 +65,7 @@ export default function (
       }
 
       if (options.response) {
-        const response = await options.response(<IMethodContextOptionsWithoutInstance & { instance: Model }>ctx)
+        const response = await options.response(<any>ctx)
 
         return res.status(response.status || status).json(response)
       }

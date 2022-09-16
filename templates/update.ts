@@ -49,7 +49,7 @@ export default function (
       }
 
       if (options.validator !== false && options.rules) {
-        const errors = await getValidationErrors(req, options.rules, ctx)
+        const errors = await getValidationErrors(req, <any>options.rules, ctx)
 
         if (errors) {
           const status = 400
@@ -62,14 +62,14 @@ export default function (
         }
       }
 
-      ctx.fields = await getContextFields(req, options.only, ctx)
+      ctx.fields = await getContextFields(req, <any>options.only, ctx)
 
       if (options.formatter) {
-        await options.formatter(ctx)
+        await options.formatter(<any>ctx)
       }
 
       if (options.beforeUpdate) {
-        await options.beforeUpdate(ctx)
+        await options.beforeUpdate(<any>ctx)
       }
 
       if (ctx.fields) {
@@ -77,7 +77,7 @@ export default function (
       }
 
       if (options.afterUpdate) {
-        await options.afterUpdate(ctx)
+        await options.afterUpdate(<any>ctx)
       }
 
       const status = 200
@@ -87,7 +87,7 @@ export default function (
       }
 
       if (options.response) {
-        const response = await options.response(ctx)
+        const response = await options.response(<any>ctx)
 
         return res.status(response.status || status).json(response)
       }

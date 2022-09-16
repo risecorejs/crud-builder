@@ -68,11 +68,11 @@ export interface IMethodCreateOptions extends IMethodBaseOptions {
   validator?: boolean
   rules?: TMethodRules<Omit<IMethodContextOptions, 'fields' | 'instance'>>
   only?: TMethodOnly<Omit<IMethodContextOptions, 'fields' | 'instance'>>
-  formatter?: TMethodHookHandler<Omit<IMethodContextOptions, 'instance'>>
-  beforeCreate?: TMethodHookHandler<Omit<IMethodContextOptions, 'instance'>>
-  afterCreate?: TMethodHookHandler<Omit<IMethodContextOptions, 'instance'> & { instance: CModel }>
+  formatter?: TMethodHookHandler<IMethodContextOptionsWithoutInstance>
+  beforeCreate?: TMethodHookHandler<IMethodContextOptionsWithoutInstance>
+  afterCreate?: TMethodHookHandler<IMethodContextOptionsWithoutInstance & { instance: CModel }>
   sendStatus?: boolean
-  response?: TMethodResponseHandlerWithContext<Omit<IMethodContextOptions, 'instance'> & { instance: CModel }>
+  response?: TMethodResponseHandlerWithContext<IMethodContextOptionsWithoutInstance & { instance: CModel }>
 }
 
 // FIND-All-OPTIONS
@@ -108,11 +108,11 @@ export interface IMethodUpdateOptions extends IMethodBaseOptions {
   validator?: boolean
   rules?: TMethodRules<Omit<IMethodContextOptions, 'fields' | 'instance'> & { instance: CModel }>
   only?: TMethodOnly<Omit<IMethodContextOptions, 'fields' | 'instance'> & { instance: CModel }>
-  formatter?: TMethodHookHandler<Omit<IMethodContextOptions, 'instance'> & { instance: CModel }>
-  beforeUpdate?: TMethodHookHandler<Omit<IMethodContextOptions, 'instance'> & { instance: CModel }>
-  afterUpdate?: TMethodHookHandler<Omit<IMethodContextOptions, 'instance'> & { instance: CModel }>
+  formatter?: TMethodHookHandler<IMethodContextOptionsWithoutInstance & { instance: CModel }>
+  beforeUpdate?: TMethodHookHandler<IMethodContextOptionsWithoutInstance & { instance: CModel }>
+  afterUpdate?: TMethodHookHandler<IMethodContextOptionsWithoutInstance & { instance: CModel }>
   sendStatus?: boolean
-  response?: TMethodResponseHandlerWithContext<Omit<IMethodContextOptions, 'instance'> & { instance: CModel }>
+  response?: TMethodResponseHandlerWithContext<IMethodContextOptionsWithoutInstance & { instance: CModel }>
 }
 
 // DESTROY-OPTIONS
