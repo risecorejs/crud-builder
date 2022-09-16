@@ -10,7 +10,7 @@ import {
   errorResponse
 } from '../utils'
 
-import { IMethodUpdateOptions, IMethodContextOptions, IMethodContextOptionsWithoutInstance } from '../interfaces'
+import { IMethodUpdateOptions, IMethodContextOptions } from '../interfaces'
 import { CModel, TGettingOptionsInstruction } from '../types'
 
 /**
@@ -30,12 +30,12 @@ export default function (
       const ctx: IMethodContextOptions = {
         req,
         res,
-        state: await getContextState(req, options),
+        state: await getContextState(req, options.state),
         fields: null,
         instance: null
       }
 
-      const queryOptions = await getQueryOptions().single(req, options, ctx)
+      const queryOptions = await getQueryOptions().single(req, options.key, options.queryBuilder, ctx)
 
       ctx.instance = await Model.findOne(queryOptions)
 
@@ -48,19 +48,21 @@ export default function (
         })
       }
 
-      const errors = await getValidationErrors(req, options, ctx)
+      if (options.validator !== false && options.rules) {
+        const errors = await getValidationErrors(req, options.rules, ctx)
 
-      if (errors) {
-        const status = 400
+        if (errors) {
+          const status = 400
 
-        return res.status(status).json({
-          status,
-          message: 'Validation errors',
-          errors
-        })
+          return res.status(status).json({
+            status,
+            message: 'Validation errors',
+            errors
+          })
+        }
       }
 
-      ctx.fields = await getContextFields(req, options, ctx)
+      ctx.fields = await getContextFields(req, options.only, ctx)
 
       if (options.formatter) {
         await options.formatter(ctx)

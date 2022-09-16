@@ -7,7 +7,7 @@ const endpoints = crudBuilder('User', {
   create: (): IMethodCreateOptions => ({
     template: 'create',
     model: 'Customer',
-    state(req) {
+    state: (req) => {
       return {}
     },
     validator: true,
@@ -22,11 +22,7 @@ const endpoints = crudBuilder('User', {
     afterCreate(ctx) {},
     sendStatus: true,
     response(ctx) {
-      ctx.instance.update({})
-
-      return {
-        test: 123
-      }
+      return {}
     }
   }),
 
@@ -38,11 +34,7 @@ const endpoints = crudBuilder('User', {
     pagination: true,
     queryBuilder: (req) => ({}),
     response: (instances, req) => {
-      if (Array.isArray(instances)) {
-      } else {
-      }
-
-      return { instances }
+      return {}
     }
   }),
 
@@ -53,9 +45,7 @@ const endpoints = crudBuilder('User', {
     key: 'customerId',
     queryBuilder: (req) => ({}),
     response: (instance, req) => {
-      instance.update({})
-
-      return { instance }
+      return {}
     }
   }),
 

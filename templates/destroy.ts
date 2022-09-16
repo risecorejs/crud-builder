@@ -27,7 +27,7 @@ export default function (
         instance: null
       }
 
-      const queryOptions = await getQueryOptions().single(req, options, ctx)
+      const queryOptions = await getQueryOptions().single(req, options.key, options.queryBuilder, ctx)
 
       ctx.instance = await Model.findOne(queryOptions)
 

@@ -10,7 +10,7 @@ import update from './update'
 import destroy from './destroy'
 // import bulkDestroy from './bulk-destroy'
 
-import restore from './destroy'
+import restore from './restore'
 // import bulkRestore from './bulk-restore'
 
 import { ITemplates } from '../interfaces'

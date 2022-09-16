@@ -104,13 +104,17 @@ export function getQueryOptions() {
     /**
      * MULTIPLE
      * @param req {express.Request}
-     * @param queryBuilder {FindOptions | IMethodQueryBuilderHandlerWithRequest | IMethodQueryBuilderHandlerWithContext}
+     * @param queryBuilder {undefined | FindOptions | IMethodQueryBuilderHandlerWithRequest | IMethodQueryBuilderHandlerWithContext}
      * @param ctx {any?}
      * @return {FindOptions | Promise<FindOptions>}
      */
     multiple(
       req: express.Request,
-      queryBuilder: FindOptions | IMethodQueryBuilderHandlerWithRequest | IMethodQueryBuilderHandlerWithContext,
+      queryBuilder:
+        | undefined
+        | FindOptions
+        | IMethodQueryBuilderHandlerWithRequest
+        | IMethodQueryBuilderHandlerWithContext,
       ctx?: any
     ): FindOptions | Promise<FindOptions> {
       if (queryBuilder) {
