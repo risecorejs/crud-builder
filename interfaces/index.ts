@@ -12,6 +12,20 @@ import { IMethodFindOneOptions } from './templates/find-one'
 import { IMethodBulkDestroyOptions } from './templates/bulk-destroy'
 import { IMethodBulkRestoreOptions } from './templates/bulk-restore'
 
+export * from './templates/create'
+
+export * from './templates/find-all'
+export * from './templates/find-one'
+export * from './templates/count'
+
+export * from './templates/update'
+
+export * from './templates/destroy'
+export * from './templates/bulk-destroy'
+
+export * from './templates/restore'
+export * from './templates/bulk-restore'
+
 // FIELDS
 export interface IFields<T = any> {
   [key: string]: T
@@ -48,7 +62,7 @@ export interface IMethods {
   bulkDestroy?: TGettingOptionsInstruction<IMethodBulkDestroyOptions>
 
   restore?: TGettingOptionsInstruction<IMethodRestoreOptions>
-  bulkRestore: TGettingOptionsInstruction<IMethodBulkRestoreOptions>
+  bulkRestore?: TGettingOptionsInstruction<IMethodBulkRestoreOptions>
 
   [key: string]: any
 }
@@ -89,17 +103,3 @@ export interface IMethodErrorResponse {
   message: string
   errors?: any
 }
-
-export * from './templates/create'
-
-export * from './templates/find-all'
-export * from './templates/find-one'
-export * from './templates/count'
-
-export * from './templates/update'
-
-export * from './templates/destroy'
-export * from './templates/bulk-destroy'
-
-export * from './templates/restore'
-export * from './templates/bulk-restore'
