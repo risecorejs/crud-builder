@@ -20,7 +20,7 @@ export default function (
     try {
       const options = getMethodOptions<IMethodCountOptions>(gettingOptionsInstruction)
 
-      const queryOptions = await getQueryOptions().multiple(req, options)
+      const queryOptions = await getQueryOptions().multiple(req, options.queryBuilder)
 
       const count = await Model.count(queryOptions)
 
