@@ -2,14 +2,18 @@ import express from 'express'
 
 import { TTemplates, TModel, TGettingOptionsInstruction, TTemplateHandler, CModel } from '../types'
 
-import { IMethodRestoreOptions } from './templates/restore'
-import { IMethodCountOptions } from './templates/count'
-import { IMethodDestroyOptions } from './templates/destroy'
-import { IMethodUpdateOptions } from './templates/update'
 import { IMethodCreateOptions } from './templates/create'
+
 import { IMethodFindAllOptions } from './templates/find-all'
 import { IMethodFindOneOptions } from './templates/find-one'
+import { IMethodCountOptions } from './templates/count'
+
+import { IMethodUpdateOptions } from './templates/update'
+
+import { IMethodDestroyOptions } from './templates/destroy'
 import { IMethodBulkDestroyOptions } from './templates/bulk-destroy'
+
+import { IMethodRestoreOptions } from './templates/restore'
 import { IMethodBulkRestoreOptions } from './templates/bulk-restore'
 
 export * from './templates/create'

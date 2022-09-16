@@ -1,12 +1,10 @@
 import express from 'express'
-
 import { Model } from 'sequelize/types/model'
-
 import { TKeys as TOnlyKeys } from '@risecorejs/only/types'
+import { IRules as IValidatorRules } from '@risecorejs/validator/interfaces'
 import { FindOptions } from 'sequelize/types/model'
 
 import { IFields, IMethodContextOptions } from '../interfaces'
-import { IRules as IValidatorRules } from '@risecorejs/validator/interfaces'
 
 export class CModel extends Model {}
 
