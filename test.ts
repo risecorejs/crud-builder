@@ -32,8 +32,10 @@ const endpoints = crudBuilder('User', {
     model: 'Customer',
     method: 'findAndCountAll',
     pagination: true,
-    queryBuilder: (req) => ({}),
-    response: (instances, req) => {
+    queryBuilder(req) {
+      return {}
+    },
+    response(instances, req) {
       return {}
     }
   }),
@@ -43,8 +45,10 @@ const endpoints = crudBuilder('User', {
     template: 'show',
     model: 'Customer',
     key: 'customerId',
-    queryBuilder: (req) => ({}),
-    response: (instance, req) => {
+    queryBuilder(req) {
+      return {}
+    },
+    response(instance, req) {
       return {}
     }
   }),
@@ -53,8 +57,10 @@ const endpoints = crudBuilder('User', {
   count: () => ({
     template: 'count',
     model: 'Customer',
-    queryBuilder: (req) => ({}),
-    response: async (count, req) => {
+    queryBuilder(req) {
+      return {}
+    },
+    async response(count, req) {
       return { count }
     }
   }),
@@ -66,15 +72,11 @@ const endpoints = crudBuilder('User', {
     state(req) {
       return {}
     },
-    queryBuilder: (ctx) => {
-      // ctx.
-
+    queryBuilder(ctx) {
       return {}
     },
     validator: true,
     rules(ctx) {
-      ctx.instance
-
       return {}
     },
     only(ctx) {
@@ -85,9 +87,7 @@ const endpoints = crudBuilder('User', {
     afterUpdate(ctx) {},
     sendStatus: true,
     response(ctx) {
-      return {
-        test: 123
-      }
+      return {}
     }
   })
 })

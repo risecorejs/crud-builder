@@ -1,4 +1,4 @@
-import { getModel, getMethodOptions } from './utils'
+import { getMethodOptions, getModel } from './utils'
 import templates from './templates'
 
 import { IMethods, IEndpoints, IMethodBaseOptions } from './interfaces'

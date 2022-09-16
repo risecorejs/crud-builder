@@ -4,9 +4,9 @@ import { FindOptions } from 'sequelize/types/model'
 
 import {
   TTemplates,
+  TModel,
   TMethodState,
   TMethodOnly,
-  TModel,
   TMethodResponseHandlerWithContext,
   TMethodResponseHandlerWithInstance,
   TMethodHookHandler,
@@ -106,13 +106,13 @@ export interface IMethodUpdateOptions extends IMethodBaseOptions {
   key?: TMethodKey
   queryBuilder?: FindOptions | IMethodQueryBuilderHandlerWithContext<Omit<IMethodContextOptions, 'fields' | 'instance'>>
   validator?: boolean
-  rules?: TMethodRules<Omit<IMethodContextOptions, 'fields'>>
-  only?: TMethodOnly<Omit<IMethodContextOptions, 'fields'>>
-  formatter?: TMethodHookHandler
-  beforeUpdate?: TMethodHookHandler
-  afterUpdate?: TMethodHookHandler
+  rules?: TMethodRules<Omit<IMethodContextOptions, 'fields' | 'instance'> & { instance: CModel }>
+  only?: TMethodOnly<Omit<IMethodContextOptions, 'fields' | 'instance'> & { instance: CModel }>
+  formatter?: TMethodHookHandler<Omit<IMethodContextOptions, 'instance'> & { instance: CModel }>
+  beforeUpdate?: TMethodHookHandler<Omit<IMethodContextOptions, 'instance'> & { instance: CModel }>
+  afterUpdate?: TMethodHookHandler<Omit<IMethodContextOptions, 'instance'> & { instance: CModel }>
   sendStatus?: boolean
-  response?: TMethodResponseHandlerWithContext
+  response?: TMethodResponseHandlerWithContext<Omit<IMethodContextOptions, 'instance'> & { instance: CModel }>
 }
 
 // DESTROY-OPTIONS
