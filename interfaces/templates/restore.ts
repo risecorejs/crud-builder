@@ -1,6 +1,7 @@
-import { IFields, IMethodBaseOptions, IMethodContextOptionsWithoutFields } from '../index'
+import { IFields, IMethodBaseContextOptions, IMethodBaseOptions } from '../index'
 
 import {
+  CModel,
   IMethodQueryBuilderHandlerWithContext,
   TMethodHookHandler,
   TMethodKey,
@@ -12,9 +13,15 @@ export interface IMethodRestoreOptions extends IMethodBaseOptions {
   template?: 'restore'
   state?: TMethodState
   key?: TMethodKey
-  queryBuilder?: IFields | IMethodQueryBuilderHandlerWithContext<IMethodContextOptionsWithoutFields>
-  beforeRestore?: TMethodHookHandler<IMethodContextOptionsWithoutFields>
-  afterRestore?: TMethodHookHandler<IMethodContextOptionsWithoutFields>
+  queryBuilder?: IFields | IMethodQueryBuilderHandlerWithContext<IMethodRestoreContextOptionsWithoutInstance>
+  beforeRestore?: TMethodHookHandler<IMethodRestoreContextOptionsWithoutInstance & { instance: CModel }>
+  afterRestore?: TMethodHookHandler<IMethodRestoreContextOptionsWithoutInstance & { instance: CModel }>
   sendStatus?: boolean
-  response?: TMethodResponseHandlerWithContext<IMethodContextOptionsWithoutFields>
+  response?: TMethodResponseHandlerWithContext<IMethodRestoreContextOptionsWithoutInstance & { instance: CModel }>
 }
+
+export interface IMethodRestoreContextOptions extends IMethodBaseContextOptions {
+  instance?: null | CModel
+}
+
+export interface IMethodRestoreContextOptionsWithoutInstance extends Omit<IMethodRestoreContextOptions, 'instance'> {}

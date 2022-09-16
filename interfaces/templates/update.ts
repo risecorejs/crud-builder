@@ -1,6 +1,6 @@
 import { FindOptions } from 'sequelize/types/model'
 
-import { IMethodBaseOptions, IMethodContextOptions, IMethodContextOptionsWithoutInstance } from '../index'
+import { IFields, IMethodBaseContextOptions, IMethodBaseOptions, IMethodContextOptions } from '../index'
 
 import {
   CModel,
@@ -21,9 +21,16 @@ export interface IMethodUpdateOptions extends IMethodBaseOptions {
   validator?: boolean
   rules?: TMethodRules<Omit<IMethodContextOptions, 'fields' | 'instance'> & { instance: CModel }>
   only?: TMethodOnly<Omit<IMethodContextOptions, 'fields' | 'instance'> & { instance: CModel }>
-  formatter?: TMethodHookHandler<IMethodContextOptionsWithoutInstance & { instance: CModel }>
-  beforeUpdate?: TMethodHookHandler<IMethodContextOptionsWithoutInstance & { instance: CModel }>
-  afterUpdate?: TMethodHookHandler<IMethodContextOptionsWithoutInstance & { instance: CModel }>
+  formatter?: TMethodHookHandler<IMethodUpdateContextOptionsWithoutInstance & { instance: CModel }>
+  beforeUpdate?: TMethodHookHandler<IMethodUpdateContextOptionsWithoutInstance & { instance: CModel }>
+  afterUpdate?: TMethodHookHandler<IMethodUpdateContextOptionsWithoutInstance & { instance: CModel }>
   sendStatus?: boolean
-  response?: TMethodResponseHandlerWithContext<IMethodContextOptionsWithoutInstance & { instance: CModel }>
+  response?: TMethodResponseHandlerWithContext<IMethodUpdateContextOptionsWithoutInstance & { instance: CModel }>
 }
+
+export interface IMethodUpdateContextOptions extends IMethodBaseContextOptions {
+  fields?: null | IFields
+  instance?: null | CModel
+}
+
+export interface IMethodUpdateContextOptionsWithoutInstance extends Omit<IMethodUpdateContextOptions, 'instance'> {}

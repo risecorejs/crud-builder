@@ -3,7 +3,7 @@ import httpStatusCodes from 'http-status-codes'
 
 import { getMethodOptions, getContextState, getQueryOptions, errorResponse } from '../utils'
 
-import { IMethodRestoreOptions, IMethodContextOptionsWithoutFields } from '../interfaces'
+import { IMethodRestoreOptions, IMethodRestoreContextOptions } from '../interfaces'
 import { CModel, TGettingOptionsInstruction } from '../types'
 
 /**
@@ -20,7 +20,7 @@ export default function (
     try {
       const options = getMethodOptions<IMethodRestoreOptions>(gettingOptionsInstruction)
 
-      const ctx: IMethodContextOptionsWithoutFields = {
+      const ctx: IMethodRestoreContextOptions = {
         req,
         res,
         state: await getContextState(req, options)
@@ -42,13 +42,13 @@ export default function (
       }
 
       if (options.beforeRestore) {
-        await options.beforeRestore(ctx)
+        await options.beforeRestore(<any>ctx)
       }
 
       await ctx.instance.restore()
 
       if (options.afterRestore) {
-        await options.afterRestore(ctx)
+        await options.afterRestore(<any>ctx)
       }
 
       const status = 200
@@ -58,7 +58,7 @@ export default function (
       }
 
       if (options.response) {
-        const response = await options.response(ctx)
+        const response = await options.response(<any>ctx)
 
         return res.status(response.status || status).json(response)
       }

@@ -95,12 +95,6 @@ export interface IMethodContextOptions extends IMethodBaseContextOptions {
   instance?: null | CModel
 }
 
-// CONTEXT-OPTIONS-WITHOUT-FIELDS
-export interface IMethodContextOptionsWithoutFields extends Omit<IMethodContextOptions, 'fields'> {}
-
-// CONTEXT-OPTIONS-WITHOUT-INSTANCE
-export interface IMethodContextOptionsWithoutInstance extends Omit<IMethodContextOptions, 'instance'> {}
-
 // ERROR-RESPONSE
 export interface IMethodErrorResponse {
   status: number
