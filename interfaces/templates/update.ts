@@ -23,16 +23,14 @@ export interface IMethodUpdateOptions extends IMethodBaseOptions {
   validator?: boolean
   rules?: TMethodRules<Omit<IMethodUpdateContextOptions, 'fields' | 'instance'> & { instance: CModel }>
   only?: TMethodOnly<Omit<IMethodUpdateContextOptions, 'fields' | 'instance'> & { instance: CModel }>
-  formatter?: TMethodHookHandler<IMethodUpdateContextOptionsWithoutInstance & { instance: CModel }>
-  beforeUpdate?: TMethodHookHandler<IMethodUpdateContextOptionsWithoutInstance & { instance: CModel }>
-  afterUpdate?: TMethodHookHandler<IMethodUpdateContextOptionsWithoutInstance & { instance: CModel }>
+  formatter?: TMethodHookHandler<Omit<IMethodUpdateContextOptions, 'instance'> & { instance: CModel }>
+  beforeUpdate?: TMethodHookHandler<Omit<IMethodUpdateContextOptions, 'instance'> & { instance: CModel }>
+  afterUpdate?: TMethodHookHandler<Omit<IMethodUpdateContextOptions, 'instance'> & { instance: CModel }>
   sendStatus?: boolean
-  response?: TMethodResponseHandlerWithContext<IMethodUpdateContextOptionsWithoutInstance & { instance: CModel }>
+  response?: TMethodResponseHandlerWithContext<Omit<IMethodUpdateContextOptions, 'instance'> & { instance: CModel }>
 }
 
 export interface IMethodUpdateContextOptions extends IMethodBaseContextOptions {
   fields?: null | IFields
   instance?: null | CModel
 }
-
-export interface IMethodUpdateContextOptionsWithoutInstance extends Omit<IMethodUpdateContextOptions, 'instance'> {}

@@ -33,12 +33,24 @@ export type TMethodOnly<C = any> = TOnlyKeys | ((ctx: C) => TOnlyKeys | Promise<
 export type TMethodKey = 'id' | string | false
 
 export type TMethodResponseHandlerWithContext<C = any> = (ctx: C) => IFields | Promise<IFields>
-export type TMethodResponseHandlerWithInstance = (instance: CModel, req: express.Request) => IFields | Promise<IFields>
+
+export type TMethodResponseHandlerWithInstance = (
+  instance: CModel,
+  req: express.Request,
+  res: express.Response
+) => IFields | Promise<IFields>
+
 export type TMethodResponseHandlerWithInstances = (
   instances: { rows: CModel[]; count: number } | CModel[],
-  req: express.Request
+  req: express.Request,
+  res: express.Response
 ) => IFields | Promise<IFields>
-export type TMethodResponseHandlerWithCount = (count: number, req: express.Request) => IFields | Promise<IFields>
+
+export type TMethodResponseHandlerWithCount = (
+  count: number,
+  req: express.Request,
+  res: express.Response
+) => IFields | Promise<IFields>
 
 export type TMethodHookHandler<C = any> = (ctx: C) => void | Promise<void>
 

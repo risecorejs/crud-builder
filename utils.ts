@@ -123,7 +123,7 @@ export function getQueryOptions() {
         | undefined
         | FindOptions
         | IMethodQueryBuilderHandlerWithRequest
-        | IMethodQueryBuilderHandlerWithContext<any>,
+        | IMethodQueryBuilderHandlerWithContext,
       ctx?: any
     ): FindOptions | Promise<FindOptions> {
       if (queryBuilder) {

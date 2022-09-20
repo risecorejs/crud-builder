@@ -45,7 +45,7 @@ export default function (
       const status = 200
 
       if (options.response) {
-        const response = await options.response(instances, req)
+        const response = await options.response(instances, req, res)
 
         return res.status(response.status || status).json(response)
       }
