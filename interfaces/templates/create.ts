@@ -11,7 +11,7 @@ import {
 
 export interface IMethodCreateOptions extends IMethodBaseOptions {
   template?: 'create'
-  state?: TMethodState
+  state?: TMethodState<Omit<IMethodCreateContextOptions, 'state' | 'fields' | 'instance'>>
   validator?: boolean
   rules?: TMethodRules<Omit<IMethodCreateContextOptions, 'fields' | 'instance'>>
   only?: TMethodOnly<Omit<IMethodCreateContextOptions, 'fields' | 'instance'>>
@@ -25,4 +25,5 @@ export interface IMethodCreateOptions extends IMethodBaseOptions {
 export interface IMethodCreateContextOptions extends IMethodBaseContextOptions {
   fields?: null | IFields
   instance?: null | CModel
+  state?: IFields
 }

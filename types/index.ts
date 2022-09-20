@@ -27,7 +27,7 @@ export type TTemplateHandler<T> = (
   gettingOptionsInstruction: TGettingOptionsInstruction<T>
 ) => express.Handler
 
-export type TMethodState = object | ((req: express.Request) => object | Promise<object>)
+export type TMethodState<C = any> = object | ((ctx: C) => object | Promise<object>)
 export type TMethodRules<C = any> = IValidatorRules | ((ctx: C) => IValidatorRules | Promise<IValidatorRules>)
 export type TMethodOnly<C = any> = TOnlyKeys | ((ctx: C) => TOnlyKeys | Promise<TOnlyKeys>)
 export type TMethodKey = 'id' | string | false

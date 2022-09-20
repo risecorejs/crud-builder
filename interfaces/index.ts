@@ -90,7 +90,6 @@ export interface IMethodBaseOptions {
 export interface IMethodBaseContextOptions {
   req: express.Request
   res: express.Response
-  state: object
 }
 
 // ERROR-RESPONSE

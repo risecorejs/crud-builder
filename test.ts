@@ -8,7 +8,8 @@ import {
   IMethodUpdateOptions,
   IMethodDestroyOptions,
   IMethodRestoreOptions,
-  IMethodBulkDestroyOptions
+  IMethodBulkDestroyOptions,
+  IFields
 } from './interfaces'
 
 export = crudBuilder('User', {
@@ -16,21 +17,57 @@ export = crudBuilder('User', {
   create: (): IMethodCreateOptions => ({
     template: 'create',
     model: 'Customer',
-    state: (req) => {
+    state: async (ctx) => {
+      ctx.req
+      ctx.res
+
       return {}
     },
     validator: true,
-    rules(ctx) {
-      return {}
+    rules: (ctx) => {
+      ctx.req
+      ctx.res
+      ctx.state
+
+      return {
+        name: 'required',
+        email: 'required'
+      }
     },
-    only(ctx) {
-      return []
+    only: (ctx) => {
+      ctx.req
+      ctx.res
+      ctx.state
+
+      return ['name', 'email']
     },
-    formatter(ctx) {},
-    beforeCreate(ctx) {},
-    afterCreate(ctx) {},
+    formatter: (ctx) => {
+      ctx.req
+      ctx.res
+      ctx.state
+      ctx.fields
+    },
+    beforeCreate: (ctx) => {
+      ctx.req
+      ctx.res
+      ctx.state
+      ctx.fields
+    },
+    afterCreate: (ctx) => {
+      ctx.req
+      ctx.res
+      ctx.state
+      ctx.fields
+      ctx.instance
+    },
     sendStatus: true,
-    response(ctx) {
+    response: (ctx) => {
+      ctx.req
+      ctx.res
+      ctx.state
+      ctx.fields
+      ctx.instance
+
       return {}
     }
   }),
@@ -42,9 +79,15 @@ export = crudBuilder('User', {
     method: 'findAndCountAll',
     pagination: true,
     queryBuilder(req) {
+      req
+
       return {}
     },
-    response(instances, req) {
+    response(instances, req, res) {
+      instances
+      req
+      res
+
       return {}
     }
   }),
