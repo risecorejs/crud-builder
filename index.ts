@@ -2,27 +2,23 @@ import { getMethodOptions, getModel } from './utils'
 import templates from './templates'
 
 import { IMethods, IEndpoints, IMethodBaseOptions } from './interfaces'
-import { TModel, TTemplates } from './types'
+import { TTemplates } from './types'
 
 /**
  * CRUD-BUILDER
- * @param model {TModel}
+ * @param model {any}
  * @param methods {IMethods}
  * @return {IEndpoints}
  */
-export default function (model: TModel, methods: IMethods): IEndpoints {
+export default function (model: any, methods: IMethods): IEndpoints {
   const endpoints: IEndpoints = {}
 
   for (const [methodName, gettingOptionsInstruction] of Object.entries(methods)) {
     const methodOptions = getMethodOptions<IMethodBaseOptions>(gettingOptionsInstruction)
 
-    model = methodOptions.model || model
+    const Model = getModel(methodOptions.model || model)
 
-    const Model = getModel(model)
-
-    if (!Model) throw Error(`Model "${model}" not found`)
-
-    const templateName = <TTemplates>(methodOptions.template || methodName)
+    const templateName = methodOptions.template || <TTemplates>methodName
 
     const template = templates[templateName]
 

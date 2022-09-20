@@ -20,8 +20,6 @@ export type TTemplates =
   | 'restore'
   | 'bulkRestore'
 
-export type TModel = string | typeof CModel | any
-
 export type TGettingOptionsInstruction<T = any> = true | (() => T)
 
 export type TTemplateHandler<T> = (

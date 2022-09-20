@@ -1,6 +1,6 @@
 import express from 'express'
 
-import { TTemplates, TModel, TGettingOptionsInstruction, TTemplateHandler } from '../types'
+import { TTemplates, TGettingOptionsInstruction, TTemplateHandler } from '../types'
 
 import { IMethodCreateOptions } from './templates/create'
 
@@ -83,7 +83,7 @@ export interface IEndpoints {
 // BASE-OPTIONS
 export interface IMethodBaseOptions {
   template?: TTemplates
-  model?: TModel
+  model?: any
 }
 
 // BASE-CONTEXT-OPTIONS

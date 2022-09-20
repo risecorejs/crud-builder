@@ -5,7 +5,7 @@ import show from './find-one'
 import count from './count'
 
 import update from './update'
-// import bulkUpdate from './bulk-update'
+import bulkUpdate from './bulk-update'
 
 import destroy from './destroy'
 import bulkDestroy from './bulk-destroy'
@@ -23,6 +23,7 @@ export default <ITemplates>{
   count,
 
   update,
+  bulkUpdate,
 
   destroy,
   bulkDestroy,

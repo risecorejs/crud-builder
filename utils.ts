@@ -14,8 +14,7 @@ import {
   TMethodKey,
   TMethodOnly,
   TMethodRules,
-  TMethodState,
-  TModel
+  TMethodState
 } from './types'
 
 /**
@@ -33,11 +32,21 @@ export function getMethodOptions<T = any>(gettingOptionsInstruction: TGettingOpt
 
 /**
  * GET-MODEL
- * @param model {TModel}
- * @return {undefined | typeof CModel}
+ * @param model {any}
+ * @return {typeof CModel}
  */
-export function getModel(model: TModel): undefined | typeof CModel {
-  return typeof model === 'string' ? models[model] : model
+export function getModel(model: any): typeof CModel {
+  if (typeof model === 'string') {
+    const Model = models[model]
+
+    if (Model) {
+      return Model
+    } else {
+      throw Error(`Model "${model}" not found`)
+    }
+  } else {
+    return model
+  }
 }
 
 /**
