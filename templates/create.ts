@@ -55,7 +55,7 @@ export default function (
         await options.beforeCreate(ctx)
       }
 
-      ctx.instance = await Model.create(<any>ctx.fields)
+      ctx.instance = await Model.create(<any>ctx.fields || {})
 
       if (options.afterCreate) {
         await options.afterCreate(<any>ctx)
