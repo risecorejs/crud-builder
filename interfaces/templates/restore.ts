@@ -1,27 +1,26 @@
-import { IFields, IMethodBaseContextOptions, IMethodBaseOptions } from '../index'
+import { IMethodBaseOptions, IMethodBaseContextOptions, IFields } from '../index'
 
 import {
-  CModel,
+  TMethodState,
+  TMethodKey,
   IMethodQueryBuilderHandlerWithContext,
   TMethodHookHandler,
-  TMethodKey,
   TMethodResponseHandlerWithContext,
-  TMethodState
+  CModel
 } from '../../types'
 
 export interface IMethodRestoreOptions extends IMethodBaseOptions {
   template?: 'restore'
-  state?: TMethodState
+  state?: TMethodState<Omit<IMethodRestoreContextOptions, 'state' | 'instance'>>
   key?: TMethodKey
-  queryBuilder?: IFields | IMethodQueryBuilderHandlerWithContext<IMethodRestoreContextOptionsWithoutInstance>
-  beforeRestore?: TMethodHookHandler<IMethodRestoreContextOptionsWithoutInstance & { instance: CModel }>
-  afterRestore?: TMethodHookHandler<IMethodRestoreContextOptionsWithoutInstance & { instance: CModel }>
+  queryBuilder?: IFields | IMethodQueryBuilderHandlerWithContext<Omit<IMethodRestoreContextOptions, 'instance'>>
+  beforeRestore?: TMethodHookHandler<Omit<IMethodRestoreContextOptions, 'instance'> & { instance: CModel }>
+  afterRestore?: TMethodHookHandler<Omit<IMethodRestoreContextOptions, 'instance'> & { instance: CModel }>
   sendStatus?: boolean
-  response?: TMethodResponseHandlerWithContext<IMethodRestoreContextOptionsWithoutInstance & { instance: CModel }>
+  response?: TMethodResponseHandlerWithContext<Omit<IMethodRestoreContextOptions, 'instance'> & { instance: CModel }>
 }
 
 export interface IMethodRestoreContextOptions extends IMethodBaseContextOptions {
+  state: IFields
   instance?: null | CModel
 }
-
-export interface IMethodRestoreContextOptionsWithoutInstance extends Omit<IMethodRestoreContextOptions, 'instance'> {}

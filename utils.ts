@@ -9,7 +9,6 @@ import { IMethodErrorResponse, IFields } from './interfaces'
 import {
   CModel,
   IMethodQueryBuilderHandlerWithContext,
-  IMethodQueryBuilderHandlerWithRequest,
   TGettingOptionsInstruction,
   TMethodKey,
   TMethodOnly,
@@ -110,17 +109,13 @@ export function getQueryOptions() {
     /**
      * MULTIPLE
      * @param req {express.Request}
-     * @param queryBuilder {undefined | FindOptions | IMethodQueryBuilderHandlerWithRequest | IMethodQueryBuilderHandlerWithContext}
+     * @param queryBuilder {undefined | FindOptions | IMethodQueryBuilderHandlerWithContext}
      * @param ctx {any?}
      * @return {FindOptions | Promise<FindOptions>}
      */
     multiple(
       req: express.Request,
-      queryBuilder:
-        | undefined
-        | FindOptions
-        | IMethodQueryBuilderHandlerWithRequest
-        | IMethodQueryBuilderHandlerWithContext,
+      queryBuilder: undefined | FindOptions | IMethodQueryBuilderHandlerWithContext,
       ctx?: any
     ): FindOptions | Promise<FindOptions> {
       if (queryBuilder) {
@@ -138,18 +133,14 @@ export function getQueryOptions() {
      * SINGLE
      * @param req {express.Request}
      * @param key {undefined | TMethodKey}
-     * @param queryBuilder {undefined | FindOptions | IMethodQueryBuilderHandlerWithRequest | IMethodQueryBuilderHandlerWithContext}
+     * @param queryBuilder {undefined | FindOptions | IMethodQueryBuilderHandlerWithContext}
      * @param ctx {any?}
      * @return {Promise<FindOptions>}
      */
     async single(
       req: express.Request,
       key: undefined | TMethodKey,
-      queryBuilder:
-        | undefined
-        | FindOptions
-        | IMethodQueryBuilderHandlerWithRequest
-        | IMethodQueryBuilderHandlerWithContext,
+      queryBuilder: undefined | FindOptions | IMethodQueryBuilderHandlerWithContext,
       ctx?: any
     ): Promise<FindOptions> {
       const queryOptions: IFields = {

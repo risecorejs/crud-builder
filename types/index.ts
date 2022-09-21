@@ -32,7 +32,6 @@ export type TMethodState<C = any> = object | ((ctx: C) => object | Promise<objec
 export type TMethodRules<C = any> = IValidatorRules | ((ctx: C) => IValidatorRules | Promise<IValidatorRules>)
 export type TMethodOnly<C = any> = TOnlyKeys | ((ctx: C) => TOnlyKeys | Promise<TOnlyKeys>)
 
-export type TMethodResponseHandlerWithContext<C = any> = (ctx: C) => IFields | Promise<IFields>
-export type TMethodHookHandler<C = any> = (ctx: C) => void | Promise<void>
-export type IMethodQueryBuilderHandlerWithRequest<C = any> = (ctx: C) => FindOptions | Promise<FindOptions>
 export type IMethodQueryBuilderHandlerWithContext<C = any> = (ctx: C) => FindOptions | Promise<FindOptions>
+export type TMethodHookHandler<C = any> = (ctx: C) => void | Promise<void>
+export type TMethodResponseHandlerWithContext<C = any> = (ctx: C) => IFields | Promise<IFields>

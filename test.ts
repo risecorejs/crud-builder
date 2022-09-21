@@ -298,17 +298,17 @@ export = crudBuilder('User', {
   restore: (): IMethodRestoreOptions => ({
     template: 'restore',
     model: 'Customer',
-    state(req) {
+    state: (ctx) => {
       return {}
     },
     key: 'customerId',
-    queryBuilder(ctx) {
+    queryBuilder: (ctx) => {
       return {}
     },
-    beforeRestore(ctx) {},
-    afterRestore(ctx) {},
+    beforeRestore: (ctx) => {},
+    afterRestore: (ctx) => {},
     sendStatus: true,
-    response(ctx) {
+    response: (ctx) => {
       return {}
     }
   })
