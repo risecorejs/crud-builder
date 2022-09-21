@@ -3,6 +3,7 @@
   "version": "1.2.1",
   "description": "",
   "main": "index.js",
+  "types": "index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/risecorejs/crud-builder.git"

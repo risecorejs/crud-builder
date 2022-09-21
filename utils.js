@@ -1,173 +1,174 @@
-const models = require('@risecorejs/core/models')
-const httpStatusCodes = require('http-status-codes')
-
-module.exports = {
-  decoratorGetOptions,
-  getContextState,
-  getModel,
-  getQueryOptions,
-  getValidationErrors,
-  getContextFields,
-  errorResponse
-}
-
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.errorResponse = exports.getQueryOptions = exports.getContextFields = exports.getValidationErrors = exports.getContextState = exports.getModel = exports.getMethodOptions = void 0;
+const http_status_codes_1 = __importDefault(require("http-status-codes"));
+const models_1 = __importDefault(require("@risecorejs/core/models"));
 /**
- * DECORATOR-GET-OPTIONS
- * @param getOptions {Function}
- * @returns {Object}
+ * GET-METHOD-OPTIONS
+ * @param gettingOptionsInstruction {TGettingOptionsInstruction<any>}
+ * @return {any}
  */
-function decoratorGetOptions(getOptions) {
-  const options = getOptions()
-
-  if (options === true) {
-    return {}
-  } else {
-    return options
-  }
-}
-
-/**
- * GET-CONTEXT-STATE
- * @param req {Object}
- * @param options {Object}
- * @return {Promise<Object>}
- */
-async function getContextState(req, options) {
-  if (options.state) {
-    if (typeof options.state === 'function') {
-      return await options.state(req)
-    } else {
-      return options.state
+function getMethodOptions(gettingOptionsInstruction) {
+    if (gettingOptionsInstruction === true) {
+        return {};
     }
-  } else {
-    return {}
-  }
+    else {
+        return gettingOptionsInstruction();
+    }
 }
-
+exports.getMethodOptions = getMethodOptions;
 /**
  * GET-MODEL
- * @param model {string|Object}
- * @return {Object}
+ * @param model {any}
+ * @return {typeof CModel}
  */
 function getModel(model) {
-  return typeof model === 'string' ? models[model] : model
-}
-
-function getQueryOptions() {
-  return {
-    /**
-     * TYPE-1
-     * @param req {Object}
-     * @param options {Object}
-     * @param context {Object?}
-     * @returns {Promise<Object>}
-     */
-    async type1(req, options, context) {
-      if (options.queryBuilder) {
-        if (typeof options.queryBuilder === 'function') {
-          return await options.queryBuilder(context || req)
-        } else {
-          return options.queryBuilder
+    if (typeof model === 'string') {
+        const Model = models_1.default[model];
+        if (Model) {
+            return Model;
         }
-      } else {
-        return {}
-      }
-    },
-
-    /**
-     * TYPE-2
-     * @param req {Object}
-     * @param options {Object}
-     * @param context {Object?}
-     * @returns {Promise<Object>}
-     */
-    async type2(req, options, context) {
-      const queryOptions = {
-        where: {}
-      }
-
-      if (options.key !== false) {
-        options.key ||= 'id'
-
-        queryOptions.where[options.key] = req.params[options.key]
-      }
-
-      if (options.queryBuilder) {
-        if (typeof options.queryBuilder === 'function') {
-          const _queryOptions = await options.queryBuilder(context || req)
-
-          if (_queryOptions.where) {
-            Object.assign(queryOptions.where, _queryOptions.where)
-
-            delete _queryOptions.where
-          }
-
-          Object.assign(queryOptions, _queryOptions)
-        } else {
-          if (options.queryBuilder.where) {
-            Object.assign(queryOptions.where, options.queryBuilder.where)
-
-            delete options.queryBuilder.where
-          }
-
-          Object.assign(queryOptions, options.queryBuilder)
+        else {
+            throw Error(`Model "${model}" not found`);
         }
-      }
-
-      return queryOptions
     }
-  }
+    else {
+        return model;
+    }
 }
-
+exports.getModel = getModel;
+/**
+ * GET-CONTEXT-STATE
+ * @param req {express.Request}
+ * @param state {undefined | TMethodState}
+ * @param ctx {any}
+ * @return {object | Promise<object>}
+ */
+function getContextState(req, state, ctx) {
+    if (typeof state === 'function') {
+        return state(ctx);
+    }
+    else {
+        return state;
+    }
+}
+exports.getContextState = getContextState;
 /**
  * GET-VALIDATION-ERRORS
- * @param req {Object}
- * @param options {Object}
- * @param context {Object}
- * @return {Promise<void|Object>}
+ * @param req {express.Request}
+ * @param rules {TMethodRules}
+ * @param ctx {any}
+ * @return {Promise<null | object>}
  */
-async function getValidationErrors(req, options, context) {
-  if (options.validator !== false && options.rules) {
-    if (typeof options.rules === 'function') {
-      options.rules = await options.rules(context)
+async function getValidationErrors(req, rules, ctx) {
+    if (typeof rules === 'function') {
+        rules = await rules(ctx);
     }
-
-    const errors = await req.validator(options.rules)
-
-    if (errors) {
-      return errors
-    }
-  }
+    return req.validator(rules);
 }
-
+exports.getValidationErrors = getValidationErrors;
 /**
  * GET-CONTEXT-FIELDS
- * @param req {Object}
- * @param options {Object}
- * @param context {Object}
- * @returns {Promise<Object>}
+ * @param req {express.Request}
+ * @param only {undefined | TMethodOnly}
+ * @param ctx {any}
+ * @return {Promise<null | object>}
  */
-async function getContextFields(req, options, context) {
-  if (typeof options.only === 'function') {
-    options.only = await options.only(context)
-  }
-
-  return options.only ? req.only(options.only) : req.body
+async function getContextFields(req, only, ctx) {
+    if (only) {
+        if (typeof only === 'function') {
+            only = await only(ctx);
+        }
+        return req.only(only);
+    }
+    else {
+        return req.body;
+    }
 }
-
+exports.getContextFields = getContextFields;
+/**
+ * GET-QUERY-OPTIONS
+ */
+function getQueryOptions() {
+    return {
+        /**
+         * MULTIPLE
+         * @param queryBuilder {undefined | FindOptions | IMethodQueryBuilderHandlerWithContext}
+         * @param ctx {any}
+         * @return {FindOptions | Promise<FindOptions>}
+         */
+        multiple(queryBuilder, ctx) {
+            if (queryBuilder) {
+                if (typeof queryBuilder === 'function') {
+                    return queryBuilder(ctx);
+                }
+                else {
+                    return queryBuilder;
+                }
+            }
+            else {
+                return {};
+            }
+        },
+        /**
+         * SINGLE
+         * @param req {express.Request}
+         * @param key {undefined | TMethodKey}
+         * @param queryBuilder {undefined | FindOptions | IMethodQueryBuilderHandlerWithContext}
+         * @param ctx {any}
+         * @return {Promise<FindOptions>}
+         */
+        async single(req, key, queryBuilder, ctx) {
+            const queryOptions = {
+                where: {}
+            };
+            if (key !== false) {
+                key ||= 'id';
+                queryOptions.where[key] = req.params[key];
+            }
+            if (queryBuilder) {
+                if (typeof queryBuilder === 'function') {
+                    const _queryOptions = await queryBuilder(ctx);
+                    if (_queryOptions.where) {
+                        Object.assign(queryOptions.where, _queryOptions.where);
+                        delete _queryOptions.where;
+                    }
+                    Object.assign(queryOptions, _queryOptions);
+                }
+                else {
+                    if (queryBuilder.where) {
+                        Object.assign(queryOptions.where, queryBuilder.where);
+                        delete queryBuilder.where;
+                    }
+                    Object.assign(queryOptions, queryBuilder);
+                }
+            }
+            return queryOptions;
+        }
+    };
+}
+exports.getQueryOptions = getQueryOptions;
 /**
  * ERROR-RESPONSE
- * @param err {Object}
- * @param res {Object}
+ * @param err {any}
+ * @param res {express.Response}
  * @return {any}
  */
 function errorResponse(err, res) {
-  console.error(err)
-
-  const status = err.status || err.response?.status || 500
-
-  return res.status(status).json({
-    status,
-    message: err.message || httpStatusCodes.getStatusText(status)
-  })
+    if (err.consoleError !== false) {
+        console.error(err);
+    }
+    const status = err.status || err.response?.status || 500;
+    const response = {
+        status,
+        message: err.message || http_status_codes_1.default.getStatusText(status)
+    };
+    if (err.errors) {
+        response.errors = err.errors;
+    }
+    return res.status(status).json(response);
 }
+exports.errorResponse = errorResponse;

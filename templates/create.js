@@ -1,84 +1,68 @@
-const {
-  decoratorGetOptions,
-  getContextState,
-  getModel,
-  getValidationErrors,
-  getContextFields,
-  errorResponse
-} = require('../utils')
-
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const http_status_codes_1 = __importDefault(require("http-status-codes"));
+const utils_1 = require("../utils");
 /**
  * CREATE
- * @param getOptions {Function: () => ({
- *   model: string|Object?,
- *   state: Object|Function?,
- *   validator: boolean?,
- *   rules: Object|Function?,
- *   only: string|Object|Array|Function?,
- *   formatter: Function?,
- *   beforeCreate: Function?,
- *   afterCreate: Function?,
- *   sendStatus: boolean,
- *   response: Function?
- * }|true)}
- * @param Model {Object}
- * @return {Function}
+ * @param Model {typeof CModel}
+ * @param gettingOptionsInstruction {TGettingOptionsInstruction<IMethodCreateOptions>)}
+ * @return {express.Handler}
  */
-module.exports = (getOptions, Model) => async (req, res) => {
-  try {
-    const options = decoratorGetOptions(getOptions)
-
-    const context = {
-      req,
-      res,
-      state: await getContextState(req, options),
-      fields: null,
-      instance: null
-    }
-
-    if (options.model) {
-      Model = getModel(options.model)
-    }
-
-    const errors = await getValidationErrors(req, options, context)
-
-    if (errors) {
-      return res.status(400).json({ errors })
-    }
-
-    context.fields = await getContextFields(req, options, context)
-
-    if (options.formatter) {
-      await options.formatter(context)
-    }
-
-    if (options.beforeCreate) {
-      await options.beforeCreate(context)
-    }
-
-    context.instance = await Model.create(context.fields)
-
-    if (options.afterCreate) {
-      await options.afterCreate(context)
-    }
-
-    const status = 201
-
-    if (options.sendStatus) {
-      return res.sendStatus(status)
-    }
-
-    if (options.response) {
-      const response = await options.response(context)
-
-      return res.status(status).json(response)
-    }
-
-    return res.status(status).json({
-      status,
-      result: context.instance
-    })
-  } catch (err) {
-    return errorResponse(err, res)
-  }
+function default_1(Model, gettingOptionsInstruction) {
+    return async (req, res) => {
+        try {
+            const options = (0, utils_1.getMethodOptions)(gettingOptionsInstruction);
+            const ctx = {
+                req,
+                res,
+                state: {},
+                fields: null
+            };
+            if (options.state) {
+                ctx.state = await (0, utils_1.getContextState)(req, options.state, ctx);
+            }
+            if (options.validator !== false && options.rules) {
+                const errors = await (0, utils_1.getValidationErrors)(req, options.rules, ctx);
+                if (errors) {
+                    const status = 400;
+                    return res.status(status).json({
+                        status,
+                        message: 'Validation errors',
+                        errors
+                    });
+                }
+            }
+            ctx.fields = await (0, utils_1.getContextFields)(req, options.only, ctx);
+            if (options.formatter) {
+                await options.formatter(ctx);
+            }
+            if (options.beforeCreate) {
+                await options.beforeCreate(ctx);
+            }
+            ctx.instance = await Model.create(ctx.fields || {});
+            if (options.afterCreate) {
+                await options.afterCreate(ctx);
+            }
+            const status = 201;
+            if (options.sendStatus) {
+                return res.sendStatus(status);
+            }
+            if (options.response) {
+                const response = await options.response(ctx);
+                return res.status(response.status || status).json(response);
+            }
+            return res.status(status).json({
+                status,
+                message: http_status_codes_1.default.getStatusText(status),
+                result: ctx.instance
+            });
+        }
+        catch (err) {
+            return (0, utils_1.errorResponse)(err, res);
+        }
+    };
 }
+exports.default = default_1;

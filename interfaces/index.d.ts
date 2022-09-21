@@ -1,0 +1,66 @@
+import express from 'express';
+import { TTemplateHandler, TGettingOptionsInstruction, TTemplates } from '../types';
+export * from './templates/create';
+import { IMethodCreateOptions } from './templates/create';
+export * from './templates/find-all';
+import { IMethodFindAllOptions } from './templates/find-all';
+export * from './templates/find-one';
+import { IMethodFindOneOptions } from './templates/find-one';
+export * from './templates/count';
+import { IMethodCountOptions } from './templates/count';
+export * from './templates/update';
+import { IMethodUpdateOptions } from './templates/update';
+export * from './templates/bulk-update';
+import { IMethodBulkUpdateOptions } from './templates/bulk-update';
+export * from './templates/destroy';
+import { IMethodDestroyOptions } from './templates/destroy';
+export * from './templates/bulk-destroy';
+import { IMethodBulkDestroyOptions } from './templates/bulk-destroy';
+export * from './templates/restore';
+import { IMethodRestoreOptions } from './templates/restore';
+export * from './templates/bulk-restore';
+import { IMethodBulkRestoreOptions } from './templates/bulk-restore';
+export interface IFields<T = any> {
+    [key: string]: T;
+}
+export interface ITemplates {
+    create: TTemplateHandler<IMethodCreateOptions>;
+    index: TTemplateHandler<IMethodFindAllOptions>;
+    show: TTemplateHandler<IMethodFindOneOptions>;
+    count: TTemplateHandler<IMethodCountOptions>;
+    update: TTemplateHandler<IMethodUpdateOptions>;
+    bulkUpdate: TTemplateHandler<IMethodBulkUpdateOptions>;
+    destroy: TTemplateHandler<IMethodDestroyOptions>;
+    bulkDestroy: TTemplateHandler<IMethodBulkDestroyOptions>;
+    restore: TTemplateHandler<IMethodRestoreOptions>;
+    bulkRestore: TTemplateHandler<IMethodBulkRestoreOptions>;
+}
+export interface IMethods {
+    create?: TGettingOptionsInstruction<IMethodCreateOptions>;
+    index?: TGettingOptionsInstruction<IMethodFindAllOptions>;
+    show?: TGettingOptionsInstruction<IMethodFindOneOptions>;
+    count?: TGettingOptionsInstruction<IMethodCountOptions>;
+    update?: TGettingOptionsInstruction<IMethodUpdateOptions>;
+    bulkUpdate?: TGettingOptionsInstruction<IMethodBulkUpdateOptions>;
+    destroy?: TGettingOptionsInstruction<IMethodDestroyOptions>;
+    bulkDestroy?: TGettingOptionsInstruction<IMethodBulkDestroyOptions>;
+    restore?: TGettingOptionsInstruction<IMethodRestoreOptions>;
+    bulkRestore?: TGettingOptionsInstruction<IMethodBulkRestoreOptions>;
+    [key: string]: any;
+}
+export interface IEndpoints {
+    [key: string]: express.Handler;
+}
+export interface IMethodBaseOptions {
+    template?: TTemplates;
+    model?: any;
+}
+export interface IMethodBaseContextOptions {
+    req: express.Request;
+    res: express.Response;
+}
+export interface IMethodErrorResponse {
+    status: number;
+    message: string;
+    errors?: any;
+}
