@@ -1,27 +1,26 @@
 import { FindOptions } from 'sequelize/types/model'
 
-import { IMethodBaseContextOptions, IMethodBaseOptions } from '../index'
+import { IMethodBaseOptions, IMethodBaseContextOptions, IFields } from '../index'
 
 import {
+  TMethodState,
   IMethodQueryBuilderHandlerWithContext,
   TMethodHookHandler,
-  TMethodResponseHandlerWithContext,
-  TMethodState
+  TMethodResponseHandlerWithContext
 } from '../../types'
 
 export interface IMethodBulkDestroyOptions extends IMethodBaseOptions {
   template?: 'bulkDestroy'
-  state?: TMethodState
-  queryBuilder?: FindOptions | IMethodQueryBuilderHandlerWithContext<IMethodBulkDestroyContextOptionsWithoutCount>
-  force?: boolean | ((ctx: IMethodBulkDestroyContextOptionsWithoutCount) => boolean | Promise<boolean>)
-  beforeDestroy?: TMethodHookHandler<IMethodBulkDestroyContextOptionsWithoutCount>
-  afterDestroy?: TMethodHookHandler<IMethodBulkDestroyContextOptionsWithoutCount & { count: number }>
+  state?: TMethodState<Omit<IMethodBulkDestroyContextOptions, 'state' | 'count'>>
+  queryBuilder?: FindOptions | IMethodQueryBuilderHandlerWithContext<Omit<IMethodBulkDestroyContextOptions, 'count'>>
+  force?: boolean | ((ctx: Omit<IMethodBulkDestroyContextOptions, 'count'>) => boolean | Promise<boolean>)
+  beforeDestroy?: TMethodHookHandler<Omit<IMethodBulkDestroyContextOptions, 'count'>>
+  afterDestroy?: TMethodHookHandler<Omit<IMethodBulkDestroyContextOptions, 'count'> & { count: number }>
   sendStatus?: boolean
-  response?: TMethodResponseHandlerWithContext<IMethodBulkDestroyContextOptionsWithoutCount & { count: number }>
+  response?: TMethodResponseHandlerWithContext<Omit<IMethodBulkDestroyContextOptions, 'count'> & { count: number }>
 }
 
 export interface IMethodBulkDestroyContextOptions extends IMethodBaseContextOptions {
+  state: IFields
   count?: number
 }
-
-export interface IMethodBulkDestroyContextOptionsWithoutCount extends Omit<IMethodBulkDestroyContextOptions, 'count'> {}

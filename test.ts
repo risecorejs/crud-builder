@@ -252,19 +252,44 @@ export = crudBuilder('User', {
   bulkDestroy: (): IMethodBulkDestroyOptions => ({
     template: 'bulkDestroy',
     model: 'Customer',
-    state(req) {
+    state: (ctx) => {
+      ctx.req
+      ctx.res
+
       return {}
     },
-    queryBuilder(ctx) {
+    queryBuilder: (ctx) => {
+      ctx.req
+      ctx.res
+      ctx.state
+
       return {}
     },
-    force(ctx) {
+    force: (ctx) => {
+      ctx.req
+      ctx.res
+      ctx.state
+
       return true
     },
-    beforeDestroy(ctx) {},
-    afterDestroy(ctx) {},
+    beforeDestroy: (ctx) => {
+      ctx.req
+      ctx.res
+      ctx.state
+    },
+    afterDestroy: (ctx) => {
+      ctx.req
+      ctx.res
+      ctx.state
+      ctx.count
+    },
     sendStatus: true,
-    response(ctx) {
+    response: (ctx) => {
+      ctx.req
+      ctx.res
+      ctx.state
+      ctx.count
+
       return {}
     }
   }),

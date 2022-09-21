@@ -25,7 +25,11 @@ export default function (
       const ctx: IMethodBulkDestroyContextOptions = {
         req,
         res,
-        state: await getContextState(req, options.state)
+        state: {}
+      }
+
+      if (options.state) {
+        ctx.state = await getContextState(req, options.state, ctx)
       }
 
       const queryOptions: FindOptions & { force?: boolean } = await getQueryOptions().multiple(

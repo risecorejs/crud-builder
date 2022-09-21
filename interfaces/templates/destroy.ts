@@ -1,6 +1,6 @@
 import { FindOptions } from 'sequelize/types/model'
 
-import { IMethodBaseOptions, IMethodBaseContextOptions } from '../index'
+import { IMethodBaseOptions, IMethodBaseContextOptions, IFields } from '../index'
 
 import {
   TMethodState,
@@ -26,6 +26,6 @@ export interface IMethodDestroyOptions extends IMethodBaseOptions {
 }
 
 export interface IMethodDestroyContextOptions extends IMethodBaseContextOptions {
-  state: TMethodState
+  state: IFields
   instance?: null | CModel
 }
