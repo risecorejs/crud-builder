@@ -299,16 +299,38 @@ export = crudBuilder('User', {
     template: 'restore',
     model: 'Customer',
     state: (ctx) => {
+      ctx.req
+      ctx.res
+
       return {}
     },
     key: 'customerId',
     queryBuilder: (ctx) => {
+      ctx.req
+      ctx.res
+      ctx.state
+
       return {}
     },
-    beforeRestore: (ctx) => {},
-    afterRestore: (ctx) => {},
+    beforeRestore: (ctx) => {
+      ctx.req
+      ctx.res
+      ctx.state
+      ctx.instance
+    },
+    afterRestore: (ctx) => {
+      ctx.req
+      ctx.res
+      ctx.state
+      ctx.instance
+    },
     sendStatus: true,
     response: (ctx) => {
+      ctx.req
+      ctx.res
+      ctx.state
+      ctx.instance
+
       return {}
     }
   })
