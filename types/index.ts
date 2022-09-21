@@ -27,20 +27,12 @@ export type TTemplateHandler<T> = (
   gettingOptionsInstruction: TGettingOptionsInstruction<T>
 ) => express.Handler
 
+export type TMethodKey = 'id' | string | false
 export type TMethodState<C = any> = object | ((ctx: C) => object | Promise<object>)
 export type TMethodRules<C = any> = IValidatorRules | ((ctx: C) => IValidatorRules | Promise<IValidatorRules>)
 export type TMethodOnly<C = any> = TOnlyKeys | ((ctx: C) => TOnlyKeys | Promise<TOnlyKeys>)
-export type TMethodKey = 'id' | string | false
 
 export type TMethodResponseHandlerWithContext<C = any> = (ctx: C) => IFields | Promise<IFields>
-
-export type TMethodResponseHandlerWithCount = (
-  count: number,
-  req: express.Request,
-  res: express.Response
-) => IFields | Promise<IFields>
-
 export type TMethodHookHandler<C = any> = (ctx: C) => void | Promise<void>
-
 export type IMethodQueryBuilderHandlerWithRequest<C = any> = (ctx: C) => FindOptions | Promise<FindOptions>
 export type IMethodQueryBuilderHandlerWithContext<C = any> = (ctx: C) => FindOptions | Promise<FindOptions>

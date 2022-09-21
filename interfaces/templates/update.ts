@@ -1,21 +1,21 @@
 import { FindOptions } from 'sequelize/types/model'
 
-import { IFields, IMethodBaseContextOptions, IMethodBaseOptions } from '../index'
+import { IMethodBaseOptions, IMethodBaseContextOptions, IFields } from '../index'
 
 import {
-  CModel,
-  IMethodQueryBuilderHandlerWithContext,
-  TMethodHookHandler,
+  TMethodState,
   TMethodKey,
-  TMethodOnly,
-  TMethodResponseHandlerWithContext,
+  IMethodQueryBuilderHandlerWithContext,
   TMethodRules,
-  TMethodState
+  TMethodOnly,
+  TMethodHookHandler,
+  TMethodResponseHandlerWithContext,
+  CModel
 } from '../../types'
 
 export interface IMethodUpdateOptions extends IMethodBaseOptions {
   template?: 'update'
-  state?: TMethodState
+  state?: TMethodState<Omit<IMethodUpdateContextOptions, 'state' | 'fields' | 'instance'>>
   key?: TMethodKey
   queryBuilder?:
     | FindOptions
@@ -31,6 +31,7 @@ export interface IMethodUpdateOptions extends IMethodBaseOptions {
 }
 
 export interface IMethodUpdateContextOptions extends IMethodBaseContextOptions {
+  state?: IFields
   fields?: null | IFields
   instance?: null | CModel
 }
