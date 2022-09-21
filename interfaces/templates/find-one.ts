@@ -1,6 +1,7 @@
 import { FindOptions } from 'sequelize/types/model'
 
 import { IMethodBaseOptions, IMethodBaseContextOptions } from '../index'
+
 import {
   TMethodKey,
   IMethodQueryBuilderHandlerWithContext,
