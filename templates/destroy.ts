@@ -25,7 +25,11 @@ export default function (
       const ctx: IMethodDestroyContextOptions = {
         req,
         res,
-        state: await getContextState(req, options)
+        state: {}
+      }
+
+      if (options.state) {
+        ctx.state = await getContextState(req, options, ctx)
       }
 
       const queryOptions = await getQueryOptions().single(req, options.key, options.queryBuilder, ctx)

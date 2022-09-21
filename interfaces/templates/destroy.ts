@@ -1,32 +1,31 @@
 import { FindOptions } from 'sequelize/types/model'
 
-import { IMethodBaseContextOptions, IMethodBaseOptions } from '../index'
+import { IMethodBaseOptions, IMethodBaseContextOptions } from '../index'
 
 import {
-  CModel,
+  TMethodState,
+  TMethodKey,
   IMethodQueryBuilderHandlerWithContext,
   TMethodHookHandler,
-  TMethodKey,
   TMethodResponseHandlerWithContext,
-  TMethodState
+  CModel
 } from '../../types'
 
 export interface IMethodDestroyOptions extends IMethodBaseOptions {
   template?: 'destroy'
-  state?: TMethodState
+  state?: TMethodState<Omit<IMethodDestroyContextOptions, 'state' | 'instance'>>
   key?: TMethodKey
-  queryBuilder?: FindOptions | IMethodQueryBuilderHandlerWithContext<IMethodDestroyContextOptionsWithoutInstance>
+  queryBuilder?: FindOptions | IMethodQueryBuilderHandlerWithContext<Omit<IMethodDestroyContextOptions, 'instance'>>
   force?:
     | boolean
-    | ((ctx: IMethodDestroyContextOptionsWithoutInstance & { instance: CModel }) => boolean | Promise<boolean>)
-  beforeDestroy?: TMethodHookHandler<IMethodDestroyContextOptionsWithoutInstance & { instance: CModel }>
-  afterDestroy?: TMethodHookHandler<IMethodDestroyContextOptionsWithoutInstance & { instance: CModel }>
+    | ((ctx: Omit<IMethodDestroyContextOptions, 'instance'> & { instance: CModel }) => boolean | Promise<boolean>)
+  beforeDestroy?: TMethodHookHandler<Omit<IMethodDestroyContextOptions, 'instance'> & { instance: CModel }>
+  afterDestroy?: TMethodHookHandler<Omit<IMethodDestroyContextOptions, 'instance'> & { instance: CModel }>
   sendStatus?: boolean
-  response?: TMethodResponseHandlerWithContext<IMethodDestroyContextOptionsWithoutInstance & { instance: CModel }>
+  response?: TMethodResponseHandlerWithContext<Omit<IMethodDestroyContextOptions, 'instance'> & { instance: CModel }>
 }
 
 export interface IMethodDestroyContextOptions extends IMethodBaseContextOptions {
+  state: TMethodState
   instance?: null | CModel
 }
-
-export interface IMethodDestroyContextOptionsWithoutInstance extends Omit<IMethodDestroyContextOptions, 'instance'> {}

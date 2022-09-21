@@ -135,14 +135,14 @@ export = crudBuilder('User', {
   update: (): IMethodUpdateOptions => ({
     template: 'update',
     model: 'Customer',
-    state(ctx) {
+    state: (ctx) => {
       ctx.req
       ctx.res
 
       return {}
     },
     key: 'customerId',
-    queryBuilder(ctx) {
+    queryBuilder: (ctx) => {
       ctx.req
       ctx.res
       ctx.state
@@ -150,17 +150,51 @@ export = crudBuilder('User', {
       return {}
     },
     validator: true,
-    rules(ctx) {
+    rules: (ctx) => {
+      ctx.req
+      ctx.res
+      ctx.state
+      ctx.instance
+
       return {}
     },
-    only(ctx) {
+    only: (ctx) => {
+      ctx.req
+      ctx.res
+      ctx.state
+      ctx.instance
+
       return []
     },
-    formatter(ctx) {},
-    beforeUpdate(ctx) {},
-    afterUpdate(ctx) {},
+    formatter: (ctx) => {
+      ctx.req
+      ctx.res
+      ctx.state
+      ctx.instance
+      ctx.fields
+    },
+    beforeUpdate: (ctx) => {
+      ctx.req
+      ctx.res
+      ctx.state
+      ctx.instance
+      ctx.fields
+    },
+    afterUpdate: (ctx) => {
+      ctx.req
+      ctx.res
+      ctx.state
+      ctx.instance
+      ctx.fields
+    },
     sendStatus: true,
-    response(ctx) {
+    response: (ctx) => {
+      ctx.req
+      ctx.res
+      ctx.state
+      ctx.instance
+      ctx.fields
+
       return {}
     }
   }),
@@ -169,18 +203,30 @@ export = crudBuilder('User', {
   destroy: (): IMethodDestroyOptions => ({
     template: 'destroy',
     model: 'Customer',
-    state(req) {
+    state: (ctx) => {
+      ctx.req
+      ctx.res
+
       return {}
     },
     key: 'customerId',
-    queryBuilder(ctx) {
+    queryBuilder: (ctx) => {
+      ctx.req
+      ctx.res
+      ctx.state
+
       return {}
     },
-    force(ctx) {
+    force: (ctx) => {
+      ctx.req
+      ctx.res
+      ctx.state
+      ctx.instance
+
       return true
     },
-    beforeDestroy(ctx) {},
-    afterDestroy(ctx) {},
+    beforeDestroy: (ctx) => {},
+    afterDestroy: (ctx) => {},
     sendStatus: true,
     response(ctx) {
       return {}
