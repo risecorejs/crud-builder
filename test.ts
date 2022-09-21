@@ -40,7 +40,7 @@ export = crudBuilder('User', {
       ctx.res
       ctx.state
 
-      return ['name', 'email']
+      return []
     },
     formatter: (ctx) => {
       ctx.req
