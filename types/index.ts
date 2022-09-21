@@ -54,5 +54,5 @@ export type TMethodResponseHandlerWithCount = (
 
 export type TMethodHookHandler<C = any> = (ctx: C) => void | Promise<void>
 
-export type IMethodQueryBuilderHandlerWithRequest = (req: express.Request) => FindOptions | Promise<FindOptions>
+export type IMethodQueryBuilderHandlerWithRequest<C = any> = (ctx: C) => FindOptions | Promise<FindOptions>
 export type IMethodQueryBuilderHandlerWithContext<C = any> = (ctx: C) => FindOptions | Promise<FindOptions>

@@ -78,15 +78,16 @@ export = crudBuilder('User', {
     model: 'Customer',
     method: 'findAndCountAll',
     pagination: true,
-    queryBuilder(req) {
-      req
+    queryBuilder(ctx) {
+      ctx.req
+      ctx.res
 
       return {}
     },
-    response(instances, req, res) {
-      instances
-      req
-      res
+    response(ctx) {
+      ctx.req
+      ctx.res
+      ctx.instances
 
       return {}
     }
