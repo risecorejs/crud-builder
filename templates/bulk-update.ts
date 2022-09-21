@@ -12,6 +12,7 @@ import {
 
 import { IMethodBulkUpdateOptions, IMethodBulkUpdateContextOptions } from '../interfaces'
 import { CModel, TGettingOptionsInstruction } from '../types'
+import { UpdateOptions } from 'sequelize'
 
 /**
  * BULK-UPDATE
@@ -63,9 +64,9 @@ export default function (
       }
 
       if (ctx.fields) {
-        const queryOptions = await getQueryOptions().multiple(req, options.queryBuilder, ctx)
+        const queryOptions = <UpdateOptions>await getQueryOptions().multiple(req, options.queryBuilder, ctx)
 
-        await Model.update(ctx.fields, <any>queryOptions)
+        await Model.update(ctx.fields, queryOptions)
       }
 
       if (options.afterUpdate) {
