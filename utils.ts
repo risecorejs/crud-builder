@@ -7,12 +7,12 @@ import { FindOptions } from 'sequelize/types/model'
 import { IMethodErrorResponse, IFields } from './interfaces'
 
 import {
+  TGettingOptionsInstruction,
   CModel,
   IMethodQueryBuilderHandlerWithContext,
-  TGettingOptionsInstruction,
   TMethodKey,
-  TMethodOnly,
   TMethodRules,
+  TMethodOnly,
   TMethodState
 } from './types'
 

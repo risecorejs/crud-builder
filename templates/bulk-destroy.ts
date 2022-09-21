@@ -33,7 +33,6 @@ export default function (
       }
 
       const queryOptions: FindOptions & { force?: boolean } = await getQueryOptions().multiple(
-        req,
         options.queryBuilder,
         ctx
       )
