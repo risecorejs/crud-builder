@@ -1,10 +1,14 @@
 import { FindOptions } from 'sequelize/types/model'
 
-import { IMethodBaseOptions } from '../index'
-import { IMethodQueryBuilderHandlerWithRequest, TMethodResponseHandlerWithCount } from '../../types'
+import { IMethodBaseOptions, IMethodBaseContextOptions } from '../index'
+import { IMethodQueryBuilderHandlerWithContext, TMethodResponseHandlerWithContext } from '../../types'
 
 export interface IMethodCountOptions extends IMethodBaseOptions {
   template?: 'count'
-  queryBuilder?: FindOptions | IMethodQueryBuilderHandlerWithRequest
-  response?: TMethodResponseHandlerWithCount
+  queryBuilder?: FindOptions | IMethodQueryBuilderHandlerWithContext<Omit<IMethodCountContextOptions, 'count'>>
+  response?: TMethodResponseHandlerWithContext<Omit<IMethodCountContextOptions, 'count'> & { count: number }>
+}
+
+export interface IMethodCountContextOptions extends IMethodBaseContextOptions {
+  count?: number
 }

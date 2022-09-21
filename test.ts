@@ -116,11 +116,18 @@ export = crudBuilder('User', {
   count: (): IMethodCountOptions => ({
     template: 'count',
     model: 'Customer',
-    queryBuilder(req) {
+    queryBuilder(ctx) {
+      ctx.req
+      ctx.res
+
       return {}
     },
-    async response(count, req) {
-      return { count }
+    async response(ctx) {
+      ctx.req
+      ctx.res
+      ctx.count
+
+      return {}
     }
   }),
 
