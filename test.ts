@@ -225,10 +225,25 @@ export = crudBuilder('User', {
 
       return true
     },
-    beforeDestroy: (ctx) => {},
-    afterDestroy: (ctx) => {},
+    beforeDestroy: (ctx) => {
+      ctx.req
+      ctx.res
+      ctx.state
+      ctx.instance
+    },
+    afterDestroy: (ctx) => {
+      ctx.req
+      ctx.res
+      ctx.state
+      ctx.instance
+    },
     sendStatus: true,
-    response(ctx) {
+    response: (ctx) => {
+      ctx.req
+      ctx.res
+      ctx.state
+      ctx.instance
+
       return {}
     }
   }),
