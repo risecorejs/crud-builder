@@ -1,36 +1,36 @@
 import express from 'express'
 
-import { TTemplates, TGettingOptionsInstruction, TTemplateHandler } from '../types'
-
-import { IMethodCreateOptions } from './templates/create'
-
-import { IMethodFindAllOptions } from './templates/find-all'
-import { IMethodFindOneOptions } from './templates/find-one'
-import { IMethodCountOptions } from './templates/count'
-
-import { IMethodUpdateOptions } from './templates/update'
-import { IMethodBulkUpdateOptions } from './templates/bulk-update'
-
-import { IMethodDestroyOptions } from './templates/destroy'
-import { IMethodBulkDestroyOptions } from './templates/bulk-destroy'
-
-import { IMethodRestoreOptions } from './templates/restore'
-import { IMethodBulkRestoreOptions } from './templates/bulk-restore'
+import { TTemplateHandler, TGettingOptionsInstruction, TTemplates } from '../types'
 
 export * from './templates/create'
+import { IMethodCreateOptions } from './templates/create'
 
 export * from './templates/find-all'
+import { IMethodFindAllOptions } from './templates/find-all'
+
 export * from './templates/find-one'
+import { IMethodFindOneOptions } from './templates/find-one'
+
 export * from './templates/count'
+import { IMethodCountOptions } from './templates/count'
 
 export * from './templates/update'
+import { IMethodUpdateOptions } from './templates/update'
+
 export * from './templates/bulk-update'
+import { IMethodBulkUpdateOptions } from './templates/bulk-update'
 
 export * from './templates/destroy'
+import { IMethodDestroyOptions } from './templates/destroy'
+
 export * from './templates/bulk-destroy'
+import { IMethodBulkDestroyOptions } from './templates/bulk-destroy'
 
 export * from './templates/restore'
+import { IMethodRestoreOptions } from './templates/restore'
+
 export * from './templates/bulk-restore'
+import { IMethodBulkRestoreOptions } from './templates/bulk-restore'
 
 // FIELDS
 export interface IFields<T = any> {
