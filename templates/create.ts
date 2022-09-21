@@ -23,7 +23,8 @@ export default function (
       const ctx: IMethodCreateContextOptions = {
         req,
         res,
-        state: {}
+        state: {},
+        fields: null
       }
 
       if (options.state) {

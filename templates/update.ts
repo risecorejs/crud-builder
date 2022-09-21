@@ -30,7 +30,8 @@ export default function (
       const ctx: IMethodUpdateContextOptions = {
         req,
         res,
-        state: {}
+        state: {},
+        fields: null
       }
 
       if (options.state) {

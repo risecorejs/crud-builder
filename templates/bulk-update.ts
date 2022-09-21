@@ -30,7 +30,12 @@ export default function (
       const ctx: IMethodBulkUpdateContextOptions = {
         req,
         res,
-        state: await getContextState(req, options)
+        state: {},
+        fields: null
+      }
+
+      if (options.state) {
+        ctx.state = await getContextState(req, options, ctx)
       }
 
       if (options.validator !== false && options.rules) {

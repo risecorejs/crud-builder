@@ -32,6 +32,6 @@ export interface IMethodUpdateOptions extends IMethodBaseOptions {
 
 export interface IMethodUpdateContextOptions extends IMethodBaseContextOptions {
   state: IFields
-  fields?: null | IFields
+  fields: null | IFields
   instance?: null | CModel
 }

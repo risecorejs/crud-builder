@@ -1,23 +1,23 @@
 import { FindOptions } from 'sequelize/types/model'
 
-import { IFields, IMethodBaseContextOptions, IMethodBaseOptions } from '../index'
+import { IMethodBaseOptions, IMethodBaseContextOptions, IFields } from '../index'
 
 import {
+  TMethodState,
   IMethodQueryBuilderHandlerWithContext,
-  TMethodHookHandler,
-  TMethodOnly,
-  TMethodResponseHandlerWithContext,
   TMethodRules,
-  TMethodState
+  TMethodOnly,
+  TMethodHookHandler,
+  TMethodResponseHandlerWithContext
 } from '../../types'
 
 export interface IMethodBulkUpdateOptions extends IMethodBaseOptions {
   template?: 'update'
   state?: TMethodState
-  queryBuilder?: FindOptions | IMethodQueryBuilderHandlerWithContext<IMethodBulkUpdateContextOptionsWithoutFields>
+  queryBuilder?: FindOptions | IMethodQueryBuilderHandlerWithContext<Omit<IMethodBulkUpdateContextOptions, 'fields'>>
   validator?: boolean
-  rules?: TMethodRules<IMethodBulkUpdateContextOptionsWithoutFields>
-  only?: TMethodOnly<IMethodBulkUpdateContextOptionsWithoutFields>
+  rules?: TMethodRules<Omit<IMethodBulkUpdateContextOptions, 'fields'>>
+  only?: TMethodOnly<Omit<IMethodBulkUpdateContextOptions, 'fields'>>
   formatter?: TMethodHookHandler<IMethodBulkUpdateContextOptions>
   beforeUpdate?: TMethodHookHandler<IMethodBulkUpdateContextOptions>
   afterUpdate?: TMethodHookHandler<IMethodBulkUpdateContextOptions>
@@ -26,7 +26,6 @@ export interface IMethodBulkUpdateOptions extends IMethodBaseOptions {
 }
 
 export interface IMethodBulkUpdateContextOptions extends IMethodBaseContextOptions {
-  fields?: null | IFields
+  state: IFields
+  fields: null | IFields
 }
-
-export interface IMethodBulkUpdateContextOptionsWithoutFields extends Omit<IMethodBulkUpdateContextOptions, 'fields'> {}
