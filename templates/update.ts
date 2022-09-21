@@ -29,10 +29,13 @@ export default function (
 
       const ctx: IMethodUpdateContextOptions = {
         req,
-        res
+        res,
+        state: {}
       }
 
-      ctx.state = await getContextState(req, options.state, ctx)
+      if (options.state) {
+        ctx.state = await getContextState(req, options.state, ctx)
+      }
 
       const queryOptions = await getQueryOptions().single(req, options.key, options.queryBuilder, ctx)
 

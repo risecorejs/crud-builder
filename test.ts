@@ -135,11 +135,18 @@ export = crudBuilder('User', {
   update: (): IMethodUpdateOptions => ({
     template: 'update',
     model: 'Customer',
-    state(req) {
+    state(ctx) {
+      ctx.req
+      ctx.res
+
       return {}
     },
     key: 'customerId',
     queryBuilder(ctx) {
+      ctx.req
+      ctx.res
+      ctx.state
+
       return {}
     },
     validator: true,

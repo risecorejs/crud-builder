@@ -22,10 +22,13 @@ export default function (
 
       const ctx: IMethodCreateContextOptions = {
         req,
-        res
+        res,
+        state: {}
       }
 
-      ctx.state = await getContextState(req, options.state, ctx)
+      if (options.state) {
+        ctx.state = await getContextState(req, options.state, ctx)
+      }
 
       if (options.validator !== false && options.rules) {
         const errors = await getValidationErrors(req, options.rules, ctx)

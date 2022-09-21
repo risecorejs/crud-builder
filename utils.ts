@@ -56,19 +56,11 @@ export function getModel(model: any): typeof CModel {
  * @param ctx {any}
  * @return {object | Promise<object>}
  */
-export function getContextState(
-  req: express.Request,
-  state: undefined | TMethodState,
-  ctx: any
-): object | Promise<object> {
-  if (state) {
-    if (typeof state === 'function') {
-      return state(ctx)
-    } else {
-      return state
-    }
+export function getContextState(req: express.Request, state: TMethodState, ctx: any): object | Promise<object> {
+  if (typeof state === 'function') {
+    return state(ctx)
   } else {
-    return {}
+    return state
   }
 }
 
