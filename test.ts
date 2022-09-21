@@ -11,7 +11,6 @@ import {
   IMethodBulkDestroyOptions,
   IMethodBulkRestoreOptions
 } from './interfaces'
-import count from './templates/count'
 
 export = crudBuilder('User', {
   // CREATE
