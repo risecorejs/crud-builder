@@ -3,7 +3,7 @@ import httpStatusCodes from 'http-status-codes'
 
 import { getMethodOptions, getContextState, getQueryOptions, errorResponse } from '../utils'
 
-import { IMethodBulkRestoreOptions, IMethodBaseContextOptions } from '../interfaces'
+import { IMethodBulkRestoreOptions, IMethodBulkRestoreContextOptions } from '../interfaces'
 import { CModel, TGettingOptionsInstruction } from '../types'
 
 /**
@@ -20,13 +20,17 @@ export default function (
     try {
       const options = getMethodOptions<IMethodBulkRestoreOptions>(gettingOptionsInstruction)
 
-      const ctx: IMethodBaseContextOptions = {
+      const ctx: IMethodBulkRestoreContextOptions = {
         req,
         res,
-        state: await getContextState(req, options)
+        state: {}
       }
 
-      const queryOptions = await getQueryOptions().multiple(req, options.queryBuilder, ctx)
+      if (options.state) {
+        ctx.state = await getContextState(req, options, ctx)
+      }
+
+      const queryOptions = await getQueryOptions().multiple(options.queryBuilder, ctx)
 
       if (options.beforeRestore) {
         await options.beforeRestore(ctx)

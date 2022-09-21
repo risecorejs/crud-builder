@@ -25,7 +25,7 @@ export default function (
         res
       }
 
-      const queryOptions = await getQueryOptions().multiple(req, options.queryBuilder, ctx)
+      const queryOptions = await getQueryOptions().multiple(options.queryBuilder, ctx)
 
       ctx.count = await Model.count(queryOptions)
 

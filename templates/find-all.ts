@@ -41,7 +41,7 @@ export default function (
         Object.assign(queryOptions, req.pagination())
       }
 
-      const _queryOptions = await getQueryOptions().multiple(req, options.queryBuilder, ctx)
+      const _queryOptions = await getQueryOptions().multiple(options.queryBuilder, ctx)
 
       Object.assign(queryOptions, _queryOptions)
 

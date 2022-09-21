@@ -108,19 +108,17 @@ export function getQueryOptions() {
   return {
     /**
      * MULTIPLE
-     * @param req {express.Request}
      * @param queryBuilder {undefined | FindOptions | IMethodQueryBuilderHandlerWithContext}
-     * @param ctx {any?}
+     * @param ctx {any}
      * @return {FindOptions | Promise<FindOptions>}
      */
     multiple(
-      req: express.Request,
       queryBuilder: undefined | FindOptions | IMethodQueryBuilderHandlerWithContext,
-      ctx?: any
+      ctx: any
     ): FindOptions | Promise<FindOptions> {
       if (queryBuilder) {
         if (typeof queryBuilder === 'function') {
-          return queryBuilder(ctx || req)
+          return queryBuilder(ctx)
         } else {
           return queryBuilder
         }
@@ -134,14 +132,14 @@ export function getQueryOptions() {
      * @param req {express.Request}
      * @param key {undefined | TMethodKey}
      * @param queryBuilder {undefined | FindOptions | IMethodQueryBuilderHandlerWithContext}
-     * @param ctx {any?}
+     * @param ctx {any}
      * @return {Promise<FindOptions>}
      */
     async single(
       req: express.Request,
       key: undefined | TMethodKey,
       queryBuilder: undefined | FindOptions | IMethodQueryBuilderHandlerWithContext,
-      ctx?: any
+      ctx: any
     ): Promise<FindOptions> {
       const queryOptions: IFields = {
         where: {}
@@ -155,7 +153,7 @@ export function getQueryOptions() {
 
       if (queryBuilder) {
         if (typeof queryBuilder === 'function') {
-          const _queryOptions = await queryBuilder(ctx || req)
+          const _queryOptions = await queryBuilder(ctx)
 
           if (_queryOptions.where) {
             Object.assign(queryOptions.where, _queryOptions.where)

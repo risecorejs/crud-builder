@@ -1,18 +1,22 @@
-import { IFields, IMethodBaseContextOptions, IMethodBaseOptions } from '../index'
+import { IMethodBaseOptions, IMethodBaseContextOptions, IFields } from '../index'
 
 import {
+  TMethodState,
   IMethodQueryBuilderHandlerWithContext,
   TMethodHookHandler,
-  TMethodResponseHandlerWithContext,
-  TMethodState
+  TMethodResponseHandlerWithContext
 } from '../../types'
 
 export interface IMethodBulkRestoreOptions extends IMethodBaseOptions {
   template?: 'bulkRestore'
-  state?: TMethodState
-  queryBuilder?: IFields | IMethodQueryBuilderHandlerWithContext<IMethodBaseContextOptions>
-  beforeRestore?: TMethodHookHandler<IMethodBaseContextOptions>
-  afterRestore?: TMethodHookHandler<IMethodBaseContextOptions>
+  state?: TMethodState<Omit<IMethodBulkRestoreContextOptions, 'state'>>
+  queryBuilder?: IFields | IMethodQueryBuilderHandlerWithContext<IMethodBulkRestoreContextOptions>
+  beforeRestore?: TMethodHookHandler<IMethodBulkRestoreContextOptions>
+  afterRestore?: TMethodHookHandler<IMethodBulkRestoreContextOptions>
   sendStatus?: boolean
-  response?: TMethodResponseHandlerWithContext<IMethodBaseContextOptions>
+  response?: TMethodResponseHandlerWithContext<IMethodBulkRestoreContextOptions>
+}
+
+export interface IMethodBulkRestoreContextOptions extends IMethodBaseContextOptions {
+  state: IFields
 }

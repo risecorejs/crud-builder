@@ -8,8 +8,10 @@ import {
   IMethodUpdateOptions,
   IMethodDestroyOptions,
   IMethodRestoreOptions,
-  IMethodBulkDestroyOptions
+  IMethodBulkDestroyOptions,
+  IMethodBulkRestoreOptions
 } from './interfaces'
+import count from './templates/count'
 
 export = crudBuilder('User', {
   // CREATE
@@ -330,6 +332,43 @@ export = crudBuilder('User', {
       ctx.res
       ctx.state
       ctx.instance
+
+      return {}
+    }
+  }),
+
+  // BULK-RESTORE
+  bulkRestore: (): IMethodBulkRestoreOptions => ({
+    template: 'bulkRestore',
+    model: 'Customer',
+    state: (ctx) => {
+      ctx.req
+      ctx.res
+
+      return {}
+    },
+    queryBuilder: (ctx) => {
+      ctx.req
+      ctx.res
+      ctx.state
+
+      return {}
+    },
+    beforeRestore: (ctx) => {
+      ctx.req
+      ctx.res
+      ctx.state
+    },
+    afterRestore: (ctx) => {
+      ctx.req
+      ctx.res
+      ctx.state
+    },
+    sendStatus: true,
+    response: (ctx) => {
+      ctx.req
+      ctx.res
+      ctx.state
 
       return {}
     }

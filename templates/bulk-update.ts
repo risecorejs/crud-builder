@@ -64,7 +64,7 @@ export default function (
       }
 
       if (ctx.fields) {
-        const queryOptions = <UpdateOptions>await getQueryOptions().multiple(req, options.queryBuilder, ctx)
+        const queryOptions = <UpdateOptions>await getQueryOptions().multiple(options.queryBuilder, ctx)
 
         await Model.update(ctx.fields, queryOptions)
       }
