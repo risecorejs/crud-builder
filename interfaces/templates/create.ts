@@ -1,12 +1,12 @@
-import { IFields, IMethodBaseContextOptions, IMethodBaseOptions } from '../index'
+import { IMethodBaseOptions, IMethodBaseContextOptions, IFields } from '../index'
 
 import {
-  CModel,
-  TMethodHookHandler,
-  TMethodOnly,
-  TMethodResponseHandlerWithContext,
+  TMethodState,
   TMethodRules,
-  TMethodState
+  TMethodOnly,
+  TMethodHookHandler,
+  CModel,
+  TMethodResponseHandlerWithContext
 } from '../../types'
 
 export interface IMethodCreateOptions extends IMethodBaseOptions {
@@ -23,7 +23,7 @@ export interface IMethodCreateOptions extends IMethodBaseOptions {
 }
 
 export interface IMethodCreateContextOptions extends IMethodBaseContextOptions {
+  state?: IFields
   fields?: null | IFields
   instance?: null | CModel
-  state?: IFields
 }
