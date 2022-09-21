@@ -8,8 +8,7 @@ import {
   IMethodUpdateOptions,
   IMethodDestroyOptions,
   IMethodRestoreOptions,
-  IMethodBulkDestroyOptions,
-  IFields
+  IMethodBulkDestroyOptions
 } from './interfaces'
 
 export = crudBuilder('User', {
@@ -98,10 +97,17 @@ export = crudBuilder('User', {
     template: 'show',
     model: 'Customer',
     key: 'customerId',
-    queryBuilder(req) {
+    queryBuilder: (ctx) => {
+      ctx.req
+      ctx.res
+
       return {}
     },
-    response(instance, req) {
+    response: (ctx) => {
+      ctx.req
+      ctx.res
+      ctx.instance
+
       return {}
     }
   }),

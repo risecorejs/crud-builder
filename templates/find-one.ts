@@ -3,7 +3,7 @@ import httpStatusCodes from 'http-status-codes'
 
 import { getMethodOptions, getQueryOptions, errorResponse } from '../utils'
 
-import { IMethodFindOneOptions } from '../interfaces'
+import { IMethodFindOneContextOptions, IMethodFindOneOptions } from '../interfaces'
 import { CModel, TGettingOptionsInstruction } from '../types'
 
 /**
@@ -20,11 +20,16 @@ export default function (
     try {
       const options = getMethodOptions<IMethodFindOneOptions>(gettingOptionsInstruction)
 
-      const queryOptions = await getQueryOptions().single(req, options.key, options.queryBuilder)
+      const ctx: IMethodFindOneContextOptions = {
+        req,
+        res
+      }
 
-      const instance = await Model.findOne(queryOptions)
+      const queryOptions = await getQueryOptions().single(req, options.key, options.queryBuilder, ctx)
 
-      if (!instance) {
+      ctx.instance = await Model.findOne(queryOptions)
+
+      if (!ctx.instance) {
         const status = 404
 
         return res.status(status).json({
@@ -36,7 +41,7 @@ export default function (
       const status = 200
 
       if (options.response) {
-        const response = await options.response(instance, req, res)
+        const response = await options.response(<any>ctx)
 
         return res.status(response.status || status).json(response)
       }
@@ -44,7 +49,7 @@ export default function (
       return res.status(status).json({
         status,
         message: httpStatusCodes.getStatusText(status),
-        result: instance
+        result: ctx.instance
       })
     } catch (err) {
       return errorResponse(err, res)

@@ -34,18 +34,6 @@ export type TMethodKey = 'id' | string | false
 
 export type TMethodResponseHandlerWithContext<C = any> = (ctx: C) => IFields | Promise<IFields>
 
-export type TMethodResponseHandlerWithInstance = (
-  instance: CModel,
-  req: express.Request,
-  res: express.Response
-) => IFields | Promise<IFields>
-
-export type TMethodResponseHandlerWithInstances = (
-  instances: { rows: CModel[]; count: number } | CModel[],
-  req: express.Request,
-  res: express.Response
-) => IFields | Promise<IFields>
-
 export type TMethodResponseHandlerWithCount = (
   count: number,
   req: express.Request,
