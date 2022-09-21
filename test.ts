@@ -29,10 +29,7 @@ export = crudBuilder('User', {
       ctx.res
       ctx.state
 
-      return {
-        name: 'required',
-        email: 'required'
-      }
+      return {}
     },
     only: (ctx) => {
       ctx.req
