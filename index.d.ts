@@ -5,4 +5,4 @@ import { IMethods, IEndpoints } from './interfaces';
  * @param methods {IMethods}
  * @return {IEndpoints}
  */
-export default function (model: any, methods: IMethods): IEndpoints;
+export default function <M = any>(model: any, methods: IMethods<M>): IEndpoints;

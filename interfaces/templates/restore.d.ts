@@ -1,22 +1,22 @@
 import { IMethodBaseOptions, IMethodBaseContextOptions, IFields } from '../index';
-import { TMethodState, TMethodKey, IMethodQueryBuilderHandlerWithContext, TMethodHookHandler, TMethodResponseHandlerWithContext, CModel } from '../../types';
-export interface IMethodRestoreOptions extends IMethodBaseOptions {
+import { TMethodState, TMethodKey, IMethodQueryBuilderHandlerWithContext, TMethodHookHandler, TMethodResponseHandlerWithContext } from '../../types';
+export interface IMethodRestoreOptions<M = any> extends IMethodBaseOptions {
     template?: 'restore';
-    state?: TMethodState<Omit<IMethodRestoreContextOptions, 'state' | 'instance'>>;
+    state?: TMethodState<Omit<IMethodRestoreContextOptions<M>, 'state' | 'instance'>>;
     key?: TMethodKey;
-    queryBuilder?: IFields | IMethodQueryBuilderHandlerWithContext<Omit<IMethodRestoreContextOptions, 'instance'>>;
-    beforeRestore?: TMethodHookHandler<Omit<IMethodRestoreContextOptions, 'instance'> & {
-        instance: CModel;
+    queryBuilder?: IFields | IMethodQueryBuilderHandlerWithContext<Omit<IMethodRestoreContextOptions<M>, 'instance'>>;
+    beforeRestore?: TMethodHookHandler<Omit<IMethodRestoreContextOptions<M>, 'instance'> & {
+        instance: M;
     }>;
-    afterRestore?: TMethodHookHandler<Omit<IMethodRestoreContextOptions, 'instance'> & {
-        instance: CModel;
+    afterRestore?: TMethodHookHandler<Omit<IMethodRestoreContextOptions<M>, 'instance'> & {
+        instance: M;
     }>;
     sendStatus?: boolean;
-    response?: TMethodResponseHandlerWithContext<Omit<IMethodRestoreContextOptions, 'instance'> & {
-        instance: CModel;
+    response?: TMethodResponseHandlerWithContext<Omit<IMethodRestoreContextOptions<M>, 'instance'> & {
+        instance: M;
     }>;
 }
-export interface IMethodRestoreContextOptions extends IMethodBaseContextOptions {
+export interface IMethodRestoreContextOptions<M = any> extends IMethodBaseContextOptions {
     state: IFields;
-    instance?: null | CModel;
+    instance?: null | M;
 }

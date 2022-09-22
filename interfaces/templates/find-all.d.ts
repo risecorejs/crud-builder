@@ -1,21 +1,21 @@
-import { FindOptions } from 'sequelize/types/model';
+import { FindOptions } from 'sequelize';
 import { IMethodBaseOptions, IMethodBaseContextOptions } from '../index';
-import { IMethodQueryBuilderHandlerWithContext, TMethodResponseHandlerWithContext, CModel } from '../../types';
-export interface IMethodFindAllOptions extends IMethodBaseOptions {
+import { IMethodQueryBuilderHandlerWithContext, TMethodResponseHandlerWithContext } from '../../types';
+export interface IMethodFindAllOptions<M = any> extends IMethodBaseOptions {
     template?: 'index';
     method?: 'findAndCountAll' | 'findAll';
     pagination?: boolean;
-    queryBuilder?: FindOptions | IMethodQueryBuilderHandlerWithContext<Omit<IMethodFindAllContextOptions, 'instances'>>;
-    response?: TMethodResponseHandlerWithContext<Omit<IMethodFindAllContextOptions, 'instances'> & {
+    queryBuilder?: FindOptions | IMethodQueryBuilderHandlerWithContext<Omit<IMethodFindAllContextOptions<M>, 'instances'>>;
+    response?: TMethodResponseHandlerWithContext<Omit<IMethodFindAllContextOptions<M>, 'instances'> & {
         instances: {
-            rows: CModel[];
+            rows: M[];
             count: number;
-        } | CModel[];
+        } | M[];
     }>;
 }
-export interface IMethodFindAllContextOptions extends IMethodBaseContextOptions {
+export interface IMethodFindAllContextOptions<M = any> extends IMethodBaseContextOptions {
     instances?: {
-        rows: CModel[];
+        rows: M[];
         count: number;
-    } | CModel[];
+    } | M[];
 }

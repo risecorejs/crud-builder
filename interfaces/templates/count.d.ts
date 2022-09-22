@@ -1,4 +1,4 @@
-import { FindOptions } from 'sequelize/types/model';
+import { FindOptions } from 'sequelize';
 import { IMethodBaseOptions, IMethodBaseContextOptions } from '../index';
 import { IMethodQueryBuilderHandlerWithContext, TMethodResponseHandlerWithContext } from '../../types';
 export interface IMethodCountOptions extends IMethodBaseOptions {

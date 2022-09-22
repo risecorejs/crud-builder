@@ -1,5 +1,5 @@
 import express from 'express';
-import { FindOptions } from 'sequelize/types/model';
+import { FindOptions } from 'sequelize';
 import { TGettingOptionsInstruction, CModel, IMethodQueryBuilderHandlerWithContext, TMethodKey, TMethodRules, TMethodOnly, TMethodState } from './types';
 /**
  * GET-METHOD-OPTIONS

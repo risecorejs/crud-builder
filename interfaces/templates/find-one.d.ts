@@ -1,14 +1,14 @@
-import { FindOptions } from 'sequelize/types/model';
+import { FindOptions } from 'sequelize';
 import { IMethodBaseOptions, IMethodBaseContextOptions } from '../index';
-import { TMethodKey, IMethodQueryBuilderHandlerWithContext, TMethodResponseHandlerWithContext, CModel } from '../../types';
-export interface IMethodFindOneOptions extends IMethodBaseOptions {
+import { TMethodKey, IMethodQueryBuilderHandlerWithContext, TMethodResponseHandlerWithContext } from '../../types';
+export interface IMethodFindOneOptions<M = any> extends IMethodBaseOptions {
     template?: 'show';
     key?: TMethodKey;
-    queryBuilder?: FindOptions | IMethodQueryBuilderHandlerWithContext<Omit<IMethodFindOneContextOptions, 'instance'>>;
-    response?: TMethodResponseHandlerWithContext<Omit<IMethodFindOneContextOptions, 'instance'> & {
-        instance: CModel;
+    queryBuilder?: FindOptions | IMethodQueryBuilderHandlerWithContext<Omit<IMethodFindOneContextOptions<M>, 'instance'>>;
+    response?: TMethodResponseHandlerWithContext<Omit<IMethodFindOneContextOptions<M>, 'instance'> & {
+        instance: M;
     }>;
 }
-export interface IMethodFindOneContextOptions extends IMethodBaseContextOptions {
-    instance?: null | CModel;
+export interface IMethodFindOneContextOptions<M = any> extends IMethodBaseContextOptions {
+    instance?: null | M;
 }
