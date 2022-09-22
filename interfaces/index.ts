@@ -56,20 +56,20 @@ export interface ITemplates {
 }
 
 // METHODS
-export interface IMethods {
-  create?: TGettingOptionsInstruction<IMethodCreateOptions>
+export interface IMethods<M = any> {
+  create?: TGettingOptionsInstruction<IMethodCreateOptions<M>>
 
-  index?: TGettingOptionsInstruction<IMethodFindAllOptions>
-  show?: TGettingOptionsInstruction<IMethodFindOneOptions>
+  index?: TGettingOptionsInstruction<IMethodFindAllOptions<M>>
+  show?: TGettingOptionsInstruction<IMethodFindOneOptions<M>>
   count?: TGettingOptionsInstruction<IMethodCountOptions>
 
-  update?: TGettingOptionsInstruction<IMethodUpdateOptions>
+  update?: TGettingOptionsInstruction<IMethodUpdateOptions<M>>
   bulkUpdate?: TGettingOptionsInstruction<IMethodBulkUpdateOptions>
 
-  destroy?: TGettingOptionsInstruction<IMethodDestroyOptions>
+  destroy?: TGettingOptionsInstruction<IMethodDestroyOptions<M>>
   bulkDestroy?: TGettingOptionsInstruction<IMethodBulkDestroyOptions>
 
-  restore?: TGettingOptionsInstruction<IMethodRestoreOptions>
+  restore?: TGettingOptionsInstruction<IMethodRestoreOptions<M>>
   bulkRestore?: TGettingOptionsInstruction<IMethodBulkRestoreOptions>
 
   [key: string]: any

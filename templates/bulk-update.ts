@@ -1,6 +1,8 @@
 import express from 'express'
 import httpStatusCodes from 'http-status-codes'
 
+import { UpdateOptions } from 'sequelize'
+
 import {
   getMethodOptions,
   getContextState,
@@ -12,7 +14,6 @@ import {
 
 import { IMethodBulkUpdateOptions, IMethodBulkUpdateContextOptions } from '../interfaces'
 import { CModel, TGettingOptionsInstruction } from '../types'
-import { UpdateOptions } from 'sequelize'
 
 /**
  * BULK-UPDATE

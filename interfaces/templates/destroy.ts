@@ -1,4 +1,4 @@
-import { FindOptions } from 'sequelize/types/model'
+import { FindOptions } from 'sequelize'
 
 import { IMethodBaseOptions, IMethodBaseContextOptions, IFields } from '../index'
 
@@ -7,25 +7,24 @@ import {
   TMethodKey,
   IMethodQueryBuilderHandlerWithContext,
   TMethodHookHandler,
-  TMethodResponseHandlerWithContext,
-  CModel
+  TMethodResponseHandlerWithContext
 } from '../../types'
 
-export interface IMethodDestroyOptions extends IMethodBaseOptions {
+export interface IMethodDestroyOptions<M = any> extends IMethodBaseOptions {
   template?: 'destroy'
-  state?: TMethodState<Omit<IMethodDestroyContextOptions, 'state' | 'instance'>>
+  state?: TMethodState<Omit<IMethodDestroyContextOptions<M>, 'state' | 'instance'>>
   key?: TMethodKey
-  queryBuilder?: FindOptions | IMethodQueryBuilderHandlerWithContext<Omit<IMethodDestroyContextOptions, 'instance'>>
+  queryBuilder?: FindOptions | IMethodQueryBuilderHandlerWithContext<Omit<IMethodDestroyContextOptions<M>, 'instance'>>
   force?:
     | boolean
-    | ((ctx: Omit<IMethodDestroyContextOptions, 'instance'> & { instance: CModel }) => boolean | Promise<boolean>)
-  beforeDestroy?: TMethodHookHandler<Omit<IMethodDestroyContextOptions, 'instance'> & { instance: CModel }>
-  afterDestroy?: TMethodHookHandler<Omit<IMethodDestroyContextOptions, 'instance'> & { instance: CModel }>
+    | ((ctx: Omit<IMethodDestroyContextOptions<M>, 'instance'> & { instance: M }) => boolean | Promise<boolean>)
+  beforeDestroy?: TMethodHookHandler<Omit<IMethodDestroyContextOptions<M>, 'instance'> & { instance: M }>
+  afterDestroy?: TMethodHookHandler<Omit<IMethodDestroyContextOptions<M>, 'instance'> & { instance: M }>
   sendStatus?: boolean
-  response?: TMethodResponseHandlerWithContext<Omit<IMethodDestroyContextOptions, 'instance'> & { instance: CModel }>
+  response?: TMethodResponseHandlerWithContext<Omit<IMethodDestroyContextOptions<M>, 'instance'> & { instance: M }>
 }
 
-export interface IMethodDestroyContextOptions extends IMethodBaseContextOptions {
+export interface IMethodDestroyContextOptions<M = any> extends IMethodBaseContextOptions {
   state: IFields
-  instance?: null | CModel
+  instance?: null | M
 }

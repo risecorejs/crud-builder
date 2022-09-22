@@ -1,7 +1,7 @@
 import express from 'express'
 import httpStatusCodes from 'http-status-codes'
 
-import { DestroyOptions } from 'sequelize/types/model'
+import { DestroyOptions } from 'sequelize'
 
 import { getMethodOptions, getContextState, getQueryOptions, errorResponse } from '../utils'
 

@@ -2,7 +2,7 @@ import httpStatusCodes from 'http-status-codes'
 import models from '@risecorejs/core/models'
 import express from 'express'
 
-import { FindOptions } from 'sequelize/types/model'
+import { FindOptions } from 'sequelize'
 
 import { IMethodErrorResponse, IFields } from './interfaces'
 

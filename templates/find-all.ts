@@ -1,7 +1,7 @@
 import express from 'express'
 import httpStatusCodes from 'http-status-codes'
 
-import { FindOptions } from 'sequelize/types/model'
+import { FindOptions } from 'sequelize'
 
 import { CModel, TGettingOptionsInstruction } from '../types'
 import { IMethodFindAllContextOptions, IMethodFindAllOptions } from '../interfaces'

@@ -5,25 +5,24 @@ import {
   TMethodRules,
   TMethodOnly,
   TMethodHookHandler,
-  CModel,
   TMethodResponseHandlerWithContext
 } from '../../types'
 
-export interface IMethodCreateOptions extends IMethodBaseOptions {
+export interface IMethodCreateOptions<M = any> extends IMethodBaseOptions {
   template?: 'create'
-  state?: TMethodState<Omit<IMethodCreateContextOptions, 'state' | 'fields' | 'instance'>>
+  state?: TMethodState<Omit<IMethodCreateContextOptions<M>, 'state' | 'fields' | 'instance'>>
   validator?: boolean
-  rules?: TMethodRules<Omit<IMethodCreateContextOptions, 'fields' | 'instance'>>
-  only?: TMethodOnly<Omit<IMethodCreateContextOptions, 'fields' | 'instance'>>
-  formatter?: TMethodHookHandler<Omit<IMethodCreateContextOptions, 'instance'>>
-  beforeCreate?: TMethodHookHandler<Omit<IMethodCreateContextOptions, 'instance'>>
-  afterCreate?: TMethodHookHandler<Omit<IMethodCreateContextOptions, 'instance'> & { instance: CModel }>
+  rules?: TMethodRules<Omit<IMethodCreateContextOptions<M>, 'fields' | 'instance'>>
+  only?: TMethodOnly<Omit<IMethodCreateContextOptions<M>, 'fields' | 'instance'>>
+  formatter?: TMethodHookHandler<Omit<IMethodCreateContextOptions<M>, 'instance'>>
+  beforeCreate?: TMethodHookHandler<Omit<IMethodCreateContextOptions<M>, 'instance'>>
+  afterCreate?: TMethodHookHandler<Omit<IMethodCreateContextOptions<M>, 'instance'> & { instance: M }>
   sendStatus?: boolean
-  response?: TMethodResponseHandlerWithContext<Omit<IMethodCreateContextOptions, 'instance'> & { instance: CModel }>
+  response?: TMethodResponseHandlerWithContext<Omit<IMethodCreateContextOptions<M>, 'instance'> & { instance: M }>
 }
 
-export interface IMethodCreateContextOptions extends IMethodBaseContextOptions {
+export interface IMethodCreateContextOptions<M = any> extends IMethodBaseContextOptions {
   state: IFields
   fields: null | IFields
-  instance?: null | CModel
+  instance?: null | M
 }

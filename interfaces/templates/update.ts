@@ -1,4 +1,4 @@
-import { FindOptions } from 'sequelize/types/model'
+import { FindOptions } from 'sequelize'
 
 import { IMethodBaseOptions, IMethodBaseContextOptions, IFields } from '../index'
 
@@ -9,29 +9,28 @@ import {
   TMethodRules,
   TMethodOnly,
   TMethodHookHandler,
-  TMethodResponseHandlerWithContext,
-  CModel
+  TMethodResponseHandlerWithContext
 } from '../../types'
 
-export interface IMethodUpdateOptions extends IMethodBaseOptions {
+export interface IMethodUpdateOptions<M = any> extends IMethodBaseOptions {
   template?: 'update'
-  state?: TMethodState<Omit<IMethodUpdateContextOptions, 'state' | 'fields' | 'instance'>>
+  state?: TMethodState<Omit<IMethodUpdateContextOptions<M>, 'state' | 'fields' | 'instance'>>
   key?: TMethodKey
   queryBuilder?:
     | FindOptions
-    | IMethodQueryBuilderHandlerWithContext<Omit<IMethodUpdateContextOptions, 'fields' | 'instance'>>
+    | IMethodQueryBuilderHandlerWithContext<Omit<IMethodUpdateContextOptions<M>, 'fields' | 'instance'>>
   validator?: boolean
-  rules?: TMethodRules<Omit<IMethodUpdateContextOptions, 'fields' | 'instance'> & { instance: CModel }>
-  only?: TMethodOnly<Omit<IMethodUpdateContextOptions, 'fields' | 'instance'> & { instance: CModel }>
-  formatter?: TMethodHookHandler<Omit<IMethodUpdateContextOptions, 'instance'> & { instance: CModel }>
-  beforeUpdate?: TMethodHookHandler<Omit<IMethodUpdateContextOptions, 'instance'> & { instance: CModel }>
-  afterUpdate?: TMethodHookHandler<Omit<IMethodUpdateContextOptions, 'instance'> & { instance: CModel }>
+  rules?: TMethodRules<Omit<IMethodUpdateContextOptions<M>, 'fields' | 'instance'> & { instance: M }>
+  only?: TMethodOnly<Omit<IMethodUpdateContextOptions<M>, 'fields' | 'instance'> & { instance: M }>
+  formatter?: TMethodHookHandler<Omit<IMethodUpdateContextOptions<M>, 'instance'> & { instance: M }>
+  beforeUpdate?: TMethodHookHandler<Omit<IMethodUpdateContextOptions<M>, 'instance'> & { instance: M }>
+  afterUpdate?: TMethodHookHandler<Omit<IMethodUpdateContextOptions<M>, 'instance'> & { instance: M }>
   sendStatus?: boolean
-  response?: TMethodResponseHandlerWithContext<Omit<IMethodUpdateContextOptions, 'instance'> & { instance: CModel }>
+  response?: TMethodResponseHandlerWithContext<Omit<IMethodUpdateContextOptions<M>, 'instance'> & { instance: M }>
 }
 
-export interface IMethodUpdateContextOptions extends IMethodBaseContextOptions {
+export interface IMethodUpdateContextOptions<M = any> extends IMethodBaseContextOptions {
   state: IFields
   fields: null | IFields
-  instance?: null | CModel
+  instance?: null | M
 }

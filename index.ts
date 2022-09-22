@@ -10,7 +10,7 @@ import { TTemplates } from './types'
  * @param methods {IMethods}
  * @return {IEndpoints}
  */
-export default function (model: any, methods: IMethods): IEndpoints {
+export default function <M = any>(model: any, methods: IMethods<M>): IEndpoints {
   const endpoints: IEndpoints = {}
 
   for (const [methodName, gettingOptionsInstruction] of Object.entries(methods)) {
