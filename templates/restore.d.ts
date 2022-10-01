@@ -1,10 +1,11 @@
 import express from 'express';
+import { M } from '../classes';
 import { IMethodRestoreOptions } from '../interfaces';
-import { CModel, TGettingOptionsInstruction } from '../types';
+import { TGettingOptionsInstruction } from '../types';
 /**
  * RESTORE
- * @param Model {typeof CModel}
+ * @param Model {typeof M}
  * @param gettingOptionsInstruction {TGettingOptionsInstruction<IMethodRestoreOptions>)}
  * @return {express.Handler}
  */
-export default function (Model: typeof CModel, gettingOptionsInstruction: TGettingOptionsInstruction<IMethodRestoreOptions>): express.Handler;
+export default function (Model: typeof M, gettingOptionsInstruction: TGettingOptionsInstruction<IMethodRestoreOptions>): express.Handler;

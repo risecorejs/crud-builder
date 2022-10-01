@@ -12,7 +12,7 @@ import {
 } from '../../types'
 
 export interface IMethodBulkUpdateOptions extends IMethodBaseOptions {
-  template?: 'update'
+  template?: 'bulkUpdate'
   state?: TMethodState
   queryBuilder?: FindOptions | IMethodQueryBuilderHandlerWithContext<Omit<IMethodBulkUpdateContextOptions, 'fields'>>
   validator?: boolean

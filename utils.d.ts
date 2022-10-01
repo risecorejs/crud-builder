@@ -1,6 +1,7 @@
 import express from 'express';
 import { FindOptions } from 'sequelize';
-import { TGettingOptionsInstruction, CModel, IMethodQueryBuilderHandlerWithContext, TMethodKey, TMethodRules, TMethodOnly, TMethodState } from './types';
+import { M } from './classes';
+import { TGettingOptionsInstruction, IMethodQueryBuilderHandlerWithContext, TMethodKey, TMethodRules, TMethodOnly, TMethodState } from './types';
 /**
  * GET-METHOD-OPTIONS
  * @param gettingOptionsInstruction {TGettingOptionsInstruction<any>}
@@ -10,9 +11,9 @@ export declare function getMethodOptions<T = any>(gettingOptionsInstruction: TGe
 /**
  * GET-MODEL
  * @param model {any}
- * @return {typeof CModel}
+ * @return {typeof M}
  */
-export declare function getModel(model: any): typeof CModel;
+export declare function getModel(model: any): typeof M;
 /**
  * GET-CONTEXT-STATE
  * @param req {express.Request}

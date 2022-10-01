@@ -1,11 +1,10 @@
 import express from 'express'
 import { TKeys as TOnlyKeys } from '@risecorejs/only/types'
 import { IRules as IValidatorRules } from '@risecorejs/validator/interfaces'
-import { Model, FindOptions } from 'sequelize'
+import { FindOptions } from 'sequelize'
 
+import { M } from '../classes'
 import { IFields } from '../interfaces'
-
-export class CModel extends Model {}
 
 export type TTemplates =
   | 'create'
@@ -22,7 +21,7 @@ export type TTemplates =
 export type TGettingOptionsInstruction<T = any> = true | (() => T)
 
 export type TTemplateHandler<T> = (
-  Model: typeof CModel,
+  Model: typeof M,
   gettingOptionsInstruction: TGettingOptionsInstruction<T>
 ) => express.Handler
 

@@ -23,7 +23,7 @@ exports.getMethodOptions = getMethodOptions;
 /**
  * GET-MODEL
  * @param model {any}
- * @return {typeof CModel}
+ * @return {typeof M}
  */
 function getModel(model) {
     if (typeof model === 'string') {

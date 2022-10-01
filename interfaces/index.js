@@ -15,8 +15,8 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./templates/create"), exports);
-__exportStar(require("./templates/find-all"), exports);
-__exportStar(require("./templates/find-one"), exports);
+__exportStar(require("./templates/index"), exports);
+__exportStar(require("./templates/show"), exports);
 __exportStar(require("./templates/count"), exports);
 __exportStar(require("./templates/update"), exports);
 __exportStar(require("./templates/bulk-update"), exports);

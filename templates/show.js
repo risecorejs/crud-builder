@@ -7,8 +7,8 @@ const http_status_codes_1 = __importDefault(require("http-status-codes"));
 const utils_1 = require("../utils");
 /**
  * FIND-ONE
- * @param Model {typeof CModel}
- * @param gettingOptionsInstruction {TGettingOptionsInstruction<IMethodFindOneOptions>)}
+ * @param Model {typeof M}
+ * @param gettingOptionsInstruction {TGettingOptionsInstruction<IMethodShowOptions>)}
  * @return {express.Handler}
  */
 function default_1(Model, gettingOptionsInstruction) {

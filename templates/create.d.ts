@@ -1,10 +1,11 @@
 import express from 'express';
+import { M } from '../classes';
 import { IMethodCreateOptions } from '../interfaces';
-import { CModel, TGettingOptionsInstruction } from '../types';
+import { TGettingOptionsInstruction } from '../types';
 /**
  * CREATE
- * @param Model {typeof CModel}
+ * @param Model {typeof M}
  * @param gettingOptionsInstruction {TGettingOptionsInstruction<IMethodCreateOptions>)}
  * @return {express.Handler}
  */
-export default function (Model: typeof CModel, gettingOptionsInstruction: TGettingOptionsInstruction<IMethodCreateOptions>): express.Handler;
+export default function (Model: typeof M, gettingOptionsInstruction: TGettingOptionsInstruction<IMethodCreateOptions>): express.Handler;

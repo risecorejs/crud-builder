@@ -2,7 +2,7 @@ import { FindOptions } from 'sequelize';
 import { IMethodBaseOptions, IMethodBaseContextOptions, IFields } from '../index';
 import { TMethodState, IMethodQueryBuilderHandlerWithContext, TMethodRules, TMethodOnly, TMethodHookHandler, TMethodResponseHandlerWithContext } from '../../types';
 export interface IMethodBulkUpdateOptions extends IMethodBaseOptions {
-    template?: 'update';
+    template?: 'bulkUpdate';
     state?: TMethodState;
     queryBuilder?: FindOptions | IMethodQueryBuilderHandlerWithContext<Omit<IMethodBulkUpdateContextOptions, 'fields'>>;
     validator?: boolean;

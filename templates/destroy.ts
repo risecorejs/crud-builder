@@ -5,17 +5,18 @@ import { DestroyOptions } from 'sequelize'
 
 import { getMethodOptions, getContextState, getQueryOptions, errorResponse } from '../utils'
 
+import { M } from '../classes'
 import { IMethodDestroyOptions, IMethodDestroyContextOptions } from '../interfaces'
-import { CModel, TGettingOptionsInstruction } from '../types'
+import { TGettingOptionsInstruction } from '../types'
 
 /**
  * DESTROY
- * @param Model {typeof CModel}
+ * @param Model {typeof M}
  * @param gettingOptionsInstruction {TGettingOptionsInstruction<IMethodDestroyOptions>)}
  * @return {express.Handler}
  */
 export default function (
-  Model: typeof CModel,
+  Model: typeof M,
   gettingOptionsInstruction: TGettingOptionsInstruction<IMethodDestroyOptions>
 ): express.Handler {
   return async (req: express.Request, res: express.Response) => {

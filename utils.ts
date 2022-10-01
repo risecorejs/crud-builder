@@ -4,11 +4,11 @@ import express from 'express'
 
 import { FindOptions } from 'sequelize'
 
+import { M } from './classes'
 import { IMethodErrorResponse, IFields } from './interfaces'
 
 import {
   TGettingOptionsInstruction,
-  CModel,
   IMethodQueryBuilderHandlerWithContext,
   TMethodKey,
   TMethodRules,
@@ -32,9 +32,9 @@ export function getMethodOptions<T = any>(gettingOptionsInstruction: TGettingOpt
 /**
  * GET-MODEL
  * @param model {any}
- * @return {typeof CModel}
+ * @return {typeof M}
  */
-export function getModel(model: any): typeof CModel {
+export function getModel(model: any): typeof M {
   if (typeof model === 'string') {
     const Model = models[model]
 

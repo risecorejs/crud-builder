@@ -7,7 +7,7 @@ const http_status_codes_1 = __importDefault(require("http-status-codes"));
 const utils_1 = require("../utils");
 /**
  * BULK-UPDATE
- * @param Model {typeof CModel}
+ * @param Model {typeof M}
  * @param gettingOptionsInstruction {TGettingOptionsInstruction<IMethodBulkUpdateOptions>)}
  * @return {express.Handler}
  */

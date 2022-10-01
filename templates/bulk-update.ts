@@ -12,17 +12,18 @@ import {
   errorResponse
 } from '../utils'
 
+import { M } from '../classes'
 import { IMethodBulkUpdateOptions, IMethodBulkUpdateContextOptions } from '../interfaces'
-import { CModel, TGettingOptionsInstruction } from '../types'
+import { TGettingOptionsInstruction } from '../types'
 
 /**
  * BULK-UPDATE
- * @param Model {typeof CModel}
+ * @param Model {typeof M}
  * @param gettingOptionsInstruction {TGettingOptionsInstruction<IMethodBulkUpdateOptions>)}
  * @return {express.Handler}
  */
 export default function (
-  Model: typeof CModel,
+  Model: typeof M,
   gettingOptionsInstruction: TGettingOptionsInstruction<IMethodBulkUpdateOptions>
 ): express.Handler {
   return async (req: express.Request, res: express.Response) => {

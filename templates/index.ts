@@ -1,33 +1,68 @@
-import create from './create'
+import express from 'express'
+import httpStatusCodes from 'http-status-codes'
 
-import index from './find-all'
-import show from './find-one'
-import count from './count'
+import { FindOptions } from 'sequelize'
 
-import update from './update'
-import bulkUpdate from './bulk-update'
+import { M } from '../classes'
+import { IMethodIndexContextOptions, IMethodIndexOptions } from '../interfaces'
+import { TGettingOptionsInstruction } from '../types'
 
-import destroy from './destroy'
-import bulkDestroy from './bulk-destroy'
+import { getQueryOptions, errorResponse, getMethodOptions } from '../utils'
 
-import restore from './restore'
-import bulkRestore from './bulk-restore'
+/**
+ * FIND-ALL
+ * @param Model {typeof M}
+ * @param gettingOptionsInstruction {TGettingOptionsInstruction<IMethodIndexOptions>)}
+ * @return {express.Handler}
+ */
+export default function (
+  Model: typeof M,
+  gettingOptionsInstruction: TGettingOptionsInstruction<IMethodIndexOptions>
+): express.Handler {
+  return async (req: express.Request, res: express.Response) => {
+    try {
+      const options = getMethodOptions<IMethodIndexOptions>(gettingOptionsInstruction)
 
-import { ITemplates } from '../interfaces'
+      const ctx: IMethodIndexContextOptions = {
+        req,
+        res
+      }
 
-export default <ITemplates>{
-  create,
+      options.method ||= 'findAndCountAll'
 
-  index,
-  show,
-  count,
+      const queryOptions: FindOptions & { distinct?: boolean } = {
+        order: [['id', 'DESC']]
+      }
 
-  update,
-  bulkUpdate,
+      if (options.method === 'findAndCountAll') {
+        queryOptions.distinct = true
+      }
 
-  destroy,
-  bulkDestroy,
+      if (options.pagination !== false) {
+        Object.assign(queryOptions, req.pagination())
+      }
 
-  restore,
-  bulkRestore
+      const _queryOptions = await getQueryOptions().multiple(options.queryBuilder, ctx)
+
+      Object.assign(queryOptions, _queryOptions)
+
+      ctx.instances = await Model[options.method](queryOptions)
+
+      const status = 200
+
+      if (options.response) {
+        const response = await options.response(<any>ctx)
+
+        return res.status(response.status || status).json(response)
+      }
+
+      return res.json({
+        status,
+        message: httpStatusCodes.getStatusText(status),
+        result: ctx.instances
+      })
+    } catch (err) {
+      return errorResponse(err, res)
+    }
+  }
 }

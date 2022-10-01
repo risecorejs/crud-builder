@@ -3,17 +3,18 @@ import httpStatusCodes from 'http-status-codes'
 
 import { getMethodOptions, getQueryOptions, errorResponse } from '../utils'
 
+import { M } from '../classes'
 import { IMethodCountOptions, IMethodCountContextOptions } from '../interfaces'
-import { CModel, TGettingOptionsInstruction } from '../types'
+import { TGettingOptionsInstruction } from '../types'
 
 /**
  * COUNT
- * @param Model {typeof CModel}
+ * @param Model {typeof M}
  * @param gettingOptionsInstruction {TGettingOptionsInstruction<IMethodCountOptions>)}
  * @return {express.Handler}
  */
 export default function (
-  Model: typeof CModel,
+  Model: typeof M,
   gettingOptionsInstruction: TGettingOptionsInstruction<IMethodCountOptions>
 ): express.Handler {
   return async (req: express.Request, res: express.Response) => {

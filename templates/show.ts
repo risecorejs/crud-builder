@@ -3,24 +3,25 @@ import httpStatusCodes from 'http-status-codes'
 
 import { getMethodOptions, getQueryOptions, errorResponse } from '../utils'
 
-import { IMethodFindOneContextOptions, IMethodFindOneOptions } from '../interfaces'
-import { CModel, TGettingOptionsInstruction } from '../types'
+import { M } from '../classes'
+import { IMethodShowContextOptions, IMethodShowOptions } from '../interfaces'
+import { TGettingOptionsInstruction } from '../types'
 
 /**
  * FIND-ONE
- * @param Model {typeof CModel}
- * @param gettingOptionsInstruction {TGettingOptionsInstruction<IMethodFindOneOptions>)}
+ * @param Model {typeof M}
+ * @param gettingOptionsInstruction {TGettingOptionsInstruction<IMethodShowOptions>)}
  * @return {express.Handler}
  */
 export default function (
-  Model: typeof CModel,
-  gettingOptionsInstruction: TGettingOptionsInstruction<IMethodFindOneOptions>
+  Model: typeof M,
+  gettingOptionsInstruction: TGettingOptionsInstruction<IMethodShowOptions>
 ): express.Handler {
   return async (req: express.Request, res: express.Response) => {
     try {
-      const options = getMethodOptions<IMethodFindOneOptions>(gettingOptionsInstruction)
+      const options = getMethodOptions<IMethodShowOptions>(gettingOptionsInstruction)
 
-      const ctx: IMethodFindOneContextOptions = {
+      const ctx: IMethodShowContextOptions = {
         req,
         res
       }

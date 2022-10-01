@@ -15,7 +15,7 @@
   },
   "homepage": "https://github.com/risecorejs/crud-builder#readme",
   "dependencies": {
-    "@risecorejs/core": "^3.0.22",
+    "@risecorejs/core": "^3.0.27",
     "@risecorejs/middleware": "^3.0.4",
     "@risecorejs/only": "^3.0.6",
     "@risecorejs/validator": "^3.0.4",

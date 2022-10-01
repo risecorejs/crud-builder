@@ -5,11 +5,11 @@ import { TTemplateHandler, TGettingOptionsInstruction, TTemplates } from '../typ
 export * from './templates/create'
 import { IMethodCreateOptions } from './templates/create'
 
-export * from './templates/find-all'
-import { IMethodFindAllOptions } from './templates/find-all'
+export * from './templates/index'
+import { IMethodIndexOptions } from './templates/index'
 
-export * from './templates/find-one'
-import { IMethodFindOneOptions } from './templates/find-one'
+export * from './templates/show'
+import { IMethodShowOptions } from './templates/show'
 
 export * from './templates/count'
 import { IMethodCountOptions } from './templates/count'
@@ -41,8 +41,8 @@ export interface IFields<T = any> {
 export interface ITemplates {
   create: TTemplateHandler<IMethodCreateOptions>
 
-  index: TTemplateHandler<IMethodFindAllOptions>
-  show: TTemplateHandler<IMethodFindOneOptions>
+  index: TTemplateHandler<IMethodIndexOptions>
+  show: TTemplateHandler<IMethodShowOptions>
   count: TTemplateHandler<IMethodCountOptions>
 
   update: TTemplateHandler<IMethodUpdateOptions>
@@ -59,8 +59,8 @@ export interface ITemplates {
 export interface IMethods<M = any> {
   create?: TGettingOptionsInstruction<IMethodCreateOptions<M>>
 
-  index?: TGettingOptionsInstruction<IMethodFindAllOptions<M>>
-  show?: TGettingOptionsInstruction<IMethodFindOneOptions<M>>
+  index?: TGettingOptionsInstruction<IMethodIndexOptions<M>>
+  show?: TGettingOptionsInstruction<IMethodShowOptions<M>>
   count?: TGettingOptionsInstruction<IMethodCountOptions>
 
   update?: TGettingOptionsInstruction<IMethodUpdateOptions<M>>

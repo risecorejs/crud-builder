@@ -5,17 +5,18 @@ import { FindOptions } from 'sequelize'
 
 import { getMethodOptions, getContextState, getQueryOptions, errorResponse } from '../utils'
 
+import { M } from '../classes'
 import { IMethodBulkDestroyOptions, IMethodBulkDestroyContextOptions } from '../interfaces'
-import { CModel, TGettingOptionsInstruction } from '../types'
+import { TGettingOptionsInstruction } from '../types'
 
 /**
  * BULK-DESTROY
- * @param Model {typeof CModel}
+ * @param Model {typeof M}
  * @param gettingOptionsInstruction {TGettingOptionsInstruction<IMethodBulkDestroyOptions>)}
  * @return {express.Handler}
  */
 export default function (
-  Model: typeof CModel,
+  Model: typeof M,
   gettingOptionsInstruction: TGettingOptionsInstruction<IMethodBulkDestroyOptions>
 ): express.Handler {
   return async (req: express.Request, res: express.Response) => {

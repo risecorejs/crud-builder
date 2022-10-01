@@ -3,17 +3,18 @@ import httpStatusCodes from 'http-status-codes'
 
 import { getMethodOptions, getContextState, getValidationErrors, getContextFields, errorResponse } from '../utils'
 
+import { M } from '../classes'
 import { IMethodCreateOptions, IMethodCreateContextOptions } from '../interfaces'
-import { CModel, TGettingOptionsInstruction } from '../types'
+import { TGettingOptionsInstruction } from '../types'
 
 /**
  * CREATE
- * @param Model {typeof CModel}
+ * @param Model {typeof M}
  * @param gettingOptionsInstruction {TGettingOptionsInstruction<IMethodCreateOptions>)}
  * @return {express.Handler}
  */
 export default function (
-  Model: typeof CModel,
+  Model: typeof M,
   gettingOptionsInstruction: TGettingOptionsInstruction<IMethodCreateOptions>
 ): express.Handler {
   return async (req: express.Request, res: express.Response) => {

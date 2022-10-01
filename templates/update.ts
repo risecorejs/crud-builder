@@ -10,17 +10,18 @@ import {
   errorResponse
 } from '../utils'
 
+import { M } from '../classes'
 import { IMethodUpdateOptions, IMethodUpdateContextOptions } from '../interfaces'
-import { CModel, TGettingOptionsInstruction } from '../types'
+import { TGettingOptionsInstruction } from '../types'
 
 /**
  * UPDATE
- * @param Model {typeof CModel}
+ * @param Model {typeof M}
  * @param gettingOptionsInstruction {TGettingOptionsInstruction<IMethodUpdateOptions>)}
  * @return {express.Handler}
  */
 export default function (
-  Model: typeof CModel,
+  Model: typeof M,
   gettingOptionsInstruction: TGettingOptionsInstruction<IMethodUpdateOptions>
 ): express.Handler {
   return async (req: express.Request, res: express.Response) => {

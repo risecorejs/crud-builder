@@ -1,5 +1,5 @@
 import { getMethodOptions, getModel } from './utils'
-import templates from './templates'
+import templates from './templates/templates'
 
 import { IMethods, IEndpoints, IMethodBaseOptions } from './interfaces'
 import { TTemplates } from './types'
